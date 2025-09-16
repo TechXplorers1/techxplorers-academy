@@ -12,7 +12,7 @@ const pageData = {
     {
       title: "Project Fulfillment",
       description:
-        "Bring us your backlog, and we’ll build you a brave team to execute. From UX design to product development, data dashboards to full-stack builds—BraveBusiness assembles vetted talent to deliver quality results.",
+        "Bring us your backlog, and we’ll build you a Brave team to execute. From UX design to product development, data dashboards to full-stack builds—BraveBusiness assembles vetted talent to deliver quality results.",
       list: [
         "Custom team simulations based on your tools & workflows",
         "Project-based learning for faster retention",

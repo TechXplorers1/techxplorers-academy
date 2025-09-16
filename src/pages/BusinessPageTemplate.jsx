@@ -252,7 +252,7 @@ const BusinessPageTemplate = ({
       {/* Footer */}
       <footer className="bg-[#120D25] text-gray-400 py-8 text-center">
         <p>
-          &copy; {new Date().getFullYear()} Digitally Brave. All rights reserved.
+          &copy; {new Date().getFullYear()} TechXplorers Academy. All rights reserved.
         </p>
       </footer>
     </div>

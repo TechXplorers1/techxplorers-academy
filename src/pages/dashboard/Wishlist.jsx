@@ -1,24 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import DashboardPageTemplate from '../DashboardPageTemplate';
 
-const Wishlist = ({ isLoggedIn }) => {
-    const wishlistItems = [
-        {
-            id: 1,
-            title: "Ai Automation: Build Smart Systems",
-            description: "Learn to automate tasks and build intelligent systems using AI tools and principles.",
-            price: "$499",
-            image: "https://placehold.co/300x200/E9EFF1/5A5A23?text=AI+Automation"
-        },
-        {
-            id: 2,
-            title: "Cybersecurity & Compliance Fundamentals",
-            description: "Understand the core concepts of cybersecurity and learn to ensure compliance in your organization.",
-            price: "$599",
-            image: "https://placehold.co/300x200/EFE9F1/235A4A?text=Cybersecurity"
-        },
-    ];
+const Wishlist = ({ isLoggedIn, wishlistItems, onRemoveFromWishlist, onAddToCart }) => {
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
 
     const WishlistItem = ({ item }) => (
         <div className="bg-white p-6 rounded-2xl shadow-lg flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6 transition-transform transform duration-300 hover:scale-[1.01]">
@@ -29,10 +15,20 @@ const Wishlist = ({ isLoggedIn }) => {
                 <p className="text-lg font-semibold text-purple-600 mt-2">{item.price}</p>
             </div>
             <div className="flex flex-col space-y-2">
-                <button className="px-4 py-2 bg-purple-600 text-white rounded-full text-sm hover:bg-purple-700 transition-colors transform duration-300 hover:scale-105">
+                <button
+                    onClick={() => {
+                        onAddToCart(item);
+                        onRemoveFromWishlist(item.id);
+                        setPopupMessage(`${item.title} added to cart!`);
+                        setShowPopup(true);
+                        setTimeout(() => setShowPopup(false), 2000);
+                    }}
+                    className="px-4 py-2 bg-purple-600 text-white rounded-full text-sm hover:bg-purple-700 transition-colors transform duration-300 hover:scale-105">
                     Add to Cart
                 </button>
-                <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-full text-sm hover:bg-gray-300 transition-colors transform duration-300 hover:scale-105">
+                <button
+                    onClick={() => onRemoveFromWishlist(item.id)}
+                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-full text-sm hover:bg-gray-300 transition-colors transform duration-300 hover:scale-105">
                     Remove
                 </button>
             </div>
@@ -41,8 +37,13 @@ const Wishlist = ({ isLoggedIn }) => {
 
     return (
         <DashboardPageTemplate isLoggedIn={isLoggedIn} title="My Wishlist">
+            {showPopup && (
+                <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-green-500 text-white py-3 px-6 rounded-full shadow-lg z-50 animate-fade-in-down">
+                    {popupMessage}
+                </div>
+            )}
             <div className="space-y-6">
-                {wishlistItems.length > 0 ? (
+                {wishlistItems && wishlistItems.length > 0 ? (
                     wishlistItems.map((item) => (
                         <WishlistItem key={item.id} item={item} />
                     ))

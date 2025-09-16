@@ -44,13 +44,14 @@ const useInView = (options) => {
     return [ref, inView];
 };
 
-const CourseDetailsTemplate = () => {
+const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, cart, wishlist }) => {
     const { courseId } = useParams();
     const [course, setCourse] = useState(null);
     const [expandedModules, setExpandedModules] = useState({});
-    const [isWishlisted, setIsWishlisted] = useState(false);
     const [showSharePopup, setShowSharePopup] = useState(false);
     const [pageRef, pageInView] = useInView({ threshold: 0.1 });
+    const [showPopup, setShowPopup] = useState(false); // New state for success pop-up
+    const [popupMessage, setPopupMessage] = useState(''); // New state for pop-up message
 
     useEffect(() => {
         let foundCourse = null;
@@ -73,13 +74,31 @@ const CourseDetailsTemplate = () => {
     };
 
     const handleWishlistClick = () => {
-        setIsWishlisted(!isWishlisted);
+        if (wishlist.some(item => item.id === course.id)) {
+            setPopupMessage('This course is already in your wishlist!');
+        } else {
+            onAddToWishlist(course);
+            setPopupMessage(`${course.title} has been added to your wishlist!`);
+        }
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 2000);
     };
 
     const handleShareClick = () => {
         navigator.clipboard.writeText(window.location.href);
         setShowSharePopup(true);
         setTimeout(() => setShowSharePopup(false), 2000);
+    };
+
+    const handleAddToCartClick = () => {
+        if (cart.some(item => item.id === course.id)) {
+            setPopupMessage('This course is already in your cart!');
+        } else {
+            onAddToCart(course);
+            setPopupMessage(`${course.title} has been added to your cart!`);
+        }
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 2000);
     };
 
     if (!course) {
@@ -140,9 +159,9 @@ const CourseDetailsTemplate = () => {
     };
 
     const relatedCourses = [
-        { id: 'braveprdo-product-owner', title: 'BravePrdO | Product Owner Stack', price: 159.99, rating: 4.0, instructor: 'Victoria', image: 'https://placehold.co/600x400/A78BFA/FFFFFF?text=BravePrdO' },
-        { id: 'bravesm-scrum-master', title: 'BraveSM | Scrum Master Stack', price: 119.99, rating: 5.0, instructor: 'Daniel Olayinka', image: 'https://placehold.co/600x400/A78BFA/FFFFFF?text=BraveSM' },
-        { id: 'braveprjm-project-manager', title: 'BravePrjM | Project Manager Stack', price: 139.99, rating: 4.5, instructor: 'Victoria', image: 'https://placehold.co/600x400/A78BFA/FFFFFF?text=BravePrjM' }
+        { id: 'Braveprdo-product-owner', title: 'BravePrdO | Product Owner Stack', price: 159.99, rating: 4.0, instructor: 'Victoria', image: 'https://placehold.co/600x400/A78BFA/FFFFFF?text=BravePrdO' },
+        { id: 'Bravesm-scrum-master', title: 'BraveSM | Scrum Master Stack', price: 119.99, rating: 5.0, instructor: 'Daniel Olayinka', image: 'https://placehold.co/600x400/A78BFA/FFFFFF?text=BraveSM' },
+        { id: 'Braveprjm-project-manager', title: 'BravePrjM | Project Manager Stack', price: 139.99, rating: 4.5, instructor: 'Victoria', image: 'https://placehold.co/600x400/A78BFA/FFFFFF?text=BravePrjM' }
     ];
 
     const getCategoryLink = (category) => {
@@ -159,9 +178,19 @@ const CourseDetailsTemplate = () => {
         return categoryMap[category] || '#';
     };
     
+    // Check if the course is already in the cart or wishlist
+    const isInCart = cart.some(item => item.id === course?.id);
+    const isInWishlist = wishlist.some(item => item.id === course?.id);
+
     return (
         <div className="bg-gray-50 text-gray-900 min-h-screen font-inter">
-            <Header isLandingPage={false} />
+            <Header />
+            
+            {showPopup && (
+                <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-green-500 text-white py-3 px-6 rounded-full shadow-lg z-50 animate-fade-in-down">
+                    {popupMessage}
+                </div>
+            )}
             
             <div className="relative pt-24 pb-16 overflow-hidden bg-gradient-to-r from-[#120D25] to-[#2A2441] text-white">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -266,15 +295,18 @@ const CourseDetailsTemplate = () => {
                                     <span className="text-sm text-gray-500 ml-2">({course.rating})</span>
                                 </div>
                             </div>
-                            <button className="w-full py-4 bg-purple-600 text-white font-semibold rounded-full text-lg shadow-lg hover:bg-purple-700 transition-colors">
-                                Buy Now
+                            <button
+                                onClick={handleAddToCartClick}
+                                className="w-full py-4 bg-purple-600 text-white font-semibold rounded-full text-lg shadow-lg hover:bg-purple-700 transition-colors"
+                            >
+                                Add to Cart
                             </button>
                             <div className="flex justify-between items-center mt-4 space-x-2">
                                 <button
-                                    className={`flex-1 py-3 px-4 rounded-full font-semibold border transition-colors ${isWishlisted ? 'bg-purple-600 text-white border-purple-600' : 'bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200'}`}
+                                    className={`flex-1 py-3 px-4 rounded-full font-semibold border transition-colors ${isInWishlist ? 'bg-purple-600 text-white border-purple-600' : 'bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200'}`}
                                     onClick={handleWishlistClick}
                                 >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 mr-2 inline-block ${isWishlisted ? 'text-white' : 'text-gray-500'}`} fill={isWishlisted ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 mr-2 inline-block ${isInWishlist ? 'text-white' : 'text-gray-500'}`} fill={isInWishlist ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                     </svg>
                                     Wishlist
@@ -310,7 +342,7 @@ const CourseDetailsTemplate = () => {
                     <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">Courses You May Like</h2>
                     <div className="flex overflow-x-auto gap-8 py-4 scrollbar-hide">
                         {relatedCourses.map((relatedCourse, index) => (
-                            <Link key={index} to={`/course/${relatedCourse.id}`} onClick={handleCourseClick} className="flex-none w-80">
+                            <Link key={index} to={`/course-details/${relatedCourse.id}`} onClick={handleCourseClick} className="flex-none w-80">
                                 <div className="bg-gray-100 rounded-lg p-4 transition-all duration-300 hover:shadow-lg hover:scale-105">
                                     <img src={relatedCourse.image} alt={relatedCourse.title} className="w-full h-32 object-cover rounded-md mb-3"/>
                                     <h4 className="text-lg font-bold">{relatedCourse.title}</h4>
@@ -334,8 +366,9 @@ const CourseDetailsTemplate = () => {
                     to { opacity: 1; transform: translateY(0); }
                 }
                 @keyframes slide-in-right {
-                    from { opacity: 0; transform: translateX(20px); }
-                    to { opacity: 1; transform: translateX(0); }
+                    opacity: 0;
+                    transform: translateX(20px);
+                    animation: slide-in-right 0.5s ease-out forwards;
                 }
                 @keyframes fade-in {
                     from { opacity: 0; }

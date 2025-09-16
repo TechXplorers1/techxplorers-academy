@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import Header from '../components/Header'; // Import the new Header component
+import Header from '../components/Header';
 import { Link } from 'react-router-dom';
 import { coursesData } from '../data/coursesData';
 
@@ -620,7 +620,7 @@ function LandingPage() {
                 topCourses.map((course, index) => (
                   <Link
                     key={index}
-                    to={`/course/${course.id}`}
+                    to={`/course-details/${course.id}`}
                     className={`group bg-white rounded-2xl relative overflow-hidden transition-all duration-500 hover:translate-y-[-10px] hover:shadow-2xl border border-white/20 hover:border-purple-600/20 w-full md:w-auto course-card ${animatedCourses.includes(index) ? 'is-visible' : ''}`}
                     style={{ transitionDelay: `${index * 150}ms` }}
                   >

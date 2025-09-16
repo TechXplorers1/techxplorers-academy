@@ -1,7 +1,7 @@
 export const coursesData = {
   productStrategy: [
     {
-      id: 'braveba-business-analyst',
+      id: 'Braveba-business-analyst',
       title: 'BraveBA | Business Analyst Stack',
       rating: 4.5,
       price: 129.99,
@@ -10,7 +10,7 @@ export const coursesData = {
       image: 'https://placehold.co/600x400/A78BFA/FFFFFF?text=BraveBA'
     },
     {
-      id: 'braveprdo-product-owner',
+      id: 'Braveprdo-product-owner',
       title: 'BravePrdO | Product Owner Stack',
       rating: 4.0,
       price: 159.99,
@@ -19,7 +19,7 @@ export const coursesData = {
       image: 'https://placehold.co/600x400/A78BFA/FFFFFF?text=BravePrdO'
     },
     {
-      id: 'braveprdm-product-manager',
+      id: 'Braveprdm-product-manager',
       title: 'BravePrdM | Product Manager Stack',
       rating: 4.5,
       price: 189.99,
@@ -28,7 +28,7 @@ export const coursesData = {
       image: 'https://placehold.co/600x400/A78BFA/FFFFFF?text=BravePrdM'
     },
     {
-      id: 'bravefounder-startup-founder',
+      id: 'Bravefounder-startup-founder',
       title: 'BraveFounder | Startup Founder/Entrepreneur',
       rating: 4.5,
       price: 229.99,
@@ -37,7 +37,7 @@ export const coursesData = {
       image: 'https://placehold.co/600x400/A78BFA/FFFFFF?text=BraveFounder'
     },
     {
-      id: 'bravesm-scrum-master',
+      id: 'Bravesm-scrum-master',
       title: 'BraveSM | Scrum Master Stack',
       rating: 5.0,
       price: 119.99,
@@ -46,7 +46,7 @@ export const coursesData = {
       image: 'https://placehold.co/600x400/A78BFA/FFFFFF?text=BraveSM'
     },
     {
-      id: 'braveprjm-project-manager',
+      id: 'Braveprjm-project-manager',
       title: 'BravePrjM | Project Manager Stack',
       rating: 4.5,
       price: 139.99,

@@ -30,7 +30,8 @@ const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
     );
 };
 
-const Header = ({ isLoggedIn, onLogout }) => {
+// The Header component now accepts cartItemsCount as a prop
+const Header = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const [isAllStacksOpen, setIsAllStacksOpen] = useState(false);
     const [isForBusinessOpen, setIsForBusinessOpen] = useState(false);
     const [isResourcesOpen, setIsResourcesOpen] = useState(false);
@@ -69,7 +70,7 @@ const Header = ({ isLoggedIn, onLogout }) => {
     ];
 
     const forBusinessItems = [
-        { name: 'BraveBusiness', path: '/for-business/brave-business' },
+        { name: 'BraveBusiness', path: '/for-business/Brave-business' },
         { name: 'Partner With Us', path: '/for-business/partner-with-us' },
         { name: 'Hire From Us', path: '/for-business/hire-from-us' },
     ];
@@ -78,15 +79,15 @@ const Header = ({ isLoggedIn, onLogout }) => {
         { name: 'Free Resources', path: '/resources/free-resources' },
         { name: 'Success Stories', path: '/resources/success-stories' },
         { name: 'Masterclass Replays', path: '/resources/masterclass-replays' },
-        { name: 'BraveStatistics', path: '/resources/brave-statistics' },
+        { name: 'BraveStatistics', path: '/resources/Brave-statistics' },
         { name: 'Community Events', path: '/resources/community-events' },
     ];
 
     const moreItems = [
         { name: 'About Us', path: '/more/about-us' },
         { name: 'Become A Mentor or Instructor', path: '/more/become-a-mentor' },
-        { name: 'Join BraveTeams', path: '/more/join-brave-teams' },
-        { name: 'Join BraveProjects', path: '/more/join-brave-projects' },
+        { name: 'Join BraveTeams', path: '/more/join-Brave-teams' },
+        { name: 'Join BraveProjects', path: '/more/join-Brave-projects' },
         { name: 'Plans', path: '/more/plans' },
     ];
 
@@ -95,7 +96,7 @@ const Header = ({ isLoggedIn, onLogout }) => {
     return (
         <header className={headerClass}>
             <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-                <Link to="/" className="text-xl font-bold">DIGITALLY BRAVE</Link>
+                <Link to="/" className="text-xl font-bold">TechXplorers Academy</Link>
                 <div className="hidden lg:flex items-center space-x-8">
                     <div className="relative" onMouseEnter={() => handleHover('allStacks', true)} onMouseLeave={() => handleHover('allStacks', false)}>
                         <button className="flex items-center hover:text-purple-400 transition-colors">
@@ -152,11 +153,17 @@ const Header = ({ isLoggedIn, onLogout }) => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </a>
-                    <a href="#" className="hover:text-purple-400 transition-colors">
+                    <Link to="/cart" className="relative hover:text-purple-400 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63-.63-.185 1.705.707 1.705H17m0 0a2 2 0 100 4 2 2 0 010-4zm-8 2a2 2 0 110 4 2 2 0 010-4z" />
                         </svg>
-                    </a>
+                        {/* The badge now uses the cartItemsCount prop */}
+                        {cartItemsCount > 0 && (
+                            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                                {cartItemsCount}
+                            </span>
+                        )}
+                    </Link>
                 </div>
                 <button className="lg:hidden text-2xl text-white">
                     ☰

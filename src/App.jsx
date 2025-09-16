@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 
@@ -46,57 +46,159 @@ import Wishlist from './pages/dashboard/Wishlist';
 import OrderHistory from './pages/dashboard/OrderHistory';
 import Settings from './pages/dashboard/Settings';
 
+// Course Page
+import CoursePage from './pages/dashboard/CoursePage'; 
+
+// Import the new CartPage component
+import CartPage from './pages/CartPage';
+
+
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  // Initialize cart and wishlist state from local storage
+  const [cart, setCart] = useState(() => {
+    try {
+      const savedCart = localStorage.getItem('cart');
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch (error) {
+      console.error("Failed to parse cart from localStorage:", error);
+      return [];
+    }
+  });
+
+  const [wishlist, setWishlist] = useState(() => {
+    try {
+      const savedWishlist = localStorage.getItem('wishlist');
+      return savedWishlist ? JSON.parse(savedWishlist) : [];
+    } catch (error) {
+      console.error("Failed to parse wishlist from localStorage:", error);
+      return [];
+    }
+  });
+
+  // Use useEffect to save cart and wishlist to local storage whenever they change
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
+
+  useEffect(() => {
+    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+  }, [wishlist]);
+
+  // Functions to handle cart state updates
+  const handleAddToCart = (course) => {
+    setCart(prevCart => {
+      const isItemInCart = prevCart.find(item => item.id === course.id);
+      if (!isItemInCart) {
+        return [...prevCart, { ...course, quantity: 1 }];
+      }
+      return prevCart;
+    });
+  };
+
+  const handleRemoveFromCart = (courseId) => {
+    setCart(prevCart => prevCart.filter(item => item.id !== courseId));
+  };
+  
+  // Functions to handle wishlist state updates
+  const handleAddToWishlist = (course) => {
+    setWishlist(prevWishlist => {
+      const isItemInWishlist = prevWishlist.find(item => item.id === course.id);
+      if (!isItemInWishlist) {
+        return [...prevWishlist, course];
+      }
+      return prevWishlist;
+    });
+  };
+
+  const handleRemoveFromWishlist = (courseId) => {
+    setWishlist(prevWishlist => prevWishlist.filter(item => item.id !== courseId));
+  };
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LandingPage isLoggedIn={isLoggedIn} />} />
+        {/* Pass cart.length as cartItemsCount to ALL pages that render the Header */}
+        <Route path="/" element={<LandingPage isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
         
         {/* All Stacks Routes */}
-        <Route path="/all-stacks/free-stacks" element={<FreeStacks isLoggedIn={isLoggedIn} />} />
-        <Route path="/all-stacks/product-strategy" element={<ProductStrategy isLoggedIn={isLoggedIn} />} />
-        <Route path="/all-stacks/ux-ui-design" element={<UxUiDesign isLoggedIn={isLoggedIn} />} />
-        <Route path="/all-stacks/engineering-development" element={<EngineeringDevelopment isLoggedIn={isLoggedIn} />} />
-        <Route path="/all-stacks/data-analytics" element={<DataAnalytics isLoggedIn={isLoggedIn} />} />
-        <Route path="/all-stacks/cybersecurity-compliance" element={<CybersecurityCompliance isLoggedIn={isLoggedIn} />} />
-        <Route path="/all-stacks/ai-automation" element={<AiAutomation isLoggedIn={isLoggedIn} />} />
-        <Route path="/all-stacks/marketing" element={<Marketing isLoggedIn={isLoggedIn} />} />
+        <Route path="/all-stacks/free-stacks" element={<FreeStacks isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/all-stacks/product-strategy" element={<ProductStrategy isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/all-stacks/ux-ui-design" element={<UxUiDesign isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/all-stacks/engineering-development" element={<EngineeringDevelopment isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/all-stacks/data-analytics" element={<DataAnalytics isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/all-stacks/cybersecurity-compliance" element={<CybersecurityCompliance isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/all-stacks/ai-automation" element={<AiAutomation isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/all-stacks/marketing" element={<Marketing isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
 
         {/* For Business Routes */}
-        <Route path="/for-business/brave-business" element={<BraveBusiness isLoggedIn={isLoggedIn} />} />
-        <Route path="/for-business/partner-with-us" element={<PartnerWithUs isLoggedIn={isLoggedIn} />} />
-        <Route path="/for-business/hire-from-us" element={<HireFromUs isLoggedIn={isLoggedIn} />} />
+        <Route path="/for-business/Brave-business" element={<BraveBusiness isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/for-business/partner-with-us" element={<PartnerWithUs isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/for-business/hire-from-us" element={<HireFromUs isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
 
         {/* Resources Routes */}
-        <Route path="/resources/free-resources" element={<FreeResources isLoggedIn={isLoggedIn} />} />
-        <Route path="/resources/success-stories" element={<SuccessStories isLoggedIn={isLoggedIn} />} />
-        <Route path="/resources/masterclass-replays" element={<MasterclassReplays isLoggedIn={isLoggedIn} />} />
-        <Route path="/resources/brave-statistics" element={<BraveStatistics isLoggedIn={isLoggedIn} />} />
-        <Route path="/resources/community-events" element={<CommunityEvents isLoggedIn={isLoggedIn} />} />
+        <Route path="/resources/free-resources" element={<FreeResources isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/resources/success-stories" element={<SuccessStories isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/resources/masterclass-replays" element={<MasterclassReplays isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/resources/Brave-statistics" element={<BraveStatistics isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/resources/community-events" element={<CommunityEvents isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
         
         {/* More Routes */}
-        <Route path="/more/about-us" element={<AboutUs isLoggedIn={isLoggedIn} />} />
-        <Route path="/more/become-a-mentor" element={<BecomeAMentor isLoggedIn={isLoggedIn} />} />
-        <Route path="/more/join-brave-teams" element={<JoinBraveTeams isLoggedIn={isLoggedIn} />} />
-        <Route path="/more/join-brave-projects" element={<JoinBraveProjects isLoggedIn={isLoggedIn} />} />
-        <Route path="/more/plans" element={<Plans isLoggedIn={isLoggedIn} />} />
+        <Route path="/more/about-us" element={<AboutUs isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/more/become-a-mentor" element={<BecomeAMentor isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/more/join-Brave-teams" element={<JoinBraveTeams isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/more/join-Brave-projects" element={<JoinBraveProjects isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/more/plans" element={<Plans isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
         
-        {/* Course Details Route */}
-        <Route path="/course/:courseId" element={<CourseDetailsTemplate isLoggedIn={isLoggedIn} />} />
+        {/* Course Details Route - Pass the handlers and state */}
+        <Route 
+          path="/course-details/:courseId" 
+          element={<CourseDetailsTemplate 
+            onAddToCart={handleAddToCart} 
+            onAddToWishlist={handleAddToWishlist} 
+            cart={cart} 
+            wishlist={wishlist} 
+            isLoggedIn={isLoggedIn} 
+            cartItemsCount={cart.length}
+          />} 
+        />
 
         {/* Auth Routes */}
-        <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
-        <Route path="/signup" element={<SignupPage setIsLoggedIn={setIsLoggedIn} />} />
+        <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/signup" element={<SignupPage setIsLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
 
         {/* Dashboard Routes */}
-        <Route path="/dashboard" element={<Dashboard isLoggedIn={isLoggedIn} />} />
-        <Route path="/dashboard/my-profile" element={<MyProfile isLoggedIn={isLoggedIn} />} />
-        <Route path="/dashboard/enrolled-courses" element={<EnrolledCourses isLoggedIn={isLoggedIn} />} />
-        <Route path="/dashboard/wishlist" element={<Wishlist isLoggedIn={isLoggedIn} />} />
-        <Route path="/dashboard/order-history" element={<OrderHistory isLoggedIn={isLoggedIn} />} />
-        <Route path="/dashboard/settings" element={<Settings isLoggedIn={isLoggedIn} />} />
+        <Route path="/dashboard" element={<Dashboard isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/dashboard/my-profile" element={<MyProfile isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/dashboard/enrolled-courses" element={<EnrolledCourses isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        {/* Wishlist Page - Pass the handlers and state */}
+        <Route 
+          path="/dashboard/wishlist" 
+          element={<Wishlist 
+            isLoggedIn={isLoggedIn} 
+            wishlistItems={wishlist} 
+            onRemoveFromWishlist={handleRemoveFromWishlist} 
+            onAddToCart={handleAddToCart}
+            cartItemsCount={cart.length}
+          />} 
+        />
+        <Route path="/dashboard/order-history" element={<OrderHistory isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+        <Route path="/dashboard/settings" element={<Settings isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+
+        {/* Old Course Page Route (Kept for now) */}
+        <Route path="/course/:courseId" element={<CoursePage isLoggedIn={isLoggedIn} cartItemsCount={cart.length} />} />
+
+        {/* Cart Page - Pass the handlers and state */}
+        <Route 
+          path="/cart" 
+          element={<CartPage 
+            isLoggedIn={isLoggedIn} 
+            cartItems={cart} 
+            onRemoveFromCart={handleRemoveFromCart}
+            cartItemsCount={cart.length}
+          />} 
+        />
       </Routes>
     </Router>
   );
