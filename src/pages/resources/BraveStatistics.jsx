@@ -1,5 +1,5 @@
 import React from 'react';
-import ResourcesPageTemplate from './ResourcesPageTemplate';
+import ResourcesPageTemplate from '../ResourcesPageTemplate';
 import useInView from '../../hooks/useInView';
 import NumberCounter from '../../components/NumberCounter'; // Changed to a default import
 

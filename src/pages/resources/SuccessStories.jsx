@@ -1,5 +1,5 @@
 import React from 'react';
-import ResourcesPageTemplate from './ResourcesPageTemplate';
+import ResourcesPageTemplate from '../ResourcesPageTemplate';
 import useInView from '../../hooks/useInView';
 
 const SuccessStories = () => {

@@ -1,8 +1,10 @@
 // src/pages/BusinessPageTemplate.jsx
 import React from "react";
-import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import Hero from "../components/Hero";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 50 },
@@ -27,55 +29,17 @@ const BusinessPageTemplate = ({
   formDescription,
   formFields,
 }) => {
-  // Filter out "For Business" from the breadcrumbs array
   const filteredBreadcrumbs = breadcrumbs.filter(crumb => crumb.name !== "For Business");
 
   return (
     <div className="bg-white text-gray-900 font-inter min-h-screen">
       <Header isLandingPage={false} />
+      <Hero
+        title={title}
+        breadcrumbs={filteredBreadcrumbs}
+        // No specific background image for this template
+      />
 
-      {/* Hero Section */}
-      <div className="relative pt-24 pb-12 overflow-hidden bg-[#120D25] text-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.h1
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
-            transition={{ duration: 0.8 }}
-            className="text-4xl md:text-5xl font-bold mb-4"
-          >
-            {title}
-          </motion.h1>
-          <motion.nav
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="flex items-center text-sm font-semibold"
-          >
-            <Link to="/" className="text-purple-300 hover:text-white">
-              Home
-            </Link>
-            {filteredBreadcrumbs.map((crumb, index) => (
-              <span key={index} className="flex items-center">
-                <span className="mx-2">&gt;</span>
-                {index === filteredBreadcrumbs.length - 1 ? (
-                  <span className="text-white">{crumb.name}</span>
-                ) : (
-                  <Link
-                    to={crumb.path}
-                    className="text-purple-300 hover:text-white"
-                  >
-                    {crumb.name}
-                  </Link>
-                )}
-              </span>
-            ))}
-          </motion.nav>
-        </div>
-      </div>
-
-      {/* Content Section */}
       <main className="container mx-auto px-6 lg:px-12 py-20 space-y-28">
         {sections.map((section, index) => (
           <motion.div
@@ -87,10 +51,8 @@ const BusinessPageTemplate = ({
             transition={{ duration: 0.8 }}
             variants={index % 2 === 0 ? slideLeft : slideRight}
           >
-            {/* Alternating Layout */}
             {index % 2 === 0 ? (
               <>
-                {/* Image Left */}
                 <motion.div
                   className="flex justify-center"
                   whileHover={{ scale: 1.05 }}
@@ -105,7 +67,6 @@ const BusinessPageTemplate = ({
                   )}
                 </motion.div>
 
-                {/* Content Right */}
                 <div className="text-left">
                   <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
                     {section.title}
@@ -133,7 +94,6 @@ const BusinessPageTemplate = ({
               </>
             ) : (
               <>
-                {/* Content Left */}
                 <div className="text-left order-2 md:order-1">
                   <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
                     {section.title}
@@ -159,7 +119,6 @@ const BusinessPageTemplate = ({
                   )}
                 </div>
 
-                {/* Image Right */}
                 <motion.div
                   className="flex justify-center order-1 md:order-2"
                   whileHover={{ scale: 1.05 }}
@@ -179,7 +138,6 @@ const BusinessPageTemplate = ({
         ))}
       </main>
 
-      {/* Form Section */}
       <div className="relative bg-gradient-to-br from-purple-700 via-purple-600 to-indigo-700 py-24 overflow-hidden">
         <div className="absolute inset-0 bg-purple-900/20 mix-blend-overlay"></div>
         <motion.div
@@ -249,12 +207,7 @@ const BusinessPageTemplate = ({
         </motion.div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-[#120D25] text-gray-400 py-8 text-center">
-        <p>
-          &copy; {new Date().getFullYear()} TechXplorers Academy. All rights reserved.
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 };

@@ -2,6 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import Header from '../components/Header';
 import { Link } from 'react-router-dom';
 import { coursesData } from '../data/coursesData';
+import hero2 from '../assets/hero-2.jpg';
+import bg1 from '../assets/bg-1.jpg';
+import bg4 from '../assets/bg-4.jpg';
+import bg3 from '../assets/bg-7.jpg';
 
 // Inline SVG Icons
 const PlayIcon = ({ size = 24, className }) => (
@@ -343,7 +347,6 @@ function LandingPage() {
       image: "https://placehold.co/100x100",
     },
   ];
-
   const [activeCategory, setActiveCategory] = useState("All");
   const [showGoTop, setShowGoTop] = useState(false);
   const carouselRef = useRef(null);
@@ -359,6 +362,8 @@ function LandingPage() {
 
   // State to track which course cards have been animated
   const [animatedCourses, setAnimatedCourses] = useState([]);
+  const [showVideoModal, setShowVideoModal] = useState(false);
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -439,6 +444,14 @@ function LandingPage() {
     coursesData.freeStacks[0],
   ];
 
+  const handleWatchDemoClick = () => {
+    setShowVideoModal(true);
+  };
+
+  const handleCloseVideoModal = () => {
+    setShowVideoModal(false);
+  };
+
   return (
     <div className="bg-[#120D25] text-white font-inter">
       {/* Go to Top Button */}
@@ -452,17 +465,44 @@ function LandingPage() {
         </button>
       )}
 
+      {/* Video Modal */}
+      {showVideoModal && (
+        <div className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4">
+          <div className="relative w-full max-w-4xl bg-white rounded-lg shadow-xl overflow-hidden">
+            <button
+              onClick={handleCloseVideoModal}
+              className="absolute top-4 right-4 text-white hover:text-gray-300 z-50 text-3xl font-bold"
+              aria-label="Close video"
+            >
+              &times;
+            </button>
+            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}> {/* 16:9 Aspect Ratio */}
+              {/* Dummy YouTube Embed - replace with your video URL */}
+              <iframe
+                className="absolute top-0 left-0 w-full h-full"
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      )}
+
       <main>
+        <Header isLandingPage={true} />
         {/* Enhanced Hero Section */}
         <section ref={heroRef} className={`relative overflow-hidden min-h-screen flex flex-col items-center justify-center pb-32 hero-section-container ${heroInView ? 'hero-section-visible' : ''}`}>
-          <Header isLandingPage={true} />
-
-          <div className="absolute inset-0 bg-[#120D25] opacity-90 z-0"></div>
-
-          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl animate-pulse-slow"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse-slow animation-delay-2000"></div>
-
-          <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48ZyBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIwLjIiIHN0cm9rZS13aWR0aD0iMiI+PHBhdGggZD0iTTAgMGg2MHY2MEgzeiIvPjwvZz48L2c+PC9zdmc+')]"></div>
+          {/* Background Image Container */}
+          <div
+            className="absolute inset-0 z-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${hero2})` }}
+          >
+            {/* Optional: Add a semi-transparent overlay to keep the content readable */}
+            <div className="absolute inset-0 bg-[#00000066] opacity-90"></div>
+          </div>
 
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-24">
             <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -486,12 +526,12 @@ function LandingPage() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-12 animate-slide-up-900">
-                  <button className="relative group bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-4 px-8 rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105">
+                  <Link to="/all-stacks/free-stacks" className="relative group bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-4 px-8 rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105">
                     <span className="relative z-10">Start Learning Free</span>
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </button>
+                  </Link>
 
-                  <button className="relative group bg-transparent border-2 border-white text-white font-semibold py-4 px-8 rounded-full overflow-hidden transition-all duration-300 hover:bg-white hover:text-purple-600 hover:shadow-xl">
+                  <button onClick={handleWatchDemoClick} className="relative group bg-transparent border-2 border-white text-white font-semibold py-4 px-8 rounded-full overflow-hidden transition-all duration-300 hover:bg-white hover:text-purple-600 hover:shadow-xl">
                     <span className="relative z-10 flex items-center justify-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
@@ -548,7 +588,7 @@ function LandingPage() {
                   <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl overflow-hidden flex flex-col justify-center items-center p-8">
                     <h3 className="text-2xl font-bold text-gray-900 mb-4">Watch Demo</h3>
                     <div className="flex space-x-6 text-purple-600">
-                      <a href="#" className="transition-transform duration-300 hover:scale-125">
+                      <a href="#" onClick={handleWatchDemoClick} className="transition-transform duration-300 hover:scale-125">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
                           <path
                             fillRule="evenodd"
@@ -611,50 +651,59 @@ function LandingPage() {
           </div>
         </section>
 
-        {/* Courses Section */}
-        <section ref={coursesRef} className={`py-16 bg-[#120D25] text-white ${coursesInView ? 'is-visible' : ''}`}>
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll">Top Popular Courses</h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
-              {topCourses.length > 0 ? (
-                topCourses.map((course, index) => (
-                  <Link
-                    key={index}
-                    to={`/course-details/${course.id}`}
-                    className={`group bg-white rounded-2xl relative overflow-hidden transition-all duration-500 hover:translate-y-[-10px] hover:shadow-2xl border border-white/20 hover:border-purple-600/20 w-full md:w-auto course-card ${animatedCourses.includes(index) ? 'is-visible' : ''}`}
-                    style={{ transitionDelay: `${index * 150}ms` }}
-                  >
-                    <div className="p-5 h-full flex flex-col gap-3 relative z-20">
-                      <div className="w-full aspect-video rounded-xl overflow-hidden transition-all duration-500 group-hover:translate-y-[-5px] group-hover:scale-[1.03] group-hover:shadow-lg bg-[#6D28D9] flex justify-center items-center text-white text-3xl font-bold">
-                        <img src={course.image || "https://placehold.co/600x400/2A1E4B/FFFFFF?text=Course"} alt={course.title} className="w-full h-full object-cover" />
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <p className="text-gray-900 text-lg font-bold m-0 transition-all duration-300 group-hover:text-purple-600 group-hover:translate-x-0.5">{course.title}</p>
-                        <div className="flex items-center text-yellow-500 mb-2">
-                          <StarRating rating={course.rating} />
-                          <span className="text-xs text-gray-500 ml-2">({course.rating})</span>
-                        </div>
-                        <p className="text-gray-900 text-xs m-0 opacity-70 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0.5">by {course.instructor} in {course.category}</p>
-                      </div>
-                      <div className="flex justify-between items-center mt-auto">
-                        <p className="text-gray-900 font-bold text-base m-0 transition-all duration-300 group-hover:text-purple-600 group-hover:translate-x-0.5">${course.price}</p>
-                        <div className="w-7 h-7 bg-purple-600 rounded-full flex items-center justify-center text-white cursor-pointer transition-all duration-300 scale-90 group-hover:scale-100 group-hover:shadow-lg group-hover:shadow-purple-600/30">
-                          <svg height={16} width={16} viewBox="0 0 24 24">
-                            <path strokeWidth={2} stroke="currentColor" d="M4 12H20M12 4V20" fill="currentColor" />
-                          </svg>
-                        </div>
-                      </div>
+ {/* Courses Section */}
+    <section ref={coursesRef} className={`py-16 relative text-white ${coursesInView ? 'is-visible' : ''}`}>
+      {/* Background Image Container with Overlay */}
+      <div
+          className="absolute inset-0 z-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${bg3})` }}
+      >
+          {/* Adds a semi-transparent dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-black opacity-80"></div>
+      </div>
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll">Top Popular Courses</h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+          {topCourses.length > 0 ? (
+            topCourses.map((course, index) => (
+              <Link
+                key={index}
+                to={`/course-details/${course.id}`}
+                className={`group bg-white rounded-2xl relative overflow-hidden transition-all duration-500 hover:translate-y-[-10px] hover:shadow-2xl border border-white/20 hover:border-purple-600/20 w-full md:w-auto course-card ${animatedCourses.includes(index) ? 'is-visible' : ''}`}
+                style={{ transitionDelay: `${index * 150}ms` }}
+              >
+                <div className="p-5 h-full flex flex-col gap-3 relative z-20">
+                  <div className="w-full aspect-video rounded-xl overflow-hidden transition-all duration-500 group-hover:translate-y-[-5px] group-hover:scale-[1.03] group-hover:shadow-lg bg-[#6D28D9] flex justify-center items-center text-white text-3xl font-bold">
+                    <img src={course.image || "https://placehold.co/600x400/2A1E4B/FFFFFF?text=Course"} alt={course.title} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <p className="text-gray-900 text-lg font-bold m-0 transition-all duration-300 group-hover:text-purple-600 group-hover:translate-x-0.5">{course.title}</p>
+                    <div className="flex items-center text-yellow-500 mb-2">
+                      <StarRating rating={course.rating} />
+                      <span className="text-xs text-gray-500 ml-2">({course.rating})</span>
                     </div>
-                  </Link>
-                ))
-              ) : (
-                <div className="col-span-full text-center text-gray-500">
-                  No courses available.
+                    <p className="text-gray-900 text-xs m-0 opacity-70 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0.5">by {course.instructor} in {course.category}</p>
+                  </div>
+                  <div className="flex justify-between items-center mt-auto">
+                    <p className="text-gray-900 font-bold text-base m-0 transition-all duration-300 group-hover:text-purple-600 group-hover:translate-x-0.5">${course.price}</p>
+                    <div className="w-7 h-7 bg-purple-600 rounded-full flex items-center justify-center text-white cursor-pointer transition-all duration-300 scale-90 group-hover:scale-100 group-hover:shadow-lg group-hover:shadow-purple-600/30">
+                      <svg height={16} width={16} viewBox="0 0 24 24">
+                        <path strokeWidth={2} stroke="currentColor" d="M4 12H20M12 4V20" fill="currentColor" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
-              )}
+              </Link>
+            ))
+          ) : (
+            <div className="col-span-full text-center text-gray-500">
+              No courses available.
             </div>
-          </div>
-        </section>
+          )}
+        </div>
+      </div>
+    </section>
 
 
         {/* New Section: Practical & Supported Learning */}
@@ -748,8 +797,17 @@ function LandingPage() {
 
         {/* --- */}
         {/* Blog Posts Section with 3D Carousel */}
-        <section className={`py-16 text-white relative overflow-hidden blog-background-gradient`}>
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <section className={`py-16 text-white relative overflow-hidden`}>
+          {/* Background Image Container */}
+          <div
+            className="absolute inset-0 z-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${bg1})` }}
+          >
+            {/* Optional: Add a semi-transparent overlay to keep content readable */}
+            <div className="absolute inset-0 bg-black opacity-80"></div>
+          </div>
+
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
               Latest Blog Posts
               <div className="h-1 bg-purple-600 w-24 mx-auto mt-2 rounded-full"></div>
@@ -809,9 +867,9 @@ function LandingPage() {
                           <p className="text-xs text-gray-400">By {post.author}</p>
                           <p className="text-xs text-gray-400 mt-1 line-clamp-3">{post.summary}</p>
                         </div>
-                        <button className="mt-2 w-full bg-purple-600 text-white py-1 px-2 rounded-full text-xs font-semibold hover:bg-purple-700 transition-colors">
+                        <Link to={`/blog/${post.id}`} className="mt-2 w-full bg-purple-600 text-white py-1 px-2 rounded-full text-xs font-semibold hover:bg-purple-700 transition-colors text-center">
                           Read More
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -820,6 +878,11 @@ function LandingPage() {
             </div>
           </div>
         </section>
+
+
+
+
+
 
         {/* How it Works Section */}
         <section ref={howItWorksRef} className={`py-16 bg-[#120D25] text-white ${howItWorksInView ? 'is-visible' : ''}`}>
@@ -972,8 +1035,16 @@ function LandingPage() {
         </section>
 
         {/* CTA Section */}
-        <section ref={ctaRef} className={`py-24 bg-purple-600 text-white relative overflow-hidden ${ctaInView ? 'is-visible' : ''}`}>
-          <div className="absolute inset-0 opacity-20 bg-[url('https://placehold.co/1920x1080/000000/FFFFFF?text=Background')] bg-cover bg-center animate-pulse"></div>
+        <section ref={ctaRef} className={`py-24 relative overflow-hidden text-white ${ctaInView ? 'is-visible' : ''}`}>
+          {/* Background Image with Overlay */}
+          <div
+            className="absolute inset-0 z-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${bg4})` }}
+          >
+            {/* Adds a semi-transparent dark overlay for better text readability */}
+            <div className="absolute inset-0 bg-black opacity-70"></div>
+          </div>
+
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight animate-on-scroll">
               Buy The Premium Stack
@@ -981,9 +1052,12 @@ function LandingPage() {
             <p className="mt-4 text-lg md:text-xl text-purple-200 animate-on-scroll animation-delay-200">
               Get started now for free to unlock the full stack and start your journey now.
             </p>
-            <button className="mt-8 bg-white text-purple-600 font-semibold py-4 px-10 rounded-full shadow-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105 animate-on-scroll animation-delay-400">
+            <Link
+              to="/more/plans"
+              className="mt-8 bg-white text-purple-600 font-semibold py-4 px-10 rounded-full shadow-lg transition-all duration-300 hover:bg-purple-600 hover:text-white hover:scale-105 hover:shadow-2xl active:scale-95 transform animate-on-scroll animation-delay-400 inline-block"
+            >
               Get Started Now
-            </button>
+            </Link>
           </div>
         </section>
       </main>

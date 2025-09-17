@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import Hero from '../../components/Hero';
 import { coursesData } from '../../data/coursesData';
 
 const StarRating = ({ rating }) => {
@@ -50,8 +51,8 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, cart, wishlist })
     const [expandedModules, setExpandedModules] = useState({});
     const [showSharePopup, setShowSharePopup] = useState(false);
     const [pageRef, pageInView] = useInView({ threshold: 0.1 });
-    const [showPopup, setShowPopup] = useState(false); // New state for success pop-up
-    const [popupMessage, setPopupMessage] = useState(''); // New state for pop-up message
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
 
     useEffect(() => {
         let foundCourse = null;
@@ -173,46 +174,34 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, cart, wishlist })
             'Cybersecurity & Compliance': '/all-stacks/cybersecurity-compliance',
             'AI & Automation': '/all-stacks/ai-automation',
             'Marketing': '/all-stacks/marketing',
-            'Development': '/all-stacks/engineering-development' // Assuming Free Stacks are also Development-focused
+            'Development': '/all-stacks/engineering-development'
         };
         return categoryMap[category] || '#';
     };
     
-    // Check if the course is already in the cart or wishlist
     const isInCart = cart.some(item => item.id === course?.id);
     const isInWishlist = wishlist.some(item => item.id === course?.id);
+
+    const breadcrumbs = [
+        { name: "Home", path: "/" },
+        { name: course.category, path: getCategoryLink(course.category) },
+        { name: course.title, path: "" }
+    ];
 
     return (
         <div className="bg-gray-50 text-gray-900 min-h-screen font-inter">
             <Header />
-            
-            {showPopup && (
-                <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-green-500 text-white py-3 px-6 rounded-full shadow-lg z-50 animate-fade-in-down">
-                    {popupMessage}
-                </div>
-            )}
-            
-            <div className="relative pt-24 pb-16 overflow-hidden bg-gradient-to-r from-[#120D25] to-[#2A2441] text-white">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <h1 className="text-4xl md:text-5xl font-extrabold mb-4 animate-fade-in-down" style={{ animationDelay: '0ms' }}>
-                        {course.title}
-                    </h1>
-                    <p className="text-xl text-gray-300 mb-6 animate-fade-in-down" style={{ animationDelay: '200ms' }}>
-                        A comprehensive course for aspiring Business Analysts.
-                    </p>
-                    <nav className="flex items-center text-sm font-semibold animate-fade-in-down" style={{ animationDelay: '400ms' }}>
-                        <Link to="/" className="text-purple-300 hover:text-white transition-colors duration-300">Home</Link>
-                        <span className="mx-2 text-gray-400">&gt;</span>
-                        <Link to={getCategoryLink(course.category)} className="text-purple-300 hover:text-white transition-colors duration-300">
-                            {course.category}
-                        </Link>
-                        <span className="mx-2 text-gray-400">&gt;</span>
-                        <span className="text-white">{course.title}</span>
-                    </nav>
-                </div>
-            </div>
+            <Hero 
+                title={course.title}
+                breadcrumbs={breadcrumbs}
+            />
 
             <main ref={pageRef} className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                {showPopup && (
+                    <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-green-500 text-white py-3 px-6 rounded-full shadow-lg z-50 animate-fade-in-down">
+                        {popupMessage}
+                    </div>
+                )}
                 <div className="grid lg:grid-cols-3 gap-12">
                     {/* Left Column */}
                     <div className="lg:col-span-2 space-y-12">
@@ -317,7 +306,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, cart, wishlist })
                                         onClick={handleShareClick}
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.684l-2.618 2.618a1.5 1.5 0 01-2.122-2.122l2.618-2.618m4.936-4.936l2.618-2.618a1.5 1.5 0 012.122 2.122l-2.618 2.618m-4.936 4.936l2.618-2.618a1.5 1.5 0 00-2.122-2.122l-2.618 2.618m4.936 4.936a1.5 1.5 0 00-2.122-2.122l-2.618 2.618" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.684l-2.618 2.618a1.5 1.5 0 01-2.122-2.122l2.618-2.618m4.936-4.936l2.618-2.618a1.5 1.5 0 012.122 2.122l-2.618 2.618m-4.936 4.936l2.618-2.618a1.5 1.5 0 00-2.122-2.122l-2.618 2.618" />
                                         </svg>
                                         <span className="ml-2 hidden lg:inline">Share</span>
                                     </button>

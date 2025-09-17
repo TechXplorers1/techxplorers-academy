@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer'; 
 import { Link } from 'react-router-dom';
+import Hero from '../components/Hero';
+import bg5 from '../assets/bg-6.jpg';
 
 const StarRating = ({ rating }) => {
     const fullStars = Math.floor(rating);
@@ -17,7 +19,6 @@ const StarRating = ({ rating }) => {
     );
 };
 
-// Custom hook for on-scroll animations
 const useInView = (options) => {
     const [inView, setInView] = useState(false);
     const ref = useRef(null);
@@ -46,7 +47,6 @@ const useInView = (options) => {
 
 
 const StacksPageTemplate = ({ title, breadcrumb, courses }) => {
-    const [headerRef, headerInView] = useInView({ threshold: 0.1 });
     const [contentRef, contentInView] = useInView({ threshold: 0.1 });
     const [animatedCourses, setAnimatedCourses] = useState([]);
 
@@ -61,20 +61,19 @@ const StacksPageTemplate = ({ title, breadcrumb, courses }) => {
         }
     }, [contentInView, courses]);
 
+    const breadcrumbs = [
+        { name: "Home", path: "/" },
+        { name: "All Stacks", path: "/all-stacks" },
+        { name: breadcrumb, path: "" }
+    ];
+
     return (
         <div className="bg-white text-gray-900 min-h-screen font-inter">
             <Header isLandingPage={false} />
-            
-            <div ref={headerRef} className={`relative pt-24 pb-12 overflow-hidden bg-[#120D25] text-white ${headerInView ? 'is-visible' : ''}`}>
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 animate-fade-in-left" style={{ animationDelay: '0ms' }}>Category: {title}</h1>
-                    <nav className="flex items-center text-sm font-semibold animate-fade-in-left" style={{ animationDelay: '200ms' }}>
-                        <Link to="/" className="text-purple-300 hover:text-white">Home</Link>
-                        <span className="mx-2">&gt;</span>
-                        <span className="text-white">{breadcrumb}</span>
-                    </nav>
-                </div>
-            </div>
+            <Hero
+                title={`Category: ${title}`}
+                breadcrumbs={breadcrumbs}
+            />
 
             <main ref={contentRef} className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className={`flex justify-between items-center mb-8 animate-on-scroll ${contentInView ? 'is-visible' : ''}`}>

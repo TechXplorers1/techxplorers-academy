@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Hero from '../components/Hero';
 
 const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount }) => {
     const subtotal = cartItems.reduce((acc, item) => acc + item.price, 0);
@@ -9,21 +10,18 @@ const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount }) => {
     const estimatedTax = subtotal * taxRate;
     const total = subtotal + estimatedTax;
 
+    const breadcrumbs = [
+        { name: "Home", path: "/" },
+        { name: "Your Cart", path: "/cart" }
+    ];
+
     return (
         <div className="bg-gray-100 text-gray-900 min-h-screen font-inter">
             <Header cartItemsCount={cartItemsCount} />
-            
-            {/* New Hero Section */}
-            <div className={`relative pt-24 pb-12 overflow-hidden bg-[#120D25] text-white`}>
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 animate-fade-in-left" style={{ animationDelay: '0ms' }}>Your Cart</h1>
-                    <nav className="flex items-center text-sm font-semibold animate-fade-in-left" style={{ animationDelay: '200ms' }}>
-                        <Link to="/" className="text-purple-300 hover:text-white">Home</Link>
-                        <span className="mx-2 text-gray-400">&gt;</span>
-                        <span className="text-white">Your Cart</span>
-                    </nav>
-                </div>
-            </div>
+            <Hero
+                title="Your Cart"
+                breadcrumbs={breadcrumbs}
+            />
 
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 {cartItems.length === 0 ? (
@@ -39,7 +37,6 @@ const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount }) => {
                     </div>
                 ) : (
                     <div className="grid lg:grid-cols-3 gap-12">
-                        {/* Cart Items List */}
                         <div className="lg:col-span-2 space-y-8">
                             {cartItems.map(item => (
                                 <div key={item.id} className="bg-white p-8 rounded-3xl shadow-xl flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8 transition-transform duration-300 hover:scale-[1.01]">
@@ -60,7 +57,6 @@ const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount }) => {
                             ))}
                         </div>
 
-                        {/* Order Summary */}
                         <div className="lg:col-span-1">
                             <div className="bg-white p-8 rounded-3xl shadow-xl sticky top-28">
                                 <h2 className="text-2xl font-bold mb-6 text-gray-900">Order Summary</h2>
@@ -70,7 +66,7 @@ const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount }) => {
                                         <span className="font-semibold text-gray-800">${subtotal.toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between items-center">
-                                        <span className="text-gray-600">Estimated Tax ({taxRate * 100}%)</span>
+                                        <span className="text-gray-600">Estimated Tax (8%)</span>
                                         <span className="font-semibold text-gray-800">${estimatedTax.toFixed(2)}</span>
                                     </div>
                                     <div className="border-t border-gray-200 my-4 pt-4"></div>
