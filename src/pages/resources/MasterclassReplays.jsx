@@ -2,7 +2,7 @@ import React from 'react';
 import ResourcesPageTemplate from '../ResourcesPageTemplate';
 import useInView from '../../hooks/useInView';
 
-const MasterclassReplays = () => {
+const MasterclassReplays = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const [contentRef, contentInView] = useInView({ threshold: 0.2 });
 
     const masterclasses = [
@@ -27,7 +27,13 @@ const MasterclassReplays = () => {
     ];
 
     return (
-        <ResourcesPageTemplate title="Masterclass Replays" breadcrumb="Masterclass Replays">
+        <ResourcesPageTemplate 
+            title="Masterclass Replays" 
+            breadcrumb="Masterclass Replays"
+            isLoggedIn={isLoggedIn}
+            onLogout={onLogout}
+            cartItemsCount={cartItemsCount}
+        >
             <div ref={contentRef} className={`flex flex-col items-center text-center space-y-8 transition-all duration-700 ${contentInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                 <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">Catch Up on Our Expert Masterclasses.</h2>
                 <p className="text-lg text-gray-700 max-w-2xl">

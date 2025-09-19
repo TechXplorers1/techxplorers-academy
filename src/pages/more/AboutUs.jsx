@@ -3,7 +3,7 @@ import React from 'react';
 import MorePageTemplate from '../MorePageTemplate';
 import useInView from '../../hooks/useInView';
 
-const AboutUs = () => {
+const AboutUs = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const [introRef, introInView] = useInView({ threshold: 0.2 });
     const [sectionsRef, sectionsInView] = useInView({ threshold: 0.2 });
     const [missionRef, missionInView] = useInView({ threshold: 0.2 });
@@ -21,7 +21,7 @@ const AboutUs = () => {
     };
 
     return (
-        <MorePageTemplate title="About Us" breadcrumb="About Us">
+        <MorePageTemplate title="About Us" breadcrumb="About Us" isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount}>
             <div ref={introRef} className={`flex flex-col lg:flex-row gap-12 items-center mb-20 transition-all duration-700 ${introInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                 <div className="lg:w-1/2">
                     <img src="https://placehold.co/600x400/9b59b6/ffffff?text=About+Us" alt="Smiling student" className="rounded-2xl shadow-2xl transition-transform duration-300 hover:scale-105"/>

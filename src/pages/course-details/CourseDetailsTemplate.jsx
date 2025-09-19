@@ -1,9 +1,52 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Hero from '../../components/Hero';
 import { coursesData } from '../../data/coursesData';
+
+// Login Required Modal Component
+const LoginRequiredModal = ({ onClose, onLoginRedirect }) => {
+    const modalRef = useRef(null);
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                onClose();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [onClose]);
+
+    const handleOutsideClick = (e) => {
+        if (modalRef.current && !modalRef.current.contains(e.target)) {
+            onClose();
+        }
+    };
+
+    return (
+        <div
+            className="fixed inset-0 bg-black bg-opacity-70 z-[100] flex justify-center items-center p-4"
+            onClick={handleOutsideClick}
+        >
+            <div
+                ref={modalRef}
+                className="w-full max-w-sm bg-white text-gray-900 rounded-lg shadow-2xl p-6 text-center"
+                onClick={e => e.stopPropagation()}
+            >
+                <h3 className="text-xl font-bold mb-4">Login Required</h3>
+                <p className="text-gray-700 mb-6">You need to be logged in to access this feature.</p>
+                <button
+                    onClick={onLoginRedirect}
+                    className="w-full px-4 py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 transition-colors"
+                >
+                    Go to Login
+                </button>
+            </div>
+        </div>
+    );
+};
 
 const StarRating = ({ rating }) => {
     const fullStars = Math.floor(rating);
@@ -45,7 +88,7 @@ const useInView = (options) => {
     return [ref, inView];
 };
 
-const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, cart, wishlist }) => {
+const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishlist, onRemoveFromCart, cart, wishlist, isLoggedIn, onLogout, cartItemsCount, enrolledCourses }) => {
     const { courseId } = useParams();
     const [course, setCourse] = useState(null);
     const [expandedModules, setExpandedModules] = useState({});
@@ -53,11 +96,16 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, cart, wishlist })
     const [pageRef, pageInView] = useInView({ threshold: 0.1 });
     const [showPopup, setShowPopup] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
+    const [showLoginModal, setShowLoginModal] = useState(false);
+    const navigate = useNavigate();
+
+    const allCourses = Object.values(coursesData).flat();
+    const relatedCourses = allCourses.filter(c => c.id !== courseId).slice(0, 3);
 
     useEffect(() => {
         let foundCourse = null;
         for (const category in coursesData) {
-            foundCourse = coursesData[category].find(c => c.id === courseId);
+            foundCourse = allCourses.find(c => c.id === courseId);
             if (foundCourse) break;
         }
         setCourse(foundCourse);
@@ -75,11 +123,17 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, cart, wishlist })
     };
 
     const handleWishlistClick = () => {
+        if (!isLoggedIn) {
+            setShowLoginModal(true);
+            return;
+        }
+
         if (wishlist.some(item => item.id === course.id)) {
-            setPopupMessage('This course is already in your wishlist!');
+            onRemoveFromWishlist(course.id);
+            setPopupMessage(`${course.title} removed from wishlist.`);
         } else {
             onAddToWishlist(course);
-            setPopupMessage(`${course.title} has been added to your wishlist!`);
+            setPopupMessage(`${course.title} added to wishlist.`);
         }
         setShowPopup(true);
         setTimeout(() => setShowPopup(false), 2000);
@@ -92,79 +146,30 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, cart, wishlist })
     };
 
     const handleAddToCartClick = () => {
+        if (!isLoggedIn) {
+            setShowLoginModal(true);
+            return;
+        }
         if (cart.some(item => item.id === course.id)) {
-            setPopupMessage('This course is already in your cart!');
+            onRemoveFromCart(course.id);
+            setPopupMessage(`${course.title} removed from cart.`);
         } else {
             onAddToCart(course);
-            setPopupMessage(`${course.title} has been added to your cart!`);
+            setPopupMessage(`${course.title} added to cart.`);
         }
         setShowPopup(true);
         setTimeout(() => setShowPopup(false), 2000);
     };
 
+    const handleLoginRedirect = () => {
+        setShowLoginModal(false);
+        navigate('/login');
+    };
+
     if (!course) {
         return <div className="text-center py-20">Course not found.</div>;
     }
-
-    const courseDetails = {
-        description: "Welcome to the BraveBA | Business Analyst Stack, a comprehensive course designed for aspiring and current business analysts. This program equips you with the essential skills and methodologies to bridge the gap between business needs and technical solutions. Through a blend of theoretical knowledge and practical, project-based learning, you will master the art of requirements gathering, stakeholder management, and data-driven decision-making. By the end of this stack, you'll be ready to tackle real-world challenges and drive impactful change within any organization.",
-        learningOutcomes: [
-            "Learn to identify project risks and opportunities.",
-            "Master Agile project management methodologies.",
-            "Develop strong communication and leadership skills.",
-            "Create effective project timelines and budgets.",
-            "Gain hands-on experience with industry-standard tools.",
-        ],
-        curriculum: [
-            {
-                title: "Module 1: Foundations of Business Analysis",
-                lessons: [
-                    "What is a Business Analyst?",
-                    "The BA Role in the Project Lifecycle",
-                    "Key Skills and Responsibilities",
-                    "Understanding Business Requirements"
-                ],
-            },
-            {
-                title: "Module 2: Agile Methodologies",
-                lessons: [
-                    "Agile vs. Waterfall Methodologies",
-                    "Scrum and Kanban",
-                    "Creating a Project Plan",
-                    "User Stories and Use Cases"
-                ],
-            },
-            {
-                title: "Module 3: Stakeholder Engagement",
-                lessons: [
-                    "Identifying and Analyzing Stakeholders",
-                    "Communication Strategies",
-                    "Conflict Resolution",
-                    "Eliciting and Validating Requirements"
-                ],
-            },
-            {
-                title: "Module 4: Business Modeling and Tools",
-                lessons: [
-                    "Process Modeling with BPMN",
-                    "Data Modeling",
-                    "Using Jira and Confluence",
-                    "Creating Wireframes and Prototypes"
-                ],
-            },
-        ],
-        mentors: [
-            { name: "Victoria", title: "Lead Business Analyst", image: "https://placehold.co/100x100/A78BFA/FFFFFF?text=V" },
-            { name: "Daniel Olayinka", title: "Scrum Master", image: "https://placehold.co/100x100/8B5CF6/FFFFFF?text=D" },
-        ],
-    };
-
-    const relatedCourses = [
-        { id: 'Braveprdo-product-owner', title: 'BravePrdO | Product Owner Stack', price: 159.99, rating: 4.0, instructor: 'Victoria', image: 'https://placehold.co/600x400/A78BFA/FFFFFF?text=BravePrdO' },
-        { id: 'Bravesm-scrum-master', title: 'BraveSM | Scrum Master Stack', price: 119.99, rating: 5.0, instructor: 'Daniel Olayinka', image: 'https://placehold.co/600x400/A78BFA/FFFFFF?text=BraveSM' },
-        { id: 'Braveprjm-project-manager', title: 'BravePrjM | Project Manager Stack', price: 139.99, rating: 4.5, instructor: 'Victoria', image: 'https://placehold.co/600x400/A78BFA/FFFFFF?text=BravePrjM' }
-    ];
-
+    
     const getCategoryLink = (category) => {
         const categoryMap = {
             'Product & Strategy': '/all-stacks/product-strategy',
@@ -179,8 +184,9 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, cart, wishlist })
         return categoryMap[category] || '#';
     };
     
-    const isInCart = cart.some(item => item.id === course?.id);
-    const isInWishlist = wishlist.some(item => item.id === course?.id);
+    const isEnrolled = isLoggedIn && enrolledCourses.some(item => item.id === course?.id);
+    const isInCart = isLoggedIn && cart.some(item => item.id === course?.id);
+    const isInWishlist = isLoggedIn && wishlist.some(item => item.id === course?.id);
 
     const breadcrumbs = [
         { name: "Home", path: "/" },
@@ -190,7 +196,8 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, cart, wishlist })
 
     return (
         <div className="bg-gray-50 text-gray-900 min-h-screen font-inter">
-            <Header />
+            {showLoginModal && <LoginRequiredModal onClose={() => setShowLoginModal(false)} onLoginRedirect={handleLoginRedirect} />}
+            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
             <Hero 
                 title={course.title}
                 breadcrumbs={breadcrumbs}
@@ -210,13 +217,15 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, cart, wishlist })
                                 <img src={course.image} alt={course.title} className="w-full h-full object-cover"/>
                             </div>
                             <h2 className="text-3xl md:text-4xl font-bold mb-4">Course Overview</h2>
-                            <p className="text-gray-700 leading-relaxed text-lg">{courseDetails.description}</p>
+                            <p className="text-gray-700 leading-relaxed text-lg">
+                                {course.description}
+                            </p>
                         </div>
 
                         <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-200 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
                             <h2 className="text-3xl md:text-4xl font-bold mb-6">What You'll Learn</h2>
                             <ul className="grid md:grid-cols-2 gap-x-8 gap-y-4 text-lg">
-                                {courseDetails.learningOutcomes.map((item, index) => (
+                                {course.learningOutcomes.map((item, index) => (
                                     <li key={index} className="flex items-start text-gray-700 animate-slide-in-right" style={{animationDelay: `${index * 100}ms`}}>
                                         <svg className="w-6 h-6 text-purple-600 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -230,7 +239,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, cart, wishlist })
                         <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-300 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
                             <h2 className="text-3xl md:text-4xl font-bold mb-6">Curriculum</h2>
                             <div className="space-y-6">
-                                {courseDetails.curriculum.map((module, index) => (
+                                {course.curriculum.map((module, index) => (
                                     <div key={index} className="border-b border-gray-200 pb-4">
                                         <button
                                             className="w-full flex justify-between items-center text-left py-2 focus:outline-none"
@@ -261,7 +270,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, cart, wishlist })
                         <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-400 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
                             <h2 className="text-3xl md:text-4xl font-bold mb-6">Your Mentors</h2>
                             <div className="grid sm:grid-cols-2 gap-8">
-                                {courseDetails.mentors.map((mentor, index) => (
+                                {course.mentors.map((mentor, index) => (
                                     <div key={index} className="flex items-center space-x-4">
                                         <img src={mentor.image} alt={mentor.name} className="w-20 h-20 rounded-full object-cover border-4 border-purple-600"/>
                                         <div>
@@ -284,21 +293,28 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, cart, wishlist })
                                     <span className="text-sm text-gray-500 ml-2">({course.rating})</span>
                                 </div>
                             </div>
-                            <button
-                                onClick={handleAddToCartClick}
-                                className="w-full py-4 bg-purple-600 text-white font-semibold rounded-full text-lg shadow-lg hover:bg-purple-700 transition-colors"
-                            >
-                                Add to Cart
-                            </button>
+                            {isLoggedIn && isEnrolled ? (
+                                <Link to={`/course/${course.id}`} className="w-full py-4 bg-green-500 text-white font-semibold rounded-full text-lg shadow-lg hover:bg-green-600 transition-colors block text-center">
+                                    Go to Course
+                                </Link>
+                            ) : (
+                                <button
+                                    onClick={handleAddToCartClick}
+                                    className={`w-full py-4 font-semibold rounded-full text-lg shadow-lg transition-colors ${isInCart ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-purple-600 text-white hover:bg-purple-700'}`}
+                                >
+                                    {isInCart ? 'Remove from Cart' : 'Add to Cart'}
+                                </button>
+                            )}
                             <div className="flex justify-between items-center mt-4 space-x-2">
                                 <button
                                     className={`flex-1 py-3 px-4 rounded-full font-semibold border transition-colors ${isInWishlist ? 'bg-purple-600 text-white border-purple-600' : 'bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200'}`}
                                     onClick={handleWishlistClick}
+                                    disabled={isEnrolled}
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 mr-2 inline-block ${isInWishlist ? 'text-white' : 'text-gray-500'}`} fill={isInWishlist ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                     </svg>
-                                    Wishlist
+                                    {isInWishlist ? 'Wishlisted' : 'Add to Wishlist'}
                                 </button>
                                 <div className="relative">
                                     <button

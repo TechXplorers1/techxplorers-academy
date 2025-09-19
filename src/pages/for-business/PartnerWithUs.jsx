@@ -46,6 +46,8 @@ const pageData = {
   ],
 };
 
-const PartnerWithUs = () => <BusinessPageTemplate {...pageData} />;
+const PartnerWithUs = ({ isLoggedIn, onLogout, cartItemsCount }) => (
+  <BusinessPageTemplate {...pageData} isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
+);
 
 export default PartnerWithUs;

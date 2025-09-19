@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import DashboardPageTemplate from '../DashboardPageTemplate';
 
-const Wishlist = ({ isLoggedIn, wishlistItems, onRemoveFromWishlist, onAddToCart }) => {
+const Wishlist = ({ isLoggedIn, onLogout, cartItemsCount, wishlistItems, onRemoveFromWishlist, onAddToCart }) => {
     const [showPopup, setShowPopup] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
 
@@ -36,7 +36,12 @@ const Wishlist = ({ isLoggedIn, wishlistItems, onRemoveFromWishlist, onAddToCart
     );
 
     return (
-        <DashboardPageTemplate isLoggedIn={isLoggedIn} title="My Wishlist">
+        <DashboardPageTemplate 
+            isLoggedIn={isLoggedIn} 
+            onLogout={onLogout}
+            cartItemsCount={cartItemsCount}
+            title="My Wishlist"
+        >
             {showPopup && (
                 <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-green-500 text-white py-3 px-6 rounded-full shadow-lg z-50 animate-fade-in-down">
                     {popupMessage}

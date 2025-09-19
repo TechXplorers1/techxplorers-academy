@@ -3,7 +3,7 @@ import React from 'react';
 import MorePageTemplate from '../MorePageTemplate';
 import useInView from '../../hooks/useInView';
 
-const Plans = () => {
+const Plans = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const [contentRef, contentInView] = useInView({ threshold: 0.2 });
     const [card1Ref, card1InView] = useInView({ threshold: 0.2 });
     const [card2Ref, card2InView] = useInView({ threshold: 0.2 });
@@ -13,7 +13,7 @@ const Plans = () => {
     const xIcon = <svg className="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" /></svg>;
 
     return (
-        <MorePageTemplate title="Plans" breadcrumb="Plans">
+        <MorePageTemplate title="Plans" breadcrumb="Plans" isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount}>
             <div ref={contentRef} className={`flex flex-col items-center text-center space-y-8 transition-all duration-700 ${contentInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                 <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">Choose The Plan That's Right For You.</h2>
                 <p className="text-lg text-gray-700 max-w-2xl">

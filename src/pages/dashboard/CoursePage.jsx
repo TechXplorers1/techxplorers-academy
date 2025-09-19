@@ -1,48 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import { coursesData } from '../../data/coursesData';
 
-const CoursePage = ({ isLoggedIn }) => {
+const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const { courseId } = useParams();
+    const [course, setCourse] = useState(null);
     const [currentLesson, setCurrentLesson] = useState(null);
     const [completedLessons, setCompletedLessons] = useState({});
 
-    // Dummy course data with a more detailed structure
-    const dummyCourseData = {
-        1: {
-            title: "UX/UI Design: From Beginner to Pro",
-            subtitle: "Learn how to build beautiful and functional user experiences from scratch.",
-            modules: [
-                {
-                    id: 1,
-                    title: "Module 1: Foundations of UX/UI",
-                    lessons: [
-                        { id: 101, title: "1.1 What is UX/UI Design?", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" },
-                        { id: 102, title: "1.2 The Design Thinking Process", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" },
-                        { id: 103, title: "1.3 Introduction to Figma", videoUrl: "https://www.youtube.com/embed/oK2yZpD8sY8" },
-                    ]
-                },
-                {
-                    id: 2,
-                    title: "Module 2: User Research & Strategy",
-                    lessons: [
-                        { id: 201, title: "2.1 Conducting User Interviews", videoUrl: "https://www.youtube.com/embed/ZfI8jQp4X0E" },
-                        { id: 202, title: "2.2 Creating User Personas", videoUrl: "https://www.youtube.com/embed/WJ7v9B5gL6k" },
-                        { id: 203, title: "2.3 Journey Mapping", videoUrl: "https://www.youtube.com/embed/xMYo9jaMah8" },
-                    ]
-                },
-            ],
-            instructor: { name: "Jane Doe", profession: "Senior UX Designer" }
-        },
-    };
-
-    const course = dummyCourseData[courseId];
-
-    // Set the first lesson as the default when the page loads
+    // Find the course data using the URL parameter
     useEffect(() => {
-        if (course && !currentLesson) {
-            setCurrentLesson(course.modules[0].lessons[0]);
+        let foundCourse = null;
+        for (const category in coursesData) {
+            foundCourse = coursesData[category].find(c => c.id === courseId);
+            if (foundCourse) break;
         }
-    }, [course, currentLesson]);
+        setCourse(foundCourse);
+        
+        if (foundCourse && foundCourse.modules && foundCourse.modules.length > 0 && foundCourse.modules[0].lessons.length > 0) {
+            setCurrentLesson(foundCourse.modules[0].lessons[0]);
+        }
+    }, [courseId]);
 
     const handleLessonClick = (lesson) => {
         setCurrentLesson(lesson);
@@ -53,7 +33,7 @@ const CoursePage = ({ isLoggedIn }) => {
     };
 
     const handleNextLesson = () => {
-        if (!currentLesson) return;
+        if (!currentLesson || !course || !course.modules) return;
 
         let foundNext = false;
         for (let i = 0; i < course.modules.length; i++) {
@@ -61,14 +41,11 @@ const CoursePage = ({ isLoggedIn }) => {
             const lessonIndex = module.lessons.findIndex(l => l.id === currentLesson.id);
             
             if (lessonIndex !== -1) {
-                // Check for next lesson in the current module
                 if (lessonIndex < module.lessons.length - 1) {
                     setCurrentLesson(module.lessons[lessonIndex + 1]);
                     foundNext = true;
                     break;
-                }
-                // Check for next lesson in the next module
-                else if (i < course.modules.length - 1) {
+                } else if (i < course.modules.length - 1) {
                     const nextModule = course.modules[i + 1];
                     if (nextModule.lessons.length > 0) {
                         setCurrentLesson(nextModule.lessons[0]);
@@ -99,24 +76,8 @@ const CoursePage = ({ isLoggedIn }) => {
 
     return (
         <div className="min-h-screen bg-gray-100 font-inter">
-            {/* Header */}
-            <header className="bg-white shadow-sm py-4">
-                <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                        <Link to="/dashboard/enrolled-courses" className="text-gray-600 hover:text-gray-900 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </Link>
-                        <div>
-                            <h1 className="text-xl font-bold text-gray-900">{course.title}</h1>
-                            <p className="text-sm text-gray-500">{currentLesson ? currentLesson.title : 'Select a lesson to begin'}</p>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            {/* Main Content Area */}
+            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
+            
             <main className="flex flex-col lg:flex-row h-full lg:h-[calc(100vh-4rem)]">
                 {/* Video Player Section */}
                 <div className="lg:flex-grow p-6 md:p-8 bg-gray-900 flex flex-col justify-center">
@@ -195,6 +156,7 @@ const CoursePage = ({ isLoggedIn }) => {
                     </div>
                 </aside>
             </main>
+            <Footer />
         </div>
     );
 };

@@ -22,7 +22,7 @@ const useInView = (options) => {
 
         return () => {
             if (ref.current) {
-                observer.unobserve(ref.current);
+                observer.unobserve(entry.target);
             }
         };
     }, [options]);
@@ -30,7 +30,7 @@ const useInView = (options) => {
     return [ref, inView];
 };
 
-const ResourcesPageTemplate = ({ title, breadcrumb, children }) => {
+const ResourcesPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, breadcrumb, children }) => {
     const breadcrumbs = [
         { name: "Home", path: "/" },
         { name: "Resources", path: "/resources/free-resources" },
@@ -39,7 +39,7 @@ const ResourcesPageTemplate = ({ title, breadcrumb, children }) => {
 
     return (
         <div className="bg-white text-gray-900 min-h-screen font-inter">
-            <Header isLandingPage={false} />
+            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
             <Hero
                 title={title}
                 breadcrumbs={breadcrumbs}

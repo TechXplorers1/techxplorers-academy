@@ -1,7 +1,7 @@
 import React from 'react';
 import DashboardPageTemplate from './DashboardPageTemplate';
 
-const Dashboard = ({ isLoggedIn, onLogout }) => {
+const Dashboard = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const courseStats = {
         enrolled: 12,
         active: 5,
@@ -25,7 +25,7 @@ const Dashboard = ({ isLoggedIn, onLogout }) => {
     );
 
     return (
-        <DashboardPageTemplate isLoggedIn={isLoggedIn} title="Dashboard">
+        <DashboardPageTemplate isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} title="Dashboard">
             {/* Stat Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <DashboardCard

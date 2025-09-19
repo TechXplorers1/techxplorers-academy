@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 
-const MorePageTemplate = ({ title, breadcrumb, children }) => {
+const MorePageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, breadcrumb, children }) => {
     const breadcrumbs = [
         { name: "Home", path: "/" },
         { name: "More", path: "/more/about-us" },
@@ -14,7 +14,7 @@ const MorePageTemplate = ({ title, breadcrumb, children }) => {
 
     return (
         <div className="bg-white text-gray-900 min-h-screen font-inter">
-            <Header isLandingPage={false} />
+            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
             <Hero
                 title={title}
                 breadcrumbs={breadcrumbs}

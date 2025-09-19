@@ -59,6 +59,8 @@ const pageData = {
   ],
 };
 
-const HireFromUs = () => <BusinessPageTemplate {...pageData} />;
+const HireFromUs = ({ isLoggedIn, onLogout, cartItemsCount }) => (
+  <BusinessPageTemplate {...pageData} isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
+);
 
 export default HireFromUs;

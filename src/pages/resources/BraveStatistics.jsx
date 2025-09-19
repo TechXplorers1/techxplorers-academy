@@ -3,7 +3,7 @@ import ResourcesPageTemplate from '../ResourcesPageTemplate';
 import useInView from '../../hooks/useInView';
 import NumberCounter from '../../components/NumberCounter'; // Changed to a default import
 
-const BraveStatistics = () => {
+const BraveStatistics = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const [contentRef, contentInView] = useInView({ threshold: 0.2 });
 
     const stats = [
@@ -14,7 +14,13 @@ const BraveStatistics = () => {
     ];
 
     return (
-        <ResourcesPageTemplate title="Brave Statistics" breadcrumb="Brave Statistics">
+        <ResourcesPageTemplate 
+            title="Brave Statistics" 
+            breadcrumb="Brave Statistics"
+            isLoggedIn={isLoggedIn}
+            onLogout={onLogout}
+            cartItemsCount={cartItemsCount}
+        >
             <div ref={contentRef} className={`flex flex-col items-center text-center space-y-8 transition-all duration-700 ${contentInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                 <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">Our Impact, By the Numbers.</h2>
                 <p className="text-lg text-gray-700 max-w-2xl">

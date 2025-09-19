@@ -3,7 +3,7 @@ import React from 'react';
 import MorePageTemplate from '../MorePageTemplate';
 import useInView from '../../hooks/useInView';
 
-const BecomeAMentor = () => {
+const BecomeAMentor = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const [introRef, introInView] = useInView({ threshold: 0.2 });
     const [whyRef, whyInView] = useInView({ threshold: 0.1 });
     const [waysRef, waysInView] = useInView({ threshold: 0.1 });
@@ -11,7 +11,7 @@ const BecomeAMentor = () => {
     const [formRef, formInView] = useInView({ threshold: 0.1 });
     
     return (
-        <MorePageTemplate title="Become A Mentor" breadcrumb="Become A Mentor">
+        <MorePageTemplate title="Become A Mentor" breadcrumb="Become A Mentor" isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount}>
             <div ref={introRef} className={`flex flex-col lg:flex-row gap-12 items-center mb-20 transition-all duration-700 ${introInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                 <div className="lg:w-1/2 space-y-6">
                     <p className="text-purple-600 font-bold text-sm uppercase">For Leaders</p>

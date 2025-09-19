@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import DashboardPageTemplate from '../DashboardPageTemplate';
 
-const OrderHistory = ({ isLoggedIn }) => {
+const OrderHistory = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const orders = [
         { id: 'ORD-12345', date: '2025-08-20', total: '$299', status: 'Completed', courses: ['Product Strategy', 'UI/UX Design'] },
         { id: 'ORD-67890', date: '2025-07-15', total: '$199', status: 'Completed', courses: ['Marketing'] },
@@ -26,7 +26,12 @@ const OrderHistory = ({ isLoggedIn }) => {
     );
 
     return (
-        <DashboardPageTemplate isLoggedIn={isLoggedIn} title="Order History">
+        <DashboardPageTemplate 
+            isLoggedIn={isLoggedIn}
+            onLogout={onLogout}
+            cartItemsCount={cartItemsCount}
+            title="Order History"
+        >
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-transform transform duration-300 hover:scale-[1.01]">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">

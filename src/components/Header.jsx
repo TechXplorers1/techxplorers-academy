@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
     const menuRef = useRef(null);
@@ -30,12 +30,12 @@ const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
     );
 };
 
-// The Header component now accepts isLoggedIn, onLogout, and cartItemsCount as props
 const Header = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const [isAllStacksOpen, setIsAllStacksOpen] = useState(false);
     const [isForBusinessOpen, setIsForBusinessOpen] = useState(false);
     const [isResourcesOpen, setIsResourcesOpen] = useState(false);
     const [isMoreOpen, setIsMoreOpen] = useState(false);
+    const navigate = useNavigate();
 
     const handleHover = (dropdownName, isOpen) => {
         setTimeout(() => {
@@ -56,6 +56,10 @@ const Header = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                     break;
             }
         }, 100);
+    };
+
+    const handleSearchClick = () => {
+        navigate('/search');
     };
 
     const allStacksItems = [
@@ -148,21 +152,23 @@ const Header = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                     )}
                 </div>
                 <div className="hidden lg:flex items-center space-x-4">
-                    <a href="#" className="hover:text-purple-400 transition-colors">
+                    <button onClick={handleSearchClick} className="hover:text-purple-400 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
-                    </a>
-                    <Link to="/cart" className="relative hover:text-purple-400 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63-.63-.185 1.705.707 1.705H17m0 0a2 2 0 100 4 2 2 0 010-4zm-8 2a2 2 0 110 4 2 2 0 010-4z" />
-                        </svg>
-                        {cartItemsCount > 0 && (
-                            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
-                                {cartItemsCount}
-                            </span>
-                        )}
-                    </Link>
+                    </button>
+                    {isLoggedIn && (
+                        <Link to="/cart" className="relative hover:text-purple-400 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63-.63-.185 1.705.707 1.705H17m0 0a2 2 0 100 4 2 2 0 010-4zm-8 2a2 2 0 110 4 2 2 0 010-4z" />
+                            </svg>
+                            {cartItemsCount > 0 && (
+                                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                                    {cartItemsCount}
+                                </span>
+                            )}
+                        </Link>
+                    )}
                 </div>
                 <button className="lg:hidden text-2xl text-white">
                     ☰

@@ -22,6 +22,9 @@ const slideRight = {
 };
 
 const BusinessPageTemplate = ({
+  isLoggedIn,
+  onLogout,
+  cartItemsCount,
   title,
   breadcrumbs,
   sections,
@@ -33,7 +36,7 @@ const BusinessPageTemplate = ({
 
   return (
     <div className="bg-white text-gray-900 font-inter min-h-screen">
-      <Header isLandingPage={false} />
+      <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
       <Hero
         title={title}
         breadcrumbs={filteredBreadcrumbs}
@@ -82,7 +85,7 @@ const BusinessPageTemplate = ({
                           className="flex items-start bg-gray-50 p-4 rounded-xl shadow-sm hover:shadow-md transition"
                           whileHover={{ scale: 1.03, x: 5 }}
                         >
-                          <span className="w-8 h-8 mr-3 flex items-center justify-center rounded-full bg-purple-600 text-white font-bold">
+                          <span className="w-8 h-8 mr-3 flex items-center justify-center rounded-full bg-blue-400 text-white font-bold">
                             ✓
                           </span>
                           {item}
@@ -109,7 +112,7 @@ const BusinessPageTemplate = ({
                           className="flex items-start bg-gray-50 p-4 rounded-xl shadow-sm hover:shadow-md transition"
                           whileHover={{ scale: 1.03, x: 5 }}
                         >
-                          <span className="w-8 h-8 mr-3 flex items-center justify-center rounded-full bg-purple-600 text-white font-bold">
+                          <span className="w-8 h-8 mr-3 flex items-center justify-center rounded-full bg-blue-400 text-white font-bold">
                             ✓
                           </span>
                           {item}
@@ -138,8 +141,8 @@ const BusinessPageTemplate = ({
         ))}
       </main>
 
-      <div className="relative bg-gradient-to-br from-purple-700 via-purple-600 to-indigo-700 py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-purple-900/20 mix-blend-overlay"></div>
+      <div className="relative bg-gradient-to-br from-blue-400 via-blue-600 to-cyan-400 py-24 overflow-hidden">
+        <div className="absolute inset-0 bg-blue-900/20 mix-blend-overlay"></div>
         <motion.div
           className="container relative mx-auto px-6 lg:px-8"
           initial="hidden"
@@ -169,13 +172,13 @@ const BusinessPageTemplate = ({
                         id={field.name}
                         name={field.name}
                         rows="4"
-                        className="w-full rounded-lg border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                        className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-400 focus:ring-blue-400"
                       />
                     ) : field.type === "select" ? (
                       <select
                         id={field.name}
                         name={field.name}
-                        className="w-full rounded-lg border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                        className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-400 focus:ring-blue-400"
                       >
                         {field.options.map((option, j) => (
                           <option key={j}>{option}</option>
@@ -186,7 +189,7 @@ const BusinessPageTemplate = ({
                         type={field.type}
                         id={field.name}
                         name={field.name}
-                        className="w-full rounded-lg border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                        className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-400 focus:ring-blue-400"
                       />
                     )}
                   </div>
@@ -197,7 +200,7 @@ const BusinessPageTemplate = ({
                   type="submit"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-lg font-semibold py-3 px-12 rounded-full shadow-lg hover:opacity-90 transition"
+                  className="bg-gradient-to-r from-blue-400 to-cyan-400 text-white text-lg font-semibold py-3 px-12 rounded-full shadow-lg hover:opacity-90 transition"
                 >
                   Submit Request
                 </motion.button>

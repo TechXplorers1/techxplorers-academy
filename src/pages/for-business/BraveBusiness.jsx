@@ -71,6 +71,8 @@ const pageData = {
   ],
 };
 
-const BraveBusiness = () => <BusinessPageTemplate {...pageData} />;
+const BraveBusiness = ({ isLoggedIn, onLogout, cartItemsCount }) => (
+  <BusinessPageTemplate {...pageData} isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
+);
 
 export default BraveBusiness;

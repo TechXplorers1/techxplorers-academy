@@ -1,14 +1,19 @@
 import React from 'react';
 import DashboardPageTemplate from '../DashboardPageTemplate';
 
-const MyProfile = ({ isLoggedIn }) => {
+const MyProfile = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const user = {
         name: "Chaveen Reddy",
         email: "chaveen.r@example.com"
     };
 
     return (
-        <DashboardPageTemplate isLoggedIn={isLoggedIn} title="My Profile">
+        <DashboardPageTemplate 
+            isLoggedIn={isLoggedIn}
+            onLogout={onLogout}
+            cartItemsCount={cartItemsCount}
+            title="My Profile"
+        >
             <div className="bg-white p-8 rounded-2xl shadow-lg transition-transform transform duration-300 hover:scale-[1.01]">
                 <h3 className="text-xl font-bold mb-6">Profile Information</h3>
                 <div className="space-y-6">

@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import DashboardSidebar from '../components/DashboardSidebar';
 
-const DashboardPageTemplate = ({ isLoggedIn, title, children }) => {
+const DashboardPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, children }) => {
     const user = {
         name: "Chaveen Reddy",
         initials: "CR"
@@ -19,7 +19,7 @@ const DashboardPageTemplate = ({ isLoggedIn, title, children }) => {
 
     return (
         <div className="min-h-screen bg-gray-50 font-inter">
-            <Header isLoggedIn={isLoggedIn} />
+            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
             <Hero
                 title={title}
                 breadcrumbs={breadcrumbs}
@@ -38,7 +38,7 @@ const DashboardPageTemplate = ({ isLoggedIn, title, children }) => {
                         </div>
                     </div>
                     {title === "Dashboard" && (
-                        <div className="md:ml-auto flex items-center justify-center space-x-2 text-orange-500 font-medium text-sm">
+                        <div className="md:ml-auto flex items-center justify-center space-x-2 text-blue-500 font-medium text-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                             </svg>

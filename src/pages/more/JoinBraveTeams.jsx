@@ -3,14 +3,14 @@ import React from 'react';
 import MorePageTemplate from '../MorePageTemplate';
 import useInView from '../../hooks/useInView';
 
-const JoinBraveTeams = () => {
+const JoinBraveTeams = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const [introRef, introInView] = useInView({ threshold: 0.2 });
     const [sectionsRef, sectionsInView] = useInView({ threshold: 0.2 });
     const [howItWorksRef, howItWorksInView] = useInView({ threshold: 0.2 });
     const [formRef, formInView] = useInView({ threshold: 0.2 });
 
     return (
-        <MorePageTemplate title="Join BraveTeams" breadcrumb="Join BraveTeams">
+        <MorePageTemplate title="Join BraveTeams" breadcrumb="Join BraveTeams" isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount}>
             <div ref={introRef} className={`flex flex-col lg:flex-row gap-12 items-center mb-20 transition-all duration-700 ${introInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                 <div className="lg:w-1/2 space-y-6">
                     <p className="text-purple-600 font-bold text-sm uppercase">For Learners</p>

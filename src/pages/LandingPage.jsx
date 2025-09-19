@@ -6,6 +6,7 @@ import hero2 from '../assets/hero-2.jpg';
 import bg1 from '../assets/bg-1.jpg';
 import bg4 from '../assets/bg-4.jpg';
 import bg3 from '../assets/bg-7.jpg';
+import Footer from '../components/Footer';
 
 // Inline SVG Icons
 const PlayIcon = ({ size = 24, className }) => (
@@ -177,7 +178,8 @@ const useInView = (options) => {
   return [ref, inView];
 };
 
-function LandingPage() {
+
+function LandingPage({ isLoggedIn, onLogout, cartItemsCount }) {
   const [blogPosts] = useState([
     {
       id: "1",
@@ -347,18 +349,22 @@ function LandingPage() {
       image: "https://placehold.co/100x100",
     },
   ];
+
   const [activeCategory, setActiveCategory] = useState("All");
   const [showGoTop, setShowGoTop] = useState(false);
   const carouselRef = useRef(null);
 
   const [heroRef, heroInView] = useInView({ threshold: 0.1 });
   const [statsRef, statsInView] = useInView({ threshold: 0.5 });
+  const [popularStacksRef, popularStacksInView] = useInView({ threshold: 0.3 });
   const [coursesRef, coursesInView] = useInView({ threshold: 0.3 });
   const [featureRef, featureInView] = useInView({ threshold: 0.3 });
   const [howItWorksRef, howItWorksInView] = useInView({ threshold: 0.5 });
   const [testimonialsRef, testimonialsInView] = useInView({ threshold: 0.3 });
   const [instructorsRef, instructorsInView] = useInView({ threshold: 0.3 });
   const [ctaRef, ctaInView] = useInView({ threshold: 0.3 });
+  const [learningMethodologyRef, learningMethodologyInView] = useInView({ threshold: 0.3 });
+
 
   // State to track which course cards have been animated
   const [animatedCourses, setAnimatedCourses] = useState([]);
@@ -444,6 +450,92 @@ function LandingPage() {
     coursesData.freeStacks[0],
   ];
 
+  const popularStacks = [
+    {
+      name: 'Product & Strategy',
+      path: '/all-stacks/product-strategy',
+      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-purple-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0h2.204a2 2 0 01.838.188l4.095 2.048a1 1 0 001.122-.163l4.581-4.581c.31-.31.056-.879-.318-1.026l-4.095-1.638a2 2 0 01-1.47-.537L9 20z" /></svg>
+    },
+    {
+      name: 'UX & UI Design',
+      path: '/all-stacks/ux-ui-design',
+      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8l-6 6 6 6M6 12h18" /></svg>
+    },
+    {
+      name: 'Engineering & Development',
+      path: '/all-stacks/engineering-development',
+      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4m-4 4l-4-4m-4-4l-4 4m-4-4l-4 4" /></svg>
+    },
+    {
+      name: 'Data & Analytics',
+      path: '/all-stacks/data-analytics',
+      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-yellow-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18.5a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18.5a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" strokeDasharray="3 3" /></svg>
+    },
+    {
+      name: 'Cybersecurity & Compliance',
+      path: '/all-stacks/cybersecurity-compliance',
+      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-red-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5-6a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V6z" /></svg>
+    },
+    {
+      name: 'AI & Automation',
+      path: '/all-stacks/ai-automation',
+      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-pink-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+    }
+  ];
+
+  const offers = [
+    {
+      title: "Get 50% Off",
+      subtitle: "On your first BraveStack purchase.",
+      bgColor: "bg-purple-600",
+      textColor: "text-white",
+      linkText: "Claim Now",
+      linkPath: "/all-stacks",
+    },
+    {
+      title: "Buy One, Get One Free",
+      subtitle: "On selected courses for a limited time.",
+      bgColor: "bg-blue-500",
+      textColor: "text-white",
+      linkText: "See Courses",
+      linkPath: "/all-stacks",
+    },
+    {
+      title: "Free First Month",
+      subtitle: "On our BraveMentor subscription.",
+      bgColor: "bg-orange-500",
+      textColor: "text-white",
+      linkText: "Learn More",
+      linkPath: "/more/plans",
+    },
+    {
+      title: "Free Access",
+      subtitle: "To all free courses for a month",
+      bgColor: "bg-green-500",
+      textColor: "text-white",
+      linkText: "Explore Now",
+      linkPath: "/all-stacks",
+    },
+    {
+      title: "Exclusive Content",
+      subtitle: "Join our exclusive community",
+      bgColor: "bg-red-500",
+      textColor: "text-white",
+      linkText: "Join Now",
+      linkPath: "/more/plans",
+    },
+  ];
+
+  const [currentOfferIndex, setCurrentOfferIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentOfferIndex((prevIndex) => (prevIndex + 1) % offers.length);
+    }, 5000); // Change offer every 5 seconds
+    return () => clearInterval(interval);
+  }, [offers.length]);
+
+
   const handleWatchDemoClick = () => {
     setShowVideoModal(true);
   };
@@ -492,8 +584,8 @@ function LandingPage() {
       )}
 
       <main>
-        <Header isLandingPage={true} />
-        {/* Enhanced Hero Section */}
+        <Header isLandingPage={true} isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
+        {/* Enhanced Hero Section with Offers */}
         <section ref={heroRef} className={`relative overflow-hidden min-h-screen flex flex-col items-center justify-center pb-32 hero-section-container ${heroInView ? 'hero-section-visible' : ''}`}>
           {/* Background Image Container */}
           <div
@@ -576,31 +668,16 @@ function LandingPage() {
                     </a>
                   </div>
                 </div>
-
-                {/* Watch Demo Card */}
-                <div className="group relative z-10 w-[260px] h-[380px] rounded-2xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 transform hero-v-card hero-v-card-right">
-                  <div className="absolute inset-0 bg-gray-900 opacity-50 group-hover:opacity-0 transition-opacity duration-500"></div>
-                  <img
-                    src="https://placehold.co/600x700/2A1E4B/FFFFFF?text=Watch+Demo"
-                    alt="Student with laptop"
-                    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0"
-                  />
-                  <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl overflow-hidden flex flex-col justify-center items-center p-8">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-4">Watch Demo</h3>
-                    <div className="flex space-x-6 text-purple-600">
-                      <a href="#" onClick={handleWatchDemoClick} className="transition-transform duration-300 hover:scale-125">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
-                          <path
-                            fillRule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
+                {/* Offers Card Carousel */}
+                <div className="group relative z-10 w-[260px] h-[380px] rounded-2xl overflow-hidden shadow-2xl p-8 flex flex-col items-center justify-center space-y-4 transition-all duration-700 transform hero-v-card hero-v-card-right">
+                  <div className={`absolute inset-0 ${offers[currentOfferIndex].bgColor} ${offers[currentOfferIndex].textColor}`}></div>
+                  <p className="relative z-10 text-sm font-semibold">Limited Offer</p>
+                  <h3 className="relative z-10 text-4xl font-extrabold">{offers[currentOfferIndex].title}</h3>
+                  <p className="relative z-10 text-xl text-center">{offers[currentOfferIndex].subtitle}</p>
+                  <Link to={offers[currentOfferIndex].linkPath} className={`relative z-10 mt-4 px-6 py-3 bg-white ${offers[currentOfferIndex].bgColor.replace('bg-', 'text-')} font-bold rounded-full shadow-lg transition-transform duration-300 hover:scale-110`}>
+                    {offers[currentOfferIndex].linkText}
+                  </Link>
                 </div>
-
 
                 <div className="absolute top-10 -left-10 w-20 h-20 bg-yellow-400/10 rounded-full blur-xl z-0"></div>
                 <div className="absolute bottom-10 -right-10 w-24 h-24 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
@@ -651,60 +728,136 @@ function LandingPage() {
           </div>
         </section>
 
- {/* Courses Section */}
-    <section ref={coursesRef} className={`py-16 relative text-white ${coursesInView ? 'is-visible' : ''}`}>
-      {/* Background Image Container with Overlay */}
-      <div
-          className="absolute inset-0 z-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${bg3})` }}
-      >
-          {/* Adds a semi-transparent dark overlay for better text readability */}
-          <div className="absolute inset-0 bg-black opacity-80"></div>
-      </div>
-      
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll">Top Popular Courses</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
-          {topCourses.length > 0 ? (
-            topCourses.map((course, index) => (
-              <Link
-                key={index}
-                to={`/course-details/${course.id}`}
-                className={`group bg-white rounded-2xl relative overflow-hidden transition-all duration-500 hover:translate-y-[-10px] hover:shadow-2xl border border-white/20 hover:border-purple-600/20 w-full md:w-auto course-card ${animatedCourses.includes(index) ? 'is-visible' : ''}`}
-                style={{ transitionDelay: `${index * 150}ms` }}
-              >
-                <div className="p-5 h-full flex flex-col gap-3 relative z-20">
-                  <div className="w-full aspect-video rounded-xl overflow-hidden transition-all duration-500 group-hover:translate-y-[-5px] group-hover:scale-[1.03] group-hover:shadow-lg bg-[#6D28D9] flex justify-center items-center text-white text-3xl font-bold">
-                    <img src={course.image || "https://placehold.co/600x400/2A1E4B/FFFFFF?text=Course"} alt={course.title} className="w-full h-full object-cover" />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <p className="text-gray-900 text-lg font-bold m-0 transition-all duration-300 group-hover:text-purple-600 group-hover:translate-x-0.5">{course.title}</p>
-                    <div className="flex items-center text-yellow-500 mb-2">
-                      <StarRating rating={course.rating} />
-                      <span className="text-xs text-gray-500 ml-2">({course.rating})</span>
-                    </div>
-                    <p className="text-gray-900 text-xs m-0 opacity-70 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0.5">by {course.instructor} in {course.category}</p>
-                  </div>
-                  <div className="flex justify-between items-center mt-auto">
-                    <p className="text-gray-900 font-bold text-base m-0 transition-all duration-300 group-hover:text-purple-600 group-hover:translate-x-0.5">${course.price}</p>
-                    <div className="w-7 h-7 bg-purple-600 rounded-full flex items-center justify-center text-white cursor-pointer transition-all duration-300 scale-90 group-hover:scale-100 group-hover:shadow-lg group-hover:shadow-purple-600/30">
-                      <svg height={16} width={16} viewBox="0 0 24 24">
-                        <path strokeWidth={2} stroke="currentColor" d="M4 12H20M12 4V20" fill="currentColor" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))
-          ) : (
-            <div className="col-span-full text-center text-gray-500">
-              No courses available.
-            </div>
-          )}
-        </div>
-      </div>
-    </section>
+        {/* Courses Section */}
+        <section ref={coursesRef} className={`py-16 relative text-white ${coursesInView ? 'is-visible' : ''}`}>
+          {/* Background Image Container with Overlay */}
+          <div
+            className="absolute inset-0 z-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${bg3})` }}
+          >
+            {/* Adds a semi-transparent dark overlay for better text readability */}
+            <div className="absolute inset-0 bg-black opacity-80"></div>
+          </div>
 
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll">Top Popular Courses</h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+              {topCourses.length > 0 ? (
+                topCourses.map((course, index) => (
+                  <Link
+                    key={index}
+                    to={`/course-details/${course.id}`}
+                    className={`group bg-white rounded-2xl relative overflow-hidden transition-all duration-500 hover:translate-y-[-10px] hover:shadow-2xl border border-white/20 hover:border-purple-600/20 w-full md:w-auto course-card ${animatedCourses.includes(index) ? 'is-visible' : ''}`}
+                    style={{ transitionDelay: `${index * 150}ms` }}
+                  >
+                    <div className="p-5 h-full flex flex-col gap-3 relative z-20">
+                      <div className="w-full aspect-video rounded-xl overflow-hidden transition-all duration-500 group-hover:translate-y-[-5px] group-hover:scale-[1.03] group-hover:shadow-lg bg-[#6D28D9] flex justify-center items-center text-white text-3xl font-bold">
+                        <img src={course.image || "https://placehold.co/600x400/2A1E4B/FFFFFF?text=Course"} alt={course.title} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <p className="text-gray-900 text-lg font-bold m-0 transition-all duration-300 group-hover:text-purple-600 group-hover:translate-x-0.5">{course.title}</p>
+                        <div className="flex items-center text-yellow-500 mb-2">
+                          <StarRating rating={course.rating} />
+                          <span className="text-xs text-gray-500 ml-2">({course.reviews} reviews)</span>
+                        </div>
+                        <p className="text-gray-900 text-xs m-0 opacity-70 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0.5">by {course.instructor} in {course.category}</p>
+                      </div>
+                      <div className="flex justify-between items-center mt-auto">
+                        <p className="text-gray-900 font-bold text-base m-0 transition-all duration-300 group-hover:text-purple-600 group-hover:translate-x-0.5">${course.price}</p>
+                        <div className="w-7 h-7 bg-purple-600 rounded-full flex items-center justify-center text-white cursor-pointer transition-all duration-300 scale-90 group-hover:scale-100 group-hover:shadow-lg group-hover:shadow-purple-600/30">
+                          <svg height={16} width={16} viewBox="0 0 24 24">
+                            <path strokeWidth={2} stroke="currentColor" d="M4 12H20M12 4V20" fill="currentColor" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <div className="col-span-full text-center text-gray-500">
+                  No courses available.
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* Popular Stacks Section */}
+        <section ref={popularStacksRef} className={`py-16 bg-white text-gray-900 ${popularStacksInView ? 'is-visible' : ''}`}>
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll animation-delay-0">Explore Our Popular Stacks</h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-8">
+              {popularStacks.map((stack, index) => (
+                <Link
+                  key={index}
+                  to={stack.path}
+                  className={`relative flex flex-col items-center justify-center text-center p-6 rounded-2xl border border-gray-200 backdrop-blur-md bg-white/50 overflow-hidden transition-all duration-300 hover:bg-white hover:border-purple-600/50 hover:shadow-xl group animate-on-scroll`}
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-blue-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                  <div className="relative z-10 w-20 h-20 flex items-center justify-center rounded-full bg-white transition-all duration-300 group-hover:bg-purple-600 mb-4">
+                    {stack.icon}
+                  </div>
+                  <h3 className="relative z-10 text-xl font-semibold transition-colors duration-300 group-hover:text-purple-600">{stack.name}</h3>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* New Section: Our Learning Methodology */}
+        <section ref={learningMethodologyRef} className={`py-20 bg-[#120D25] text-white ${learningMethodologyInView ? 'is-visible' : ''}`}>
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4 animate-on-scroll">
+                Our Learning Methodology
+              </h2>
+              <p className="text-lg text-gray-400 max-w-3xl mx-auto mb-16 animate-on-scroll animation-delay-200">
+                We believe in a **project-driven, community-supported, and flexible** approach to learning. Here's how we help you succeed.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-12">
+              <div className="flex flex-col items-center text-center animate-on-scroll animation-delay-400">
+                <div className="w-16 h-16 rounded-full bg-purple-600 flex items-center justify-center text-white mb-6 transform transition-transform duration-300 hover:scale-110 shadow-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m14-6h-2m2 6h-2M13 19h1a2 2 0 002-2v-4a2 2 0 00-2-2h-1a2 2 0 00-2 2v4a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-semibold mb-2">Hands-On Projects</h3>
+                <p className="text-gray-400">
+                  Apply theory immediately with **real-world projects** that build your portfolio and confidence.
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center text-center animate-on-scroll animation-delay-600">
+                <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white mb-6 transform transition-transform duration-300 hover:scale-110 shadow-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h-1a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4zm-1-12a2 2 0 100-4 2 2 0 000 4z" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-semibold mb-2">Expert-Led Support</h3>
+                <p className="text-gray-400">
+                  Get personalized guidance from **seasoned instructors** and a vibrant community every step of the way.
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center text-center animate-on-scroll animation-delay-800">
+                <div className="w-16 h-16 rounded-full bg-yellow-600 flex items-center justify-center text-white mb-6 transform transition-transform duration-300 hover:scale-110 shadow-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h-1a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2zM9 11h6" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-semibold mb-2">Flexible Learning Paths</h3>
+                <p className="text-gray-400">
+                  Our structured stacks let you **learn at your own pace** while staying on track with career goals.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* --- */}
 
         {/* New Section: Practical & Supported Learning */}
         <section ref={featureRef} className={`py-16 bg-white text-gray-900 ${featureInView ? 'is-visible' : ''}`}>
@@ -793,9 +946,6 @@ function LandingPage() {
           </div>
         </section>
 
-        {/* --- */}
-
-        {/* --- */}
         {/* Blog Posts Section with 3D Carousel */}
         <section className={`py-16 text-white relative overflow-hidden`}>
           {/* Background Image Container */}
@@ -803,7 +953,7 @@ function LandingPage() {
             className="absolute inset-0 z-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${bg1})` }}
           >
-            {/* Optional: Add a semi-transparent overlay to keep content readable */}
+            {/* Optional: Add a semi-transparent dark overlay to keep content readable */}
             <div className="absolute inset-0 bg-black opacity-80"></div>
           </div>
 
@@ -878,9 +1028,6 @@ function LandingPage() {
             </div>
           </div>
         </section>
-
-
-
 
 
 
@@ -1063,234 +1210,221 @@ function LandingPage() {
       </main>
 
       {/* Footer Section */}
-      <footer className="bg-[#120D25] text-white py-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left space-y-4 md:space-y-0">
-            <div className="text-xl font-bold">DIGITAL.</div>
-            <div className="space-x-4">
-              <a href="#" className="hover:text-purple-400">About</a>
-              <a href="#" className="hover:text-purple-400">Courses</a>
-              <a href="#" className="hover:text-purple-400">Blog</a>
-              <a href="#" className="hover:text-purple-400">Contact</a>
-            </div>
-            <p className="text-sm text-gray-400">&copy; 2023 Digital. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* Add custom animations */}
       <style>{`
-                /* 3D Carousel Animations */
-                @keyframes autoRun3d {
-                    from { transform: perspective(1000px) rotateY(-360deg); }
-                    to { transform: perspective(1000px) rotateY(0deg); }
-                }
+            /* 3D Carousel Animations */
+            @keyframes autoRun3d {
+                from { transform: perspective(1000px) rotateY(-360deg); }
+                to { transform: perspective(1000px) rotateY(0deg); }
+            }
 
-                @keyframes animateBrightness {
-                    0%, 100% { filter: brightness(1); }
-                    50% { filter: brightness(0.7); } /* Slightly dim when in background */
-                }
+            @keyframes animateBrightness {
+                0%, 100% { filter: brightness(1); }
+                50% { filter: brightness(0.7); } /* Slightly dim when in background */
+            }
 
-                /* Blog background gradient animation */
-                @keyframes gradientShift {
-                    0% { background-position: 0% 50%; }
-                    50% { background-position: 100% 50%; }
-                    100% { background-position: 0% 50%; }
-                }
+            /* Blog background gradient animation */
+            @keyframes gradientShift {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
 
-                .blog-background-gradient {
-                    background: linear-gradient(-45deg, #120D25, #2A1E4B, #120D25);
-                    background-size: 400% 400%;
-                    animation: gradientShift 15s ease infinite;
-                }
+            .blog-background-gradient {
+                background: linear-gradient(-45deg, #120D25, #2A1E4B, #120D25);
+                background-size: 400% 400%;
+                animation: gradientShift 15s ease infinite;
+            }
 
-                /* Utility Animations */
-                @keyframes float {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-10px); }
-                }
-                @keyframes pulse-slow {
-                    0%, 100% { opacity: 0.2; }
-                    50% { opacity: 0.4; }
-                }
-                @keyframes bounce-slow {
-                    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-                    40% {transform: translateY(-10px);}
-                    60% {transform: translateY(-5px);}
-                }
+            /* Utility Animations */
+            @keyframes float {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-10px); }
+            }
+            @keyframes pulse-slow {
+                0%, 100% { opacity: 0.2; }
+                50% { opacity: 0.4; }
+            }
+            @keyframes bounce-slow {
+                0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+                40% {transform: translateY(-10px);}
+                60% {transform: translateY(-5px);}
+            }
 
-                /* New on-scroll animations */
-                @keyframes slide-up {
-                    0% { transform: translateY(20px); opacity: 0; }
-                    100% { transform: translateY(0); opacity: 1; }
-                }
-                @keyframes fade-in-down {
-                    0% { transform: translateY(-20px); opacity: 0; }
-                    100% { transform: translateY(0); opacity: 1; }
-                }
-                
-                /* Hero V-shape animations */
-                .hero-v-card {
-                    opacity: 0;
-                    transform: translate(-50%, -50%) scale(0.8);
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transition: none;
-                }
+            /* New on-scroll animations */
+            @keyframes slide-up {
+                0% { transform: translateY(20px); opacity: 0; }
+                100% { transform: translateY(0); opacity: 1; }
+            }
+            @keyframes fade-in-down {
+                0% { transform: translateY(-20px); opacity: 0; }
+                100% { transform: translateY(0); opacity: 1; }
+            }
+            
+            /* Hero V-shape animations */
+            .hero-v-card {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transition: none;
+            }
 
-                .hero-section-visible .hero-v-card-left {
-                    animation: spread-out-left 0.8s ease-out forwards;
-                    animation-delay: 1200ms;
-                }
-                .hero-section-visible .hero-v-card-right {
-                    animation: spread-out-right 0.8s ease-out forwards;
-                    animation-delay: 1400ms;
-                }
+            .hero-section-visible .hero-v-card-left {
+                animation: spread-out-left 0.8s ease-out forwards;
+                animation-delay: 1200ms;
+            }
+            .hero-section-visible .hero-v-card-right {
+                animation: spread-out-right 0.8s ease-out forwards;
+                animation-delay: 1400ms;
+            }
 
-                @keyframes spread-out-left {
-                    from { opacity: 0; transform: translate(-50%, -50%) rotate(0deg) scale(0.8); }
-                    to { opacity: 1; transform: translate(-100%, -50%) rotate(-6deg) scale(1); }
-                }
-                @keyframes spread-out-right {
-                    from { opacity: 0; transform: translate(-50%, -50%) rotate(0deg) scale(0.8); }
-                    to { opacity: 1; transform: translate(0%, -50%) rotate(6deg) scale(1); }
-                }
-                
-                /* Ribbon Animation for Stats */
-                @keyframes ribbon-wave {
-                    0%, 100% { transform: scaleX(0); }
-                    50% { transform: scaleX(1); }
-                }
-                .ribbon-animation {
-                    transform: scaleX(0);
-                    transition: all 0.6s ease-out;
-                    transform-origin: center;
-                }
-                .is-visible .ribbon-animation {
-                    animation: ribbon-wave 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-                }
+            @keyframes spread-out-left {
+                from { opacity: 0; transform: translate(-50%, -50%) rotate(0deg) scale(0.8); }
+                to { opacity: 1; transform: translate(-100%, -50%) rotate(-6deg) scale(1); }
+            }
+            @keyframes spread-out-right {
+                from { opacity: 0; transform: translate(-50%, -50%) rotate(0deg) scale(0.8); }
+                to { opacity: 1; transform: translate(0%, -50%) rotate(6deg) scale(1); }
+            }
+            
+            /* Ribbon Animation for Stats */
+            @keyframes ribbon-wave {
+                0%, 100% { transform: scaleX(0); }
+                50% { transform: scaleX(1); }
+            }
+            .ribbon-animation {
+                transform: scaleX(0);
+                transition: all 0.6s ease-out;
+                transform-origin: center;
+            }
+            .is-visible .ribbon-animation {
+                animation: ribbon-wave 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            }
 
-                @keyframes text-glow {
-                    0%, 100% { text-shadow: 0 0 5px rgba(139, 92, 246, 0.8); }
-                    50% { text-shadow: 0 0 20px rgba(139, 92, 246, 1); }
-                }
-                .text-glow {
-                    animation: none;
-                }
-                .is-visible .text-glow {
-                    animation: text-glow 2s infinite ease-in-out;
-                }
-                
-                /* Glowing Border for Testimonials */
-                .glowing-border {
-                    position: relative;
-                    background: #f3f4f6; /* Tailwind gray-100 */
-                    z-index: 1;
-                    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-                    transition: box-shadow 0.3s ease-out;
-                }
+            @keyframes text-glow {
+                0%, 100% { text-shadow: 0 0 5px rgba(139, 92, 246, 0.8); }
+                50% { text-shadow: 0 0 20px rgba(139, 92, 246, 1); }
+            }
+            .text-glow {
+                animation: none;
+            }
+            .is-visible .text-glow {
+                animation: text-glow 2s infinite ease-in-out;
+            }
+            
+            /* Glowing Border for Testimonials */
+            .glowing-border {
+                position: relative;
+                background: #f3f4f6; /* Tailwind gray-100 */
+                z-index: 1;
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+                transition: box-shadow 0.3s ease-out;
+            }
 
-                .glowing-border:hover {
-                    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1), 0 0 20px 0px #8b5cf6, 0 0 40px 0px #d8b4fe; /* glow effect */
-                }
+            .glowing-border:hover {
+                box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1), 0 0 20px 0px #8b5cf6, 0 0 40px 0px #d8b4fe; /* glow effect */
+            }
 
-                /* General animation styles */
-                .animate-on-scroll {
-                    opacity: 0;
-                    transform: translateY(20px);
-                    transition: all 0.6s ease-out;
-                }
+            /* General animation styles */
+            .animate-on-scroll {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.6s ease-out;
+            }
 
-                .is-visible .animate-on-scroll {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
+            .is-visible .animate-on-scroll {
+                opacity: 1;
+                transform: translateY(0);
+            }
 
-                /* Hero section-specific animations */
-                .hero-section-container .animate-fade-in-down,
-                .hero-section-container .animate-slide-up-200,
-                .hero-section-container .animate-slide-up-500,
-                .hero-section-container .animate-slide-up-700,
-                .hero-section-container .animate-slide-up-900,
-                .hero-section-container .animate-slide-up-1100,
-                .hero-section-container .animate-slide-up-1300,
-                .hero-section-container .animate-slide-up-1500 {
-                    opacity: 0;
-                    transform: translateY(20px);
-                    transition: all 0.6s ease-out;
-                }
-                
-                .hero-section-visible .animate-fade-in-down { animation: fade-in-down 0.6s ease-out forwards; animation-delay: 500ms; }
-                .hero-section-visible .animate-slide-up-200 { animation: slide-up 0.6s ease-out forwards; animation-delay: 200ms; }
-                .hero-section-visible .animate-slide-up-500 { animation: slide-up 0.6s ease-out forwards; animation-delay: 500ms; }
-                .hero-section-visible .animate-slide-up-700 { animation: slide-up 0.6s ease-out forwards; animation-delay: 700ms; }
-                .hero-section-visible .animate-slide-up-900 { animation: slide-up 0.6s ease-out forwards; animation-delay: 900ms; }
-                .hero-section-visible .animate-slide-up-1100 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1100ms; }
-                .hero-section-visible .animate-slide-up-1300 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1300ms; }
-                .hero-section-visible .animate-slide-up-1500 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1500ms; }
-                
+            /* Hero section-specific animations */
+            .hero-section-container .animate-fade-in-down,
+            .hero-section-container .animate-slide-up-200,
+            .hero-section-container .animate-slide-up-500,
+            .hero-section-container .animate-slide-up-700,
+            .hero-section-container .animate-slide-up-900,
+            .hero-section-container .animate-slide-up-1100,
+            .hero-section-container .animate-slide-up-1300,
+            .hero-section-container .animate-slide-up-1500 {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.6s ease-out;
+            }
+            
+            .hero-section-visible .animate-fade-in-down { animation: fade-in-down 0.6s ease-out forwards; animation-delay: 500ms; }
+            .hero-section-visible .animate-slide-up-200 { animation: slide-up 0.6s ease-out forwards; animation-delay: 200ms; }
+            .hero-section-visible .animate-slide-up-500 { animation: slide-up 0.6s ease-out forwards; animation-delay: 500ms; }
+            .hero-section-visible .animate-slide-up-700 { animation: slide-up 0.6s ease-out forwards; animation-delay: 700ms; }
+            .hero-section-visible .animate-slide-up-900 { animation: slide-up 0.6s ease-out forwards; animation-delay: 900ms; }
+            .hero-section-visible .animate-slide-up-1100 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1100ms; }
+            .hero-section-visible .animate-slide-up-1300 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1300ms; }
+            .hero-section-visible .animate-slide-up-1500 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1500ms; }
+            
 
-                .animate-float { animation: float 3s ease-in-out infinite; }
-                .animate-pulse-slow { animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-                .animate-bounce-slow { animation: bounce-slow 2s infinite; }
-                .animation-delay-2000 { animation-delay: 2s; }
+            .animate-float { animation: float 3s ease-in-out infinite; }
+            .animate-pulse-slow { animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+            .animate-bounce-slow { animation: bounce-slow 2s infinite; }
+            .animation-delay-2000 { animation-delay: 2s; }
+            
+            .card-3d {
+                position: relative;
+                width: 500px;
+                height: 400px;
+                transform-style: preserve-3d;
+                transform: perspective(1000px) rotateY(0deg);
+                animation: autoRun3d 25s linear infinite;
+                will-change: transform;
+            }
 
-                .card-3d {
-                    position: relative;
-                    width: 500px;
-                    height: 400px;
-                    transform-style: preserve-3d;
-                    transform: perspective(1000px) rotateY(0deg);
-                    animation: autoRun3d 25s linear infinite;
-                    will-change: transform;
-                }
+            .card-3d:hover { animation-play-state: paused !important; }
 
-                .card-3d:hover { animation-play-state: paused !important; }
+            .blog-card {
+                position: absolute;
+                width: 220px;
+                height: 280px;
+                top: 50%;
+                left: 50%;
+                transform-origin: center center;
+                animation: animateBrightness 25s linear infinite;
+                transition-duration: 300ms;
+                will-change: transform, filter;
+            }
 
-                .blog-card {
-                    position: absolute;
-                    width: 220px;
-                    height: 280px;
-                    top: 50%;
-                    left: 50%;
-                    transform-origin: center center;
-                    animation: animateBrightness 25s linear infinite;
-                    transition-duration: 300ms;
-                    will-change: transform, filter;
-                }
+            .card-3d:hover .blog-card { animation-play-state: paused !important; }
 
-                .card-3d:hover .blog-card { animation-play-state: paused !important; }
+            .blog-card-inner {
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
 
-                .blog-card-inner {
-                    width: 100%;
-                    height: 100%;
-                    overflow: hidden;
-                }
+            .line-clamp-2 {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            .line-clamp-3 {
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
 
-                .line-clamp-2 {
-                    display: -webkit-box;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
-                }
-                .line-clamp-3 {
-                    display: -webkit-box;
-                    -webkit-line-clamp: 3;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
-                }
-
-                .course-card {
-                    opacity: 0;
-                    transform: translateY(20px);
-                    transition: all 0.6s ease-out;
-                }
-                .course-card.is-visible {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            `}</style>
+            .course-card {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.6s ease-out;
+            }
+            .course-card.is-visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        `}</style>
     </div>
   );
 }

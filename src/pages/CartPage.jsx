@@ -1,23 +1,30 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 
-const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount }) => {
+const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount, isLoggedIn, onLogout, onCheckout }) => {
     const subtotal = cartItems.reduce((acc, item) => acc + item.price, 0);
     const taxRate = 0.08;
     const estimatedTax = subtotal * taxRate;
     const total = subtotal + estimatedTax;
+
+    const navigate = useNavigate();
 
     const breadcrumbs = [
         { name: "Home", path: "/" },
         { name: "Your Cart", path: "/cart" }
     ];
 
+    const handleCheckoutClick = () => {
+        onCheckout();
+        navigate('/dashboard/enrolled-courses');
+    };
+
     return (
         <div className="bg-gray-100 text-gray-900 min-h-screen font-inter">
-            <Header cartItemsCount={cartItemsCount} />
+            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
             <Hero
                 title="Your Cart"
                 breadcrumbs={breadcrumbs}
@@ -75,7 +82,10 @@ const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount }) => {
                                         <span>${total.toFixed(2)}</span>
                                     </div>
                                 </div>
-                                <button className="w-full mt-8 py-4 bg-green-500 text-white font-bold text-lg rounded-full shadow-lg hover:bg-green-600 transition-colors transform hover:scale-105">
+                                <button
+                                    onClick={handleCheckoutClick}
+                                    className="w-full mt-8 py-4 bg-green-500 text-white font-bold text-lg rounded-full shadow-lg hover:bg-green-600 transition-colors transform hover:scale-105"
+                                >
                                     Proceed to Checkout
                                 </button>
                             </div>

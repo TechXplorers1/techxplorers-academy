@@ -89,7 +89,7 @@ const EventRegistrationModal = ({ event, onClose }) => {
     );
 };
 
-const CommunityEvents = () => {
+const CommunityEvents = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const [contentRef, contentInView] = useInView({ threshold: 0.2 });
     const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -126,7 +126,13 @@ const CommunityEvents = () => {
     };
 
     return (
-        <ResourcesPageTemplate title="Community Events" breadcrumb="Community Events">
+        <ResourcesPageTemplate 
+            title="Community Events" 
+            breadcrumb="Community Events"
+            isLoggedIn={isLoggedIn}
+            onLogout={onLogout}
+            cartItemsCount={cartItemsCount}
+        >
             {selectedEvent && <EventRegistrationModal event={selectedEvent} onClose={handleCloseModal} />}
             <div ref={contentRef} className={`flex flex-col items-center text-center space-y-8 transition-all duration-700 ${contentInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                 <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">Join Our Upcoming Community Events.</h2>

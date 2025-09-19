@@ -1,9 +1,14 @@
 import React from 'react';
 import DashboardPageTemplate from '../DashboardPageTemplate';
 
-const Settings = ({ isLoggedIn }) => {
+const Settings = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     return (
-        <DashboardPageTemplate isLoggedIn={isLoggedIn} title="Settings">
+        <DashboardPageTemplate 
+            isLoggedIn={isLoggedIn}
+            onLogout={onLogout}
+            cartItemsCount={cartItemsCount}
+            title="Settings"
+        >
             <div className="bg-white p-8 rounded-2xl shadow-lg transition-transform transform duration-300 hover:scale-[1.01]">
                 <h3 className="text-xl font-bold mb-6">Account Settings</h3>
                 <div className="space-y-4">
