@@ -4,25 +4,57 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { coursesData } from '../../data/coursesData';
 
-const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
+const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, enrolledCourses, setEnrolledCourses }) => {
     const { courseId } = useParams();
     const [course, setCourse] = useState(null);
     const [currentLesson, setCurrentLesson] = useState(null);
     const [completedLessons, setCompletedLessons] = useState({});
 
-    // Find the course data using the URL parameter
     useEffect(() => {
-        let foundCourse = null;
+        // Find the full course data from the main coursesData object
+        let foundCourseData = null;
         for (const category in coursesData) {
-            foundCourse = coursesData[category].find(c => c.id === courseId);
-            if (foundCourse) break;
+            foundCourseData = coursesData[category].find(c => c.id === courseId);
+            if (foundCourseData) break;
         }
-        setCourse(foundCourse);
-        
-        if (foundCourse && foundCourse.modules && foundCourse.modules.length > 0 && foundCourse.modules[0].lessons.length > 0) {
-            setCurrentLesson(foundCourse.modules[0].lessons[0]);
+
+        // Find the user's progress for this course from the enrolledCourses state
+        const enrolledCourse = enrolledCourses.find(c => c.id === courseId);
+
+        if (foundCourseData) {
+            // Merge the full course data with the user's progress data
+            const courseWithProgress = {
+                ...foundCourseData,
+                progress: enrolledCourse?.progress || 0,
+                completedLessons: enrolledCourse?.completedLessons || {}
+            };
+            setCourse(courseWithProgress);
+            setCompletedLessons(courseWithProgress.completedLessons);
+
+            if (courseWithProgress.modules && courseWithProgress.modules.length > 0) {
+                let allLessons = courseWithProgress.modules.flatMap(module => module.lessons);
+                let firstIncompleteLesson = allLessons.find(lesson => !courseWithProgress.completedLessons[lesson.id]);
+                setCurrentLesson(firstIncompleteLesson || allLessons[0]);
+            }
         }
-    }, [courseId]);
+    }, [courseId, enrolledCourses]);
+
+    useEffect(() => {
+        if (course) {
+            setEnrolledCourses(prevEnrolled => {
+                const updatedEnrolledCourses = prevEnrolled.map(c => {
+                    if (c.id === course.id) {
+                        const completedCount = Object.keys(completedLessons).length;
+                        const totalCount = course.totalLessons;
+                        const progress = totalCount > 0 ? Math.floor((completedCount / totalCount) * 100) : 0;
+                        return { ...c, progress, completedLessons };
+                    }
+                    return c;
+                });
+                return updatedEnrolledCourses;
+            });
+        }
+    }, [completedLessons]);
 
     const handleLessonClick = (lesson) => {
         setCurrentLesson(lesson);
@@ -35,27 +67,12 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const handleNextLesson = () => {
         if (!currentLesson || !course || !course.modules) return;
 
-        let foundNext = false;
-        for (let i = 0; i < course.modules.length; i++) {
-            const module = course.modules[i];
-            const lessonIndex = module.lessons.findIndex(l => l.id === currentLesson.id);
-            
-            if (lessonIndex !== -1) {
-                if (lessonIndex < module.lessons.length - 1) {
-                    setCurrentLesson(module.lessons[lessonIndex + 1]);
-                    foundNext = true;
-                    break;
-                } else if (i < course.modules.length - 1) {
-                    const nextModule = course.modules[i + 1];
-                    if (nextModule.lessons.length > 0) {
-                        setCurrentLesson(nextModule.lessons[0]);
-                        foundNext = true;
-                        break;
-                    }
-                }
-            }
-        }
-        if (!foundNext) {
+        let allLessons = course.modules.flatMap(module => module.lessons);
+        const currentIndex = allLessons.findIndex(l => l.id === currentLesson.id);
+
+        if (currentIndex !== -1 && currentIndex < allLessons.length - 1) {
+            setCurrentLesson(allLessons[currentIndex + 1]);
+        } else {
             alert("You have completed all lessons in this course!");
         }
     };
@@ -77,7 +94,7 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     return (
         <div className="min-h-screen bg-gray-100 font-inter">
             <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
-            
+
             <main className="flex flex-col lg:flex-row h-full lg:h-[calc(100vh-4rem)]">
                 {/* Video Player Section */}
                 <div className="lg:flex-grow p-6 md:p-8 bg-gray-900 flex flex-col justify-center">
@@ -102,13 +119,13 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                     </div>
                     {currentLesson && (
                         <div className="mt-6 text-center">
-                            <button 
+                            <button
                                 onClick={() => handleMarkAsComplete(currentLesson.id)}
                                 className={`px-6 py-2 rounded-full font-semibold transition-colors ${completedLessons[currentLesson.id] ? 'bg-green-600 text-white' : 'bg-white text-gray-800 hover:bg-gray-200'}`}
                             >
                                 {completedLessons[currentLesson.id] ? 'Completed!' : 'Mark as Complete'}
                             </button>
-                            <button 
+                            <button
                                 onClick={handleNextLesson}
                                 className="ml-4 px-6 py-2 bg-purple-600 text-white font-semibold rounded-full hover:bg-purple-700 transition-colors"
                             >
@@ -121,7 +138,7 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                 {/* Course Content Sidebar */}
                 <aside className="lg:w-96 bg-white shadow-md p-6 overflow-y-auto">
                     <h2 className="text-2xl font-bold text-gray-900 mb-4">Course Content</h2>
-                    {course.modules.map(module => (
+                    {course.modules && course.modules.map(module => (
                         <div key={module.id} className="mb-6">
                             <h3 className="text-lg font-semibold text-gray-800 mb-2">{module.title}</h3>
                             <ul className="space-y-2">
@@ -134,7 +151,7 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                                         onClick={() => handleLessonClick(lesson)}
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 mr-3 flex-shrink-0 ${completedLessons[lesson.id] ? 'text-green-500' : 'text-gray-400'}`} viewBox="0 0 20 20" fill="currentColor">
-                                            {completedLessons[lesson.id] ? 
+                                            {completedLessons[lesson.id] ?
                                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /> :
                                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
                                             }
@@ -145,7 +162,7 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                             </ul>
                         </div>
                     ))}
-                    
+
                     <div className="mt-8 pt-6 border-t border-gray-200">
                         <Link to="/dashboard/enrolled-courses" className="text-sm text-purple-600 font-semibold hover:underline">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -35,8 +35,13 @@ export const coursesData = {
         { name: "Daniel Olayinka", title: "Scrum Master", image: "https://placehold.co/100x100/8B5CF6/FFFFFF?text=D" },
       ],
       modules: [
-        { id: 1, title: "Module 1: Foundations of Business Analysis", lessons: [{ id: 101, title: "What is a Business Analyst?", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "The BA Role in the Project Lifecycle", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: Foundations of Business Analysis", lessons: [{ id: 101, title: "What is a Business Analyst?", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "The BA Role in the Project Lifecycle", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Key Skills and Responsibilities", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Agile Methodologies", lessons: [{ id: 201, title: "Agile vs. Waterfall Methodologies", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Scrum and Kanban", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Creating a Project Plan", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Stakeholder Engagement", lessons: [{ id: 301, title: "Identifying Stakeholders", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Communication Strategies", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Eliciting and Validating Requirements", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'Braveprdo-product-owner',
@@ -72,8 +77,13 @@ export const coursesData = {
         { name: "Jessica Lee", title: "Product Strategist", image: "https://placehold.co/100x100/8B5CF6/FFFFFF?text=J" },
       ],
       modules: [
-        { id: 1, title: "Module 1: Product Owner Fundamentals", lessons: [{ id: 101, title: "Role of the Product Owner", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Product Vision and Strategy", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: Product Owner Fundamentals", lessons: [{ id: 101, title: "Role of the Product Owner", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Product Vision and Strategy", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Market Research and Analysis", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: The Product Backlog", lessons: [{ id: 201, title: "Creating and Refining the Product Backlog", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Prioritization Techniques", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "User Stories", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Release Planning", lessons: [{ id: 301, title: "Roadmap Planning", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Release Management", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Sprint Reviews", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'Braveprdm-product-manager',
@@ -109,8 +119,13 @@ export const coursesData = {
         { name: "Michael O'Connell", title: "Head of Growth", image: "https://placehold.co/100x100/8B5CF6/FFFFFF?text=M" },
       ],
       modules: [
-        { id: 1, title: "Module 1: Product Management Essentials", lessons: [{ id: 101, title: "What is a Product Manager?", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "The Product Lifecycle", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: Product Management Essentials", lessons: [{ id: 101, title: "What is a Product Manager?", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "The Product Lifecycle", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Developing a Product Strategy", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Customer Discovery", lessons: [{ id: 201, title: "User Interviewing", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Survey Design", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Prototyping and Usability Testing", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Launch and Growth", lessons: [{ id: 301, title: "Go-to-Market Strategy", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Data Analysis for Product Growth", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Feature Prioritization", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'Bravefounder-startup-founder',
@@ -146,8 +161,13 @@ export const coursesData = {
         { name: "John Chen", title: "Venture Capitalist", image: "https://placehold.co/100x100/8B5CF6/FFFFFF?text=J" },
       ],
       modules: [
-        { id: 1, title: "Module 1: Ideation to MVP", lessons: [{ id: 101, title: "Validating Your Business Idea", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Creating a Lean Canvas", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: Ideation to MVP", lessons: [{ id: 101, title: "Validating Your Business Idea", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Creating a Lean Canvas", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Building Your Minimum Viable Product (MVP)", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Business & Finance", lessons: [{ id: 201, title: "Financial Modeling for Startups", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Fundraising 101", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Legal Structures for Your Business", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Go-to-Market", lessons: [{ id: 301, title: "Marketing and Branding", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Building a Sales Funnel", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Scaling Your Operations", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'Bravesm-scrum-master',
@@ -183,8 +203,13 @@ export const coursesData = {
         { name: "Sarah Khan", title: "Agile Coach", image: "https://placehold.co/100x100/A78BFA/FFFFFF?text=S" },
       ],
       modules: [
-        { id: 1, title: "Module 1: The Scrum Framework", lessons: [{ id: 101, title: "Scrum Roles and Responsibilities", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Scrum Events", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: The Scrum Framework", lessons: [{ id: 101, title: "Scrum Roles and Responsibilities", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Scrum Events", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Scrum Artifacts", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Servant Leadership", lessons: [{ id: 201, title: "Coaching the Development Team", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Facilitating Productive Meetings", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Conflict Resolution", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Agile at Scale", lessons: [{ id: 301, title: "Scaling Scrum with Nexus", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Kanban integration", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Lean principles", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'Braveprjm-project-manager',
@@ -220,8 +245,13 @@ export const coursesData = {
         { name: "Robert Davies", title: "Head of Operations", image: "https://placehold.co/100x100/8B5CF6/FFFFFF?text=R" },
       ],
       modules: [
-        { id: 1, title: "Module 1: Project Management Fundamentals", lessons: [{ id: 101, title: "The Role of a Project Manager", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Project Lifecycle", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: Project Management Fundamentals", lessons: [{ id: 101, title: "The Role of a Project Manager", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Project Lifecycle", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Project Charter", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Planning and Execution", lessons: [{ id: 201, title: "Work Breakdown Structure", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Gantt Charts", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Risk Management", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Project Closing", lessons: [{ id: 301, title: "Project Closure Report", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Lessons Learned", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Stakeholder Sign-off", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
   ],
   freeStacks: [
@@ -258,8 +288,13 @@ export const coursesData = {
         { name: "Alex Miller", title: "Frontend Developer", image: "https://placehold.co/100x100/A78BFA/FFFFFF?text=A" },
       ],
       modules: [
-        { id: 1, title: "Module 1: HTML Basics", lessons: [{ id: 101, title: "Tags and Elements", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Building Your First Page", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: HTML Basics", lessons: [{ id: 101, title: "Tags and Elements", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Building Your First Page", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Forms and Inputs", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: CSS Styling", lessons: [{ id: 201, title: "Selectors and Properties", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Box Model", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Flexbox and Grid", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: JavaScript Introduction", lessons: [{ id: 301, title: "Variables and Data Types", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Functions and Events", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "DOM Manipulation", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'beginner-python',
@@ -294,8 +329,13 @@ export const coursesData = {
         { name: "Jane Smith", title: "Data Scientist", image: "https://placehold.co/100x100/8B5CF6/FFFFFF?text=J" },
       ],
       modules: [
-        { id: 1, title: "Module 1: Python Fundamentals", lessons: [{ id: 101, title: "Introduction to Python", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Variables and Expressions", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: Python Fundamentals", lessons: [{ id: 101, title: "Introduction to Python", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Variables and Expressions", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Conditional Logic", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Data Structures", lessons: [{ id: 201, title: "Lists and Dictionaries", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Loops and Iteration", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Functions and Scope", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Simple Projects", lessons: [{ id: 301, title: "Building a Simple Calculator", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Automating a Task", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Final Project", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'intro-to-ui-design',
@@ -330,8 +370,13 @@ export const coursesData = {
         { name: "Emily Clark", title: "Lead UX Designer", image: "https://placehold.co/100x100/A78BFA/FFFFFF?text=E" },
       ],
       modules: [
-        { id: 1, title: "Module 1: Design Principles", lessons: [{ id: 101, title: "The Role of UI Design", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Color Theory", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: Design Principles", lessons: [{ id: 101, title: "The Role of UI Design", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Color Theory", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Typography Basics", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Wireframing", lessons: [{ id: 201, title: "Creating Wireframes", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "User Flows", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Prototyping Basics", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Figma Crash Course", lessons: [{ id: 301, title: "Figma Interface", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Creating Your First Component", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Exporting Assets", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
   ],
   uxUiDesign: [
@@ -369,8 +414,13 @@ export const coursesData = {
         { name: "Ryan Carter", title: "Senior Product Designer", image: "https://placehold.co/100x100/8B5CF6/FFFFFF?text=R" },
       ],
       modules: [
-        { id: 1, title: "Module 1: Advanced Figma", lessons: [{ id: 101, title: "Auto Layout", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Variants and Interactive Components", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: Advanced Figma", lessons: [{ id: 101, title: "Auto Layout", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Variants and Interactive Components", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Plugins and Integrations", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Design Systems", lessons: [{ id: 201, title: "Building a Design System", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Style Guides", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Tokens and Variables", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Prototyping", lessons: [{ id: 301, title: "Advanced Prototyping", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Testing and Feedback", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Developer Handoff", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'user-research-personas',
@@ -405,8 +455,13 @@ export const coursesData = {
         { name: "Sarah Williams", title: "UX Researcher", image: "https://placehold.co/100x100/8B5CF6/FFFFFF?text=S" },
       ],
       modules: [
-        { id: 1, title: "Module 1: Planning Research", lessons: [{ id: 101, title: "Defining Research Goals", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Choosing Research Methods", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: Planning Research", lessons: [{ id: 101, title: "Defining Research Goals", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Choosing Research Methods", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Ethical Considerations", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Data Collection", lessons: [{ id: 201, title: "Writing Effective Interview Questions", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Conducting Surveys", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Usability Testing", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Synthesis & Personas", lessons: [{ id: 301, title: "Affinity Mapping", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Creating User Personas", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Journey Mapping", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'responsive-design',
@@ -441,8 +496,13 @@ export const coursesData = {
         { name: "Michael Johnson", title: "Web Designer", image: "https://placehold.co/100x100/A78BFA/FFFFFF?text=M" },
       ],
       modules: [
-        { id: 1, title: "Module 1: Introduction to Responsiveness", lessons: [{ id: 101, title: "What is Responsive Design?", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Fluid Grids", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: Introduction to Responsiveness", lessons: [{ id: 101, title: "What is Responsive Design?", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Fluid Grids", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Flexible Images", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Media Queries", lessons: [{ id: 201, title: "Syntax and Usage", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Breakpoints", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Advanced Media Queries", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Mobile-First Design", lessons: [{ id: 301, title: "Thinking Mobile-First", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Performance Optimization", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Final Responsive Project", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
   ],
   engineeringDevelopment: [
@@ -480,8 +540,13 @@ export const coursesData = {
         { name: "Chris P. Bacon", title: "Cloud Engineer", image: "https://placehold.co/100x100/8B5CF6/FFFFFF?text=C" },
       ],
       modules: [
-        { id: 1, title: "Module 1: Frontend with React", lessons: [{ id: 101, title: "React Components", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "State Management", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: Frontend with React", lessons: [{ id: 101, title: "React Components", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "State Management", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Routing with React Router", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Backend with Node.js", lessons: [{ id: 201, title: "Setting up a Node.js Server", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Express.js", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Connecting to a Database", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Full-Stack Integration", lessons: [{ id: 301, title: "Connecting Frontend and Backend", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "User Authentication", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Deployment", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'advanced-javascript',
@@ -516,8 +581,13 @@ export const coursesData = {
         { name: "Alex Miller", title: "JavaScript Guru", image: "https://placehold.co/100x100/A78BFA/FFFFFF?text=A" },
       ],
       modules: [
-        { id: 1, title: "Module 1: The JavaScript Engine", lessons: [{ id: 101, title: "Execution Context", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Closures", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: The JavaScript Engine", lessons: [{ id: 101, title: "Execution Context", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Closures", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "The 'this' keyword", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Asynchronous JavaScript", lessons: [{ id: 201, title: "Callbacks and Promises", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Async/Await", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Event Loop", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Modern JS", lessons: [{ id: 301, title: "ES6+ Features", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Modular JavaScript", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Advanced Array Methods", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'devops-docker-kubernetes',
@@ -552,8 +622,13 @@ export const coursesData = {
         { name: "Ben Carter", title: "DevOps Engineer", image: "https://placehold.co/100x100/A78BFA/FFFFFF?text=B" },
       ],
       modules: [
-        { id: 1, title: "Module 1: Docker Fundamentals", lessons: [{ id: 101, title: "Introduction to Docker", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Dockerfile Best Practices", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: Docker Fundamentals", lessons: [{ id: 101, title: "Introduction to Docker", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Dockerfile Best Practices", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Docker Compose", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Kubernetes Basics", lessons: [{ id: 201, title: "Kubernetes Architecture", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Deployments and Services", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Pods and ReplicaSets", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: CI/CD Pipelines", lessons: [{ id: 301, title: "Jenkins and GitHub Actions", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Automated Testing", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Deployment Strategies", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
   ],
   dataAnalytics: [
@@ -590,8 +665,13 @@ export const coursesData = {
         { name: "Jane Smith", title: "Senior Data Scientist", image: "https://placehold.co/100x100/8B5CF6/FFFFFF?text=J" },
       ],
       modules: [
-        { id: 1, title: "Module 1: Introduction to Python for Data Science", lessons: [{ id: 101, title: "Python Basics for Data", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Jupyter Notebooks", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: Introduction to Python for Data Science", lessons: [{ id: 101, title: "Python Basics for Data", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Jupyter Notebooks", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "NumPy for Numerical Computing", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Data Manipulation and Analysis", lessons: [{ id: 201, title: "Pandas DataFrames", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Data Cleaning", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Data Aggregation and Grouping", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Data Visualization", lessons: [{ id: 301, title: "Matplotlib and Seaborn", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Creating Plots and Charts", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Storytelling with Data", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'sql-for-data-analysis',
@@ -626,8 +706,13 @@ export const coursesData = {
         { name: "Maria Garcia", title: "Data Analyst", image: "https://placehold.co/100x100/A78BFA/FFFFFF?text=M" },
       ],
       modules: [
-        { id: 1, title: "Module 1: SQL Fundamentals", lessons: [{ id: 101, title: "Introduction to Databases", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "SELECT, FROM, WHERE clauses", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: SQL Fundamentals", lessons: [{ id: 101, title: "Introduction to Databases", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "SELECT, FROM, WHERE clauses", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Basic Operators", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Advanced Queries", lessons: [{ id: 201, title: "JOINs and Subqueries", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Window Functions", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Data Aggregation", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Database Design", lessons: [{ id: 301, title: "Database Normalization", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Indexing", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Performance Optimization", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'machine-learning-scikit',
@@ -662,8 +747,13 @@ export const coursesData = {
         { name: "Sam Lee", title: "Machine Learning Engineer", image: "https://placehold.co/100x100/A78BFA/FFFFFF?text=S" },
       ],
       modules: [
-        { id: 1, title: "Module 1: ML Fundamentals", lessons: [{ id: 101, title: "Introduction to Machine Learning", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Supervised Learning", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: ML Fundamentals", lessons: [{ id: 101, title: "Introduction to Machine Learning", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Supervised Learning", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Unsupervised Learning", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Scikit-learn Toolkit", lessons: [{ id: 201, title: "Data Preprocessing", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Classification and Regression", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Model Evaluation", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Capstone Project", lessons: [{ id: 301, title: "Project Planning", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Model Building", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Final Report", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
   ],
   cybersecurityCompliance: [
@@ -700,8 +790,13 @@ export const coursesData = {
         { name: "David Miller", title: "Cybersecurity Analyst", image: "https://placehold.co/100x100/A78BFA/FFFFFF?text=D" },
       ],
       modules: [
-        { id: 1, title: "Module 1: Introduction to Cybersecurity", lessons: [{ id: 101, title: "The CIA Triad", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Common Attack Vectors", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: Introduction to Cybersecurity", lessons: [{ id: 101, title: "The CIA Triad", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Common Attack Vectors", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Threat Modeling", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Network & Web Security", lessons: [{ id: 201, title: "Firewalls and IDS/IPS", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Web Application Attacks (XSS, SQLi)", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Secure Coding Practices", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Cryptography", lessons: [{ id: 301, title: "Symmetric and Asymmetric Encryption", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Hashing", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Digital Signatures", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'ethical-hacking-101',
@@ -736,8 +831,13 @@ export const coursesData = {
         { name: "Chris Evans", title: "Penetration Tester", image: "https://placehold.co/100x100/8B5CF6/FFFFFF?text=C" },
       ],
       modules: [
-        { id: 1, title: "Module 1: The Hacking Mindset", lessons: [{ id: 101, title: "Ethical Hacking vs. Malicious Hacking", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Phases of Hacking", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: The Hacking Mindset", lessons: [{ id: 101, title: "Ethical Hacking vs. Malicious Hacking", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Phases of Hacking", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Lab Setup", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Reconnaissance & Scanning", lessons: [{ id: 201, title: "Information Gathering", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Network Scanning with Nmap", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Vulnerability Analysis", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Gaining Access", lessons: [{ id: 301, title: "Exploitation Techniques", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Password Cracking", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Web Application Hacking", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
   ],
   aiAutomation: [
@@ -774,8 +874,13 @@ export const coursesData = {
         { name: "Sam Lee", title: "AI Researcher", image: "https://placehold.co/100x100/A78BFA/FFFFFF?text=S" },
       ],
       modules: [
-        { id: 1, title: "Module 1: What is AI?", lessons: [{ id: 101, title: "History of AI", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Types of AI", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: What is AI?", lessons: [{ id: 101, title: "History of AI", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Types of AI", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "AI in daily life", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Core AI Concepts", lessons: [{ id: 201, title: "Machine Learning", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Neural Networks", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Natural Language Processing", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: The Future of AI", lessons: [{ id: 301, title: "Ethical AI", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "AI and Robotics", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "The Singularity", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'automating-workflows-python',
@@ -810,8 +915,13 @@ export const coursesData = {
         { name: "Jane Smith", title: "Automation Expert", image: "https://placehold.co/100x100/8B5CF6/FFFFFF?text=J" },
       ],
       modules: [
-        { id: 1, title: "Module 1: Automation Fundamentals", lessons: [{ id: 101, title: "The Power of Automation", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Python Libraries for Automation", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: Automation Fundamentals", lessons: [{ id: 101, title: "The Power of Automation", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Python Libraries for Automation", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Setting up Your Environment", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: File and Web Automation", lessons: [{ id: 201, title: "Working with Files and Folders", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Web Scraping with BeautifulSoup", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Automating Emails", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: API Interactions", lessons: [{ id: 301, title: "Making API Calls", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Parsing JSON Data", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Final Automation Project", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
   ],
   marketing: [
@@ -848,8 +958,13 @@ export const coursesData = {
         { name: "Emily White", title: "Digital Marketing Strategist", image: "https://placehold.co/100x100/A78BFA/FFFFFF?text=E" },
       ],
       modules: [
-        { id: 1, title: "Module 1: The Digital Marketing Landscape", lessons: [{ id: 101, title: "Introduction to Digital Marketing", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Developing a Strategy", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: The Digital Marketing Landscape", lessons: [{ id: 101, title: "Introduction to Digital Marketing", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Developing a Strategy", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "Understanding Your Audience", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Key Digital Channels", lessons: [{ id: 201, title: "Social Media Marketing", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Email Marketing", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Content Marketing", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Analytics and Reporting", lessons: [{ id: 301, title: "Google Analytics", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "A/B Testing", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "KPIs and ROI", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
     {
       id: 'seo-masterclass',
@@ -884,8 +999,13 @@ export const coursesData = {
         { name: "Alex Miller", title: "SEO Specialist", image: "https://placehold.co/100x100/8B5CF6/FFFFFF?text=A" },
       ],
       modules: [
-        { id: 1, title: "Module 1: SEO Fundamentals", lessons: [{ id: 101, title: "How Search Engines Work", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Keyword Research", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
-      ]
+        { id: 1, title: "Module 1: SEO Fundamentals", lessons: [{ id: 101, title: "How Search Engines Work", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 102, title: "Keyword Research", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 103, title: "On-Page SEO", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 2, title: "Module 2: Advanced SEO", lessons: [{ id: 201, title: "Off-Page SEO (Link Building)", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 202, title: "Technical SEO", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 203, title: "Local SEO", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] },
+        { id: 3, title: "Module 3: Tools and Strategy", lessons: [{ id: 301, title: "Using SEO Tools (SEMrush, Ahrefs)", videoUrl: "https://www.youtube.com/embed/j_8-Bq31F6I" }, { id: 302, title: "Content Strategy", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }, { id: 303, title: "Performance Tracking", videoUrl: "https://www.youtube.com/embed/aCBlW_K4eF4" }] }
+      ],
+      progress: 0,
+      totalLessons: 9,
+      completedLessons: {}
     },
   ],
 };

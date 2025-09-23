@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -22,6 +22,14 @@ const StarRating = ({ rating }) => {
 const SearchPage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredResults, setFilteredResults] = useState({ courses: [], stacks: [] });
+    const searchInputRef = useRef(null); // Ref to access the input element
+
+    // Focus the input field when the page loads
+    useEffect(() => {
+        if (searchInputRef.current) {
+            searchInputRef.current.focus();
+        }
+    }, []);
 
     // Consolidate all courses and stacks into a single array for searching
     const allCourses = Object.values(coursesData).flat();
@@ -84,6 +92,7 @@ const SearchPage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                         value={searchTerm}
                         onChange={handleSearchChange}
                         className="w-full p-3 pl-12 border-2 border-transparent bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow"
+                        ref={searchInputRef} // Attach the ref to the input element
                     />
                     <svg className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -108,9 +117,9 @@ const SearchPage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                             <div>
                                 <h2 className="text-3xl font-bold mb-6">Courses</h2>
                                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                                    {filteredResults.courses.map((course, index) => (
+                                    {filteredResults.courses.map((course) => (
                                         <Link
-                                            key={index}
+                                            key={course.id} // Use a unique identifier from the course object
                                             to={`/course-details/${course.id}`}
                                             className="group bg-white rounded-2xl relative overflow-hidden transition-all duration-300 hover:translate-y-[-10px] hover:shadow-2xl border border-gray-200"
                                         >
@@ -140,9 +149,9 @@ const SearchPage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                             <div>
                                 <h2 className="text-3xl font-bold mb-6">Stacks</h2>
                                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                                    {filteredResults.stacks.map((stack, index) => (
+                                    {filteredResults.stacks.map((stack) => (
                                         <Link
-                                            key={index}
+                                            key={stack.path} // Use a unique path as the key
                                             to={stack.path}
                                             className="group bg-white rounded-2xl relative overflow-hidden transition-all duration-300 hover:translate-y-[-5px] hover:shadow-2xl border border-gray-200 p-6 text-center flex flex-col items-center"
                                         >

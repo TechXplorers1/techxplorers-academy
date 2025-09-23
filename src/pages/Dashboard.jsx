@@ -1,12 +1,9 @@
 import React from 'react';
 import DashboardPageTemplate from './DashboardPageTemplate';
 
-const Dashboard = ({ isLoggedIn, onLogout, cartItemsCount }) => {
-    const courseStats = {
-        enrolled: 12,
-        active: 5,
-        completed: 3
-    };
+const Dashboard = ({ isLoggedIn, onLogout, cartItemsCount, registeredLiveClassesCount, enrolledCourses = [] }) => {
+    const totalEnrolled = enrolledCourses.length;
+    const completedCoursesCount = enrolledCourses.filter(course => (course.progress || 0) === 100).length;
 
     const DashboardCard = ({ title, value, icon, bgColor, textColor }) => (
         <div className={`p-6 rounded-2xl shadow-lg flex items-center space-x-4 transform transition-transform duration-300 hover:scale-[1.03] ${bgColor} ${textColor}`}>
@@ -30,23 +27,23 @@ const Dashboard = ({ isLoggedIn, onLogout, cartItemsCount }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <DashboardCard
                     title="Enrolled Courses"
-                    value={courseStats.enrolled}
+                    value={totalEnrolled}
                     icon="M12 14l9-5-9-5-9 5 9 5z"
                     bgColor="bg-purple-600"
                     textColor="text-white"
                 />
                 <DashboardCard
-                    title="Active Courses"
-                    value={courseStats.active}
-                    icon="M13 10V3L4 14h7v7l9-11h-7z"
-                    bgColor="bg-blue-600"
+                    title="Completed Courses"
+                    value={completedCoursesCount}
+                    icon="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    bgColor="bg-green-600"
                     textColor="text-white"
                 />
                 <DashboardCard
-                    title="Completed Courses"
-                    value={courseStats.completed}
-                    icon="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    bgColor="bg-green-600"
+                    title="Live Classes"
+                    value={registeredLiveClassesCount}
+                    icon="M15 10l4.553-2.276A1 1 0 0121 8.71v6.58a1 1 0 01-1.447.894L15 14m-5-4v4m0 0v4H6a2 2 0 01-2-2v-4a2 2 0 012-2h4z"
+                    bgColor="bg-red-600"
                     textColor="text-white"
                 />
             </div>

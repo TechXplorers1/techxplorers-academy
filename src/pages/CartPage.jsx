@@ -18,8 +18,13 @@ const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount, isLoggedIn, onL
     ];
 
     const handleCheckoutClick = () => {
-        onCheckout();
-        navigate('/dashboard/enrolled-courses');
+        if (!isLoggedIn) {
+            alert("Please log in to proceed to checkout.");
+            navigate('/login');
+        } else {
+            onCheckout();
+            navigate('/dashboard/enrolled-courses');
+        }
     };
 
     return (

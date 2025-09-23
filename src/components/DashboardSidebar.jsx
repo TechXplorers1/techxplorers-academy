@@ -8,6 +8,7 @@ const DashboardSidebar = () => {
         { name: 'Dashboard', path: '/dashboard', icon: 'M4 4v5h.582m15.836 0L19.5 4v5m-15.836 0h15.836m-15.836 0l-.034 6.551M19.5 9h-15.836m15.836 0l.034 6.551m0 0a2.028 2.028 0 00.999-.404C21.785 15.347 22 14.868 22 14.362V11c-.054 1.1-.967 2-2.107 2h-1.528A2.84 2.84 0 0115 11.5v-2c0-.9.7-1.5 1.5-1.5h1.528A2.84 2.84 0 0122 8.5V4h-.478c-1.11 0-2.023.9-2.107 2H15c-1.14 0-2.107-.9-2.107-2H7v10h10V4zM2 14v-2h2a2 2 0 012-2h14v10H2V14z' },
         { name: 'My Profile', path: '/dashboard/my-profile', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' },
         { name: 'Enrolled Courses', path: '/dashboard/enrolled-courses', icon: 'M12 14l9-5-9-5-9 5 9 5z' },
+        { name: 'My Live Classes', path: '/dashboard/my-live-classes', icon: 'M15 10l4.553-2.276A1 1 0 0121 8.71v6.58a1 1 0 01-1.447.894L15 14m-5-4v4m0 0v4H6a2 2 0 01-2-2v-4a2 2 0 012-2h4z' },
         { name: 'Wishlist', path: '/dashboard/wishlist', icon: 'M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z' },
         { name: 'Order History', path: '/dashboard/order-history', icon: 'M3 3a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V4a1 1 0 00-1-1H3z' },
         { name: 'Settings', path: '/dashboard/settings', icon: 'M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z' },

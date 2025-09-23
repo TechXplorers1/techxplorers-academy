@@ -4,7 +4,8 @@ import DashboardPageTemplate from '../DashboardPageTemplate';
 
 const EnrolledCourses = ({ isLoggedIn, onLogout, cartItemsCount, enrolledCourses }) => {
     
-    // Check if enrolledCourses exist and are not empty
+    const inProgressCourses = enrolledCourses.filter(course => (course.progress || 0) < 100);
+    const completedCourses = enrolledCourses.filter(course => (course.progress || 0) === 100);
     const hasEnrolledCourses = enrolledCourses && enrolledCourses.length > 0;
 
     const CourseCard = ({ course }) => (
@@ -20,7 +21,7 @@ const EnrolledCourses = ({ isLoggedIn, onLogout, cartItemsCount, enrolledCourses
                 </div>
                 <p className="text-sm text-gray-600 mb-4">{course.progress || 0}% Complete</p>
                 <Link to={`/course/${course.id}`} className="block text-center bg-purple-600 text-white font-semibold py-2 rounded-full hover:bg-purple-700 transition-colors">
-                    Resume Course
+                    {course.progress === 100 ? 'View Course' : 'Resume Course'}
                 </Link>
             </div>
         </div>
@@ -34,10 +35,27 @@ const EnrolledCourses = ({ isLoggedIn, onLogout, cartItemsCount, enrolledCourses
             title="Enrolled Courses"
         >
             {hasEnrolledCourses ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {enrolledCourses.map((course) => (
-                        <CourseCard key={course.id} course={course} />
-                    ))}
+                <div className="space-y-8">
+                    {inProgressCourses.length > 0 && (
+                        <div>
+                            <h2 className="text-xl font-bold mb-4">In Progress</h2>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {inProgressCourses.map((course) => (
+                                    <CourseCard key={course.id} course={course} />
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    {completedCourses.length > 0 && (
+                        <div>
+                            <h2 className="text-xl font-bold mb-4">Completed</h2>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {completedCourses.map((course) => (
+                                    <CourseCard key={course.id} course={course} />
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             ) : (
                 <div className="bg-white p-8 rounded-2xl shadow-lg text-center transform transition-transform duration-300 hover:scale-[1.01]">

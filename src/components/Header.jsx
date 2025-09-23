@@ -138,18 +138,9 @@ const Header = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                         </button>
                         <DropdownMenu isOpen={isMoreOpen} items={moreItems} onMouseEnter={() => handleHover('more', true)} onMouseLeave={() => handleHover('more', false)} />
                     </div>
-                    {isLoggedIn ? (
-                        <>
-                            <Link to="/dashboard" className="hover:text-purple-400 transition-colors">
-                                Dashboard
-                            </Link>
-                            <button onClick={onLogout} className="px-4 py-2 border border-white rounded-full text-white hover:bg-white hover:text-purple-600 transition-colors">
-                                Logout
-                            </button>
-                        </>
-                    ) : (
-                        <Link to="/login" className="hover:text-purple-400 transition-colors">Login</Link>
-                    )}
+                    <Link to="/more/live-classes" className="text-white font-bold py-2 px-4 rounded-full bg-purple-600 hover:bg-purple-700 transition-colors">
+                        Live Classes
+                    </Link>
                 </div>
                 <div className="hidden lg:flex items-center space-x-4">
                     <button onClick={handleSearchClick} className="hover:text-purple-400 transition-colors">
@@ -168,6 +159,18 @@ const Header = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                                 </span>
                             )}
                         </Link>
+                    )}
+                    {isLoggedIn ? (
+                        <>
+                            <Link to="/dashboard" className="hover:text-purple-400 transition-colors">
+                                Dashboard
+                            </Link>
+                            <button onClick={onLogout} className="px-4 py-2 border border-white rounded-full text-white hover:bg-white hover:text-purple-600 transition-colors">
+                                Logout
+                            </button>
+                        </>
+                    ) : (
+                        <Link to="/login" className="hover:text-purple-400 transition-colors">Login</Link>
                     )}
                 </div>
                 <button className="lg:hidden text-2xl text-white">

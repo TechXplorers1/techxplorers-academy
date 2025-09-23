@@ -31,6 +31,7 @@ import BecomeAMentor from './pages/more/BecomeAMentor';
 import JoinBraveProjects from './pages/more/JoinBraveProjects';
 import JoinBraveTeams from './pages/more/JoinBraveTeams';
 import Plans from './pages/more/Plans';
+import LiveClasses from './pages/more/LiveClasses';
 
 // Course Details Page
 import CourseDetailsTemplate from './pages/course-details/CourseDetailsTemplate';
@@ -46,6 +47,8 @@ import EnrolledCourses from './pages/dashboard/EnrolledCourses';
 import Wishlist from './pages/dashboard/Wishlist';
 import OrderHistory from './pages/dashboard/OrderHistory';
 import Settings from './pages/dashboard/Settings';
+import MyLiveClasses from './pages/dashboard/MyLiveClasses';
+import LiveClassRecordings from './pages/dashboard/LiveClassRecordings';
 
 // Course Page
 import CoursePage from './pages/dashboard/CoursePage'; 
@@ -57,6 +60,7 @@ import CartPage from './pages/CartPage';
 import SearchPage from './pages/SearchPage';
 
 import { coursesData } from './data/coursesData';
+import { liveClassesData } from './data/liveClassesData';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -91,6 +95,16 @@ export default function App() {
     }
   });
 
+  const [registeredLiveClasses, setRegisteredLiveClasses] = useState(() => {
+    try {
+      const savedLiveClasses = localStorage.getItem('registeredLiveClasses');
+      return savedLiveClasses ? JSON.parse(savedLiveClasses) : [];
+    } catch (error) {
+      console.error("Failed to parse registered live classes from localStorage:", error);
+      return [];
+    }
+  });
+
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
@@ -102,6 +116,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('enrolledCourses', JSON.stringify(enrolledCourses));
   }, [enrolledCourses]);
+  
+  useEffect(() => {
+    localStorage.setItem('registeredLiveClasses', JSON.stringify(registeredLiveClasses));
+  }, [registeredLiveClasses]);
 
   const handleAddToCart = (course) => {
     setCart(prevCart => {
@@ -144,8 +162,16 @@ export default function App() {
   };
 
   const handleCheckout = () => {
-    setEnrolledCourses(prevEnrolled => [...prevEnrolled, ...cart]);
+    const newEnrolledCourses = cart.filter(course => !enrolledCourses.some(enrolled => enrolled.id === course.id));
+    setEnrolledCourses(prevEnrolled => [...prevEnrolled, ...newEnrolledCourses]);
     setCart([]);
+  };
+
+  const handleRegisterLiveClass = (event) => {
+    const isAlreadyRegistered = registeredLiveClasses.some(cls => cls.id === event.id);
+    if (!isAlreadyRegistered) {
+      setRegisteredLiveClasses(prevClasses => [...prevClasses, event]);
+    }
   };
 
   return (
@@ -180,6 +206,7 @@ export default function App() {
         <Route path="/more/join-Brave-teams" element={<JoinBraveTeams isLoggedIn={isLoggedIn} onLogout={handleLogout} cartItemsCount={cart.length} />} />
         <Route path="/more/join-Brave-projects" element={<JoinBraveProjects isLoggedIn={isLoggedIn} onLogout={handleLogout} cartItemsCount={cart.length} />} />
         <Route path="/more/plans" element={<Plans isLoggedIn={isLoggedIn} onLogout={handleLogout} cartItemsCount={cart.length} />} />
+        <Route path="/more/live-classes" element={<LiveClasses isLoggedIn={isLoggedIn} onLogout={handleLogout} cartItemsCount={cart.length} onRegisterLiveClass={handleRegisterLiveClass} registeredLiveClasses={registeredLiveClasses} />} />
         
         <Route 
           path="/course-details/:courseId" 
@@ -200,7 +227,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} onLogout={handleLogout} cartItemsCount={cart.length} />} />
         <Route path="/signup" element={<SignupPage setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} onLogout={handleLogout} cartItemsCount={cart.length} />} />
 
-        <Route path="/dashboard" element={<Dashboard isLoggedIn={isLoggedIn} onLogout={handleLogout} cartItemsCount={cart.length} />} />
+        <Route path="/dashboard" element={<Dashboard isLoggedIn={isLoggedIn} onLogout={handleLogout} cartItemsCount={cart.length} registeredLiveClassesCount={registeredLiveClasses.length} enrolledCourses={enrolledCourses} />} />
         <Route path="/dashboard/my-profile" element={<MyProfile isLoggedIn={isLoggedIn} onLogout={handleLogout} cartItemsCount={cart.length} />} />
         <Route 
           path="/dashboard/enrolled-courses" 
@@ -224,8 +251,19 @@ export default function App() {
         />
         <Route path="/dashboard/order-history" element={<OrderHistory isLoggedIn={isLoggedIn} onLogout={handleLogout} cartItemsCount={cart.length} />} />
         <Route path="/dashboard/settings" element={<Settings isLoggedIn={isLoggedIn} onLogout={handleLogout} cartItemsCount={cart.length} />} />
+        <Route path="/dashboard/my-live-classes" element={<MyLiveClasses isLoggedIn={isLoggedIn} onLogout={handleLogout} cartItemsCount={cart.length} registeredLiveClasses={registeredLiveClasses} />} />
+        <Route path="/dashboard/live-class/:classId" element={<LiveClassRecordings isLoggedIn={isLoggedIn} onLogout={handleLogout} cartItemsCount={cart.length} liveClassesData={liveClassesData} />} />
 
-        <Route path="/course/:courseId" element={<CoursePage isLoggedIn={isLoggedIn} onLogout={handleLogout} cartItemsCount={cart.length} enrolledCourses={enrolledCourses} />} />
+        <Route 
+          path="/course/:courseId" 
+          element={<CoursePage 
+            isLoggedIn={isLoggedIn} 
+            onLogout={handleLogout} 
+            cartItemsCount={cart.length} 
+            enrolledCourses={enrolledCourses} 
+            setEnrolledCourses={setEnrolledCourses} 
+          />} 
+        />
 
         <Route 
           path="/cart" 
