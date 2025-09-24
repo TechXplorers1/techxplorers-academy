@@ -2,72 +2,69 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import { coursesData } from '../../data/coursesData';
+import { ref, update } from "firebase/database";
+import { auth, db } from '../../firebase';
 
-const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, enrolledCourses, setEnrolledCourses }) => {
+const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , user, enrolledCourses, setEnrolledCourses }) => {
     const { courseId } = useParams();
     const [course, setCourse] = useState(null);
     const [currentLesson, setCurrentLesson] = useState(null);
     const [completedLessons, setCompletedLessons] = useState({});
 
     useEffect(() => {
-        // Find the full course data from the main coursesData object
         let foundCourseData = null;
-        for (const category in coursesData) {
-            foundCourseData = coursesData[category].find(c => c.id === courseId);
-            if (foundCourseData) break;
-        }
-
-        // Find the user's progress for this course from the enrolledCourses state
+        // Convert the coursesData object into a searchable array
+        const allCourses = Object.values(coursesData || {});
+        foundCourseData = allCourses.find(c => c.id === courseId);
+        
         const enrolledCourse = enrolledCourses.find(c => c.id === courseId);
 
-        if (foundCourseData) {
-            // Merge the full course data with the user's progress data
+        if (foundCourseData && enrolledCourse) {
             const courseWithProgress = {
                 ...foundCourseData,
-                progress: enrolledCourse?.progress || 0,
-                completedLessons: enrolledCourse?.completedLessons || {}
+                progress: enrolledCourse.progress || 0,
+                completedLessons: enrolledCourse.completedLessons || {}
             };
             setCourse(courseWithProgress);
             setCompletedLessons(courseWithProgress.completedLessons);
 
             if (courseWithProgress.modules && courseWithProgress.modules.length > 0) {
-                let allLessons = courseWithProgress.modules.flatMap(module => module.lessons);
+                let allLessons = courseWithProgress.modules.flatMap(module => Object.values(module.lessons));
                 let firstIncompleteLesson = allLessons.find(lesson => !courseWithProgress.completedLessons[lesson.id]);
                 setCurrentLesson(firstIncompleteLesson || allLessons[0]);
             }
         }
-    }, [courseId, enrolledCourses]);
-
-    useEffect(() => {
-        if (course) {
-            setEnrolledCourses(prevEnrolled => {
-                const updatedEnrolledCourses = prevEnrolled.map(c => {
-                    if (c.id === course.id) {
-                        const completedCount = Object.keys(completedLessons).length;
-                        const totalCount = course.totalLessons;
-                        const progress = totalCount > 0 ? Math.floor((completedCount / totalCount) * 100) : 0;
-                        return { ...c, progress, completedLessons };
-                    }
-                    return c;
-                });
-                return updatedEnrolledCourses;
-            });
-        }
-    }, [completedLessons]);
+    }, [courseId, enrolledCourses, coursesData]);
 
     const handleLessonClick = (lesson) => {
         setCurrentLesson(lesson);
     };
 
-    const handleMarkAsComplete = (lessonId) => {
-        setCompletedLessons(prev => ({ ...prev, [lessonId]: true }));
+    const handleMarkAsComplete = async (lessonId) => {
+        if (!auth.currentUser || !course) return;
+
+        const newCompletedLessons = { ...completedLessons, [lessonId]: true };
+        const allLessonsCount = course.totalLessons;
+        const newCompletedCount = Object.keys(newCompletedLessons).length;
+        const newProgress = allLessonsCount > 0 ? Math.floor((newCompletedCount / allLessonsCount) * 100) : 0;
+
+        const userCourseRef = ref(db, `users/${auth.currentUser.uid}/enrolledCourses/${courseId}`);
+        await update(userCourseRef, {
+            progress: newProgress,
+            completedLessons: newCompletedLessons
+        });
+        
+        setCompletedLessons(newCompletedLessons);
+        
+        setEnrolledCourses(prevEnrolled => {
+            return prevEnrolled.map(c => c.id === courseId ? { ...c, progress: newProgress, completedLessons: newCompletedLessons } : c);
+        });
     };
 
     const handleNextLesson = () => {
         if (!currentLesson || !course || !course.modules) return;
 
-        let allLessons = course.modules.flatMap(module => module.lessons);
+        let allLessons = course.modules.flatMap(module => Object.values(module.lessons));
         const currentIndex = allLessons.findIndex(l => l.id === currentLesson.id);
 
         if (currentIndex !== -1 && currentIndex < allLessons.length - 1) {
@@ -82,7 +79,7 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, enrolledCourses, set
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center p-12 bg-white rounded-xl shadow-lg">
                     <h2 className="text-2xl font-bold mb-4">Course not found.</h2>
-                    <p>The course you are looking for does not exist or has not been created yet.</p>
+                    <p>The course you are looking for does not exist or you are not enrolled.</p>
                     <Link to="/dashboard/enrolled-courses" className="mt-6 inline-block text-purple-600 hover:underline">
                         Go back to your courses
                     </Link>
@@ -90,13 +87,12 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, enrolledCourses, set
             </div>
         );
     }
-
+    
     return (
         <div className="min-h-screen bg-gray-100 font-inter">
             <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
 
             <main className="flex flex-col lg:flex-row h-full lg:h-[calc(100vh-4rem)]">
-                {/* Video Player Section */}
                 <div className="lg:flex-grow p-6 md:p-8 bg-gray-900 flex flex-col justify-center">
                     <div className="w-full flex-grow flex items-center justify-center">
                         {currentLesson ? (
@@ -135,14 +131,13 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, enrolledCourses, set
                     )}
                 </div>
 
-                {/* Course Content Sidebar */}
                 <aside className="lg:w-96 bg-white shadow-md p-6 overflow-y-auto">
                     <h2 className="text-2xl font-bold text-gray-900 mb-4">Course Content</h2>
                     {course.modules && course.modules.map(module => (
                         <div key={module.id} className="mb-6">
                             <h3 className="text-lg font-semibold text-gray-800 mb-2">{module.title}</h3>
                             <ul className="space-y-2">
-                                {module.lessons.map(lesson => (
+                                {Object.values(module.lessons).map(lesson => (
                                     <li
                                         key={lesson.id}
                                         className={`flex items-center p-3 rounded-lg cursor-pointer transition-colors ${

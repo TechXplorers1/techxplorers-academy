@@ -2,13 +2,13 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import DashboardPageTemplate from '../DashboardPageTemplate';
 
-const LiveClassRecordings = ({ isLoggedIn, onLogout, cartItemsCount, liveClassesData }) => {
+const LiveClassRecordings = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , user, liveClassesData }) => {
     const { classId } = useParams();
     const liveClass = liveClassesData.find(cls => cls.id === classId);
 
     if (!liveClass) {
         return (
-            <DashboardPageTemplate isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} title="Live Class Not Found">
+            <DashboardPageTemplate isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} coursesData={coursesData} title="Live Class Not Found" user={user}>
                 <div className="bg-white p-8 rounded-2xl shadow-lg text-center">
                     <h3 className="text-2xl font-bold text-gray-900 mb-4">Class Not Found</h3>
                     <p className="text-gray-600">The live class you are looking for does not exist or you may not be registered for it.</p>
@@ -21,7 +21,7 @@ const LiveClassRecordings = ({ isLoggedIn, onLogout, cartItemsCount, liveClasses
     }
 
     return (
-        <DashboardPageTemplate isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} title={liveClass.title}>
+        <DashboardPageTemplate isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} title={liveClass.title} user={user}>
             <div className="bg-white p-8 rounded-2xl shadow-lg">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">{liveClass.title} Recordings</h3>
                 <p className="text-gray-600 mb-6">{liveClass.description}</p>

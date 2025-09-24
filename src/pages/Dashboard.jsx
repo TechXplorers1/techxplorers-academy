@@ -1,7 +1,7 @@
 import React from 'react';
 import DashboardPageTemplate from './DashboardPageTemplate';
 
-const Dashboard = ({ isLoggedIn, onLogout, cartItemsCount, registeredLiveClassesCount, enrolledCourses = [] }) => {
+const Dashboard = ({ isLoggedIn, onLogout, cartItemsCount, registeredLiveClassesCount, enrolledCourses = [], user }) => {
     const totalEnrolled = enrolledCourses.length;
     const completedCoursesCount = enrolledCourses.filter(course => (course.progress || 0) === 100).length;
 
@@ -22,7 +22,7 @@ const Dashboard = ({ isLoggedIn, onLogout, cartItemsCount, registeredLiveClasses
     );
 
     return (
-        <DashboardPageTemplate isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} title="Dashboard">
+        <DashboardPageTemplate isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} title="Dashboard" user={user}>
             {/* Stat Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <DashboardCard

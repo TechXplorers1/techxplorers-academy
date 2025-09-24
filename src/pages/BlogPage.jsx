@@ -2,28 +2,55 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer'; 
-import { blogPosts } from '../data/blogPosts';
+// The static import has been removed
+// import { blogPosts } from '../data/blogPosts';
 
-const BlogPage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
+const BlogPage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, blogPostsData }) => {
     const { id } = useParams();
     const [post, setPost] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const foundPost = blogPosts.find(p => p.id === id);
-        setPost(foundPost);
-    }, [id]);
+        // Check if blogPostsData has been loaded
+        if (blogPostsData && blogPostsData.length > 0) {
+            const foundPost = blogPostsData.find(p => p.id === id);
+            setPost(foundPost);
+            setLoading(false);
+        } else if (blogPostsData) { // This condition handles the case where data is loaded but is empty
+            setLoading(false);
+        }
+    }, [id, blogPostsData]);
+
+    if (loading) {
+        return (
+            <div className="bg-[#120D25] text-white min-h-screen flex items-center justify-center">
+                <p className="text-2xl">Loading post...</p>
+            </div>
+        );
+    }
 
     if (!post) {
         return (
-            <div className="bg-[#120D25] text-white min-h-screen flex items-center justify-center">
-                <p className="text-2xl">Blog post not found...</p>
+            <div className="bg-[#120D25] text-white min-h-screen">
+                 <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} coursesData={coursesData} />
+                 <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+                    <h1 className="text-3xl font-bold mb-4">Blog Post Not Found</h1>
+                    <p className="text-gray-400 mb-8">Sorry, we couldn't find the blog post you're looking for.</p>
+                    <Link to="/" className="text-purple-400 hover:text-white transition-colors flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Back to Home
+                    </Link>
+                 </main>
+                 <Footer />
             </div>
         );
     }
 
     return (
         <div className="bg-[#120D25] text-white min-h-screen font-inter">
-            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
+            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} coursesData={coursesData} />
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div className="max-w-7xl mx-auto">
                     <Link to="/" className="text-purple-400 hover:text-white transition-colors mb-6 flex items-center">

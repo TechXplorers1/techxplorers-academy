@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import DashboardPageTemplate from '../DashboardPageTemplate';
 
-const Wishlist = ({ isLoggedIn, onLogout, cartItemsCount, wishlistItems, onRemoveFromWishlist, onAddToCart }) => {
+export const Wishlist = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , wishlistItems, onRemoveFromWishlist, onAddToCart, user }) => {
     const [showPopup, setShowPopup] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
 
@@ -11,8 +11,8 @@ const Wishlist = ({ isLoggedIn, onLogout, cartItemsCount, wishlistItems, onRemov
             <img src={item.image} alt={item.title} className="w-24 h-24 object-cover rounded-xl" />
             <div className="flex-1 text-center sm:text-left">
                 <h4 className="text-lg font-bold">{item.title}</h4>
-                <p className="text-sm text-gray-600 mt-1">{item.description}</p>
-                <p className="text-lg font-semibold text-purple-600 mt-2">{item.price}</p>
+                <p className="text-sm text-gray-600 mt-1">Instructor: {item.instructor}</p>
+                <p className="text-lg font-semibold text-purple-600 mt-2">${item.price.toFixed(2)}</p>
             </div>
             <div className="flex flex-col space-y-2">
                 <button
@@ -38,9 +38,10 @@ const Wishlist = ({ isLoggedIn, onLogout, cartItemsCount, wishlistItems, onRemov
     return (
         <DashboardPageTemplate 
             isLoggedIn={isLoggedIn} 
-            onLogout={onLogout}
-            cartItemsCount={cartItemsCount}
+            onLogout={onLogout} 
+            cartItemsCount={cartItemsCount} 
             title="My Wishlist"
+            user={user}
         >
             {showPopup && (
                 <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-green-500 text-white py-3 px-6 rounded-full shadow-lg z-50 animate-fade-in-down">
@@ -64,5 +65,3 @@ const Wishlist = ({ isLoggedIn, onLogout, cartItemsCount, wishlistItems, onRemov
         </DashboardPageTemplate>
     );
 };
-
-export default Wishlist;

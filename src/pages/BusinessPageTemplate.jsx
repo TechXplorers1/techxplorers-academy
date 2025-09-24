@@ -31,12 +31,15 @@ const BusinessPageTemplate = ({
   formTitle,
   formDescription,
   formFields,
+  coursesData // Accept prop
+
 }) => {
   const filteredBreadcrumbs = breadcrumbs.filter(crumb => crumb.name !== "For Business");
 
   return (
     <div className="bg-white text-gray-900 font-inter min-h-screen">
-      <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
+      <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} coursesData={coursesData} // Pass prop
+ />
       <Hero
         title={title}
         breadcrumbs={filteredBreadcrumbs}

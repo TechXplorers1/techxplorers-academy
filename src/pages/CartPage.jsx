@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 
-const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount, isLoggedIn, onLogout, onCheckout }) => {
+const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount, isLoggedIn, onLogout, onCheckout ,coursesData }) => {
     const subtotal = cartItems.reduce((acc, item) => acc + item.price, 0);
     const taxRate = 0.08;
     const estimatedTax = subtotal * taxRate;
@@ -29,7 +29,7 @@ const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount, isLoggedIn, onL
 
     return (
         <div className="bg-gray-100 text-gray-900 min-h-screen font-inter">
-            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
+            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} coursesData={coursesData}  />
             <Hero
                 title="Your Cart"
                 breadcrumbs={breadcrumbs}

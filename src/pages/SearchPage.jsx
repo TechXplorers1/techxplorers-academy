@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
-import { coursesData } from '../data/coursesData';
+import { categoryMap, toKebabCase } from '../utils/categoryHelper';
 
 const StarRating = ({ rating }) => {
     const fullStars = Math.floor(rating);
@@ -19,30 +19,22 @@ const StarRating = ({ rating }) => {
     );
 };
 
-const SearchPage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
+const SearchPage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, coursesDataForHeader }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredResults, setFilteredResults] = useState({ courses: [], stacks: [] });
-    const searchInputRef = useRef(null); // Ref to access the input element
+    const searchInputRef = useRef(null);
 
-    // Focus the input field when the page loads
     useEffect(() => {
         if (searchInputRef.current) {
             searchInputRef.current.focus();
         }
     }, []);
 
-    // Consolidate all courses and stacks into a single array for searching
-    const allCourses = Object.values(coursesData).flat();
-    const stackCategories = [
-        { name: 'Product & Strategy', path: '/all-stacks/product-strategy' },
-        { name: 'UX & UI Design', path: '/all-stacks/ux-ui-design' },
-        { name: 'Engineering & Development', path: '/all-stacks/engineering-development' },
-        { name: 'Data & Analytics', path: '/all-stacks/data-analytics' },
-        { name: 'Cybersecurity & Compliance', path: '/all-stacks/cybersecurity-compliance' },
-        { name: 'AI & Automation', path: '/all-stacks/ai-automation' },
-        { name: 'Marketing', path: '/all-stacks/marketing' },
-        { name: 'Free Stacks', path: '/all-stacks/free-stacks' },
-    ];
+    // Dynamically generate the list of stacks/categories for searching
+    const stackCategories = coursesDataForHeader ? Object.keys(coursesDataForHeader).map(key => ({
+        name: categoryMap[key] || key,
+        path: `/all-stacks/${toKebabCase(key)}`
+    })) : [];
 
     const handleSearchChange = (event) => {
         const query = event.target.value;
@@ -55,14 +47,12 @@ const SearchPage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
 
         const lowerCaseQuery = query.toLowerCase();
 
-        // Filter courses
-        const matchedCourses = allCourses.filter(course =>
+        const matchedCourses = coursesData.filter(course =>
             course.title.toLowerCase().includes(lowerCaseQuery) ||
             course.instructor.toLowerCase().includes(lowerCaseQuery) ||
             course.category.toLowerCase().includes(lowerCaseQuery)
         );
 
-        // Filter stacks
         const matchedStacks = stackCategories.filter(stack =>
             stack.name.toLowerCase().includes(lowerCaseQuery)
         );
@@ -79,7 +69,12 @@ const SearchPage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
 
     return (
         <div className="bg-white text-gray-900 min-h-screen font-inter">
-            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
+            <Header 
+                isLoggedIn={isLoggedIn} 
+                onLogout={onLogout} 
+                cartItemsCount={cartItemsCount} 
+                coursesData={coursesDataForHeader} 
+            />
             <Hero
                 title="Search"
                 breadcrumbs={breadcrumbs}
@@ -92,7 +87,7 @@ const SearchPage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                         value={searchTerm}
                         onChange={handleSearchChange}
                         className="w-full p-3 pl-12 border-2 border-transparent bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow"
-                        ref={searchInputRef} // Attach the ref to the input element
+                        ref={searchInputRef}
                     />
                     <svg className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -119,7 +114,7 @@ const SearchPage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
                                     {filteredResults.courses.map((course) => (
                                         <Link
-                                            key={course.id} // Use a unique identifier from the course object
+                                            key={course.id}
                                             to={`/course-details/${course.id}`}
                                             className="group bg-white rounded-2xl relative overflow-hidden transition-all duration-300 hover:translate-y-[-10px] hover:shadow-2xl border border-gray-200"
                                         >
@@ -151,7 +146,7 @@ const SearchPage = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
                                     {filteredResults.stacks.map((stack) => (
                                         <Link
-                                            key={stack.path} // Use a unique path as the key
+                                            key={stack.path}
                                             to={stack.path}
                                             className="group bg-white rounded-2xl relative overflow-hidden transition-all duration-300 hover:translate-y-[-5px] hover:shadow-2xl border border-gray-200 p-6 text-center flex flex-col items-center"
                                         >

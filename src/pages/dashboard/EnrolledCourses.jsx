@@ -2,11 +2,26 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import DashboardPageTemplate from '../DashboardPageTemplate';
 
-const EnrolledCourses = ({ isLoggedIn, onLogout, cartItemsCount, enrolledCourses }) => {
+const EnrolledCourses = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , user, enrolledCourses }) => {
     
-    const inProgressCourses = enrolledCourses.filter(course => (course.progress || 0) < 100);
-    const completedCourses = enrolledCourses.filter(course => (course.progress || 0) === 100);
-    const hasEnrolledCourses = enrolledCourses && enrolledCourses.length > 0;
+    // Combine enrolled course data with full course details
+    const getFullEnrolledCourses = () => {
+        // Convert the coursesData object into an array of courses
+        const allCourses = Object.values(coursesData || {});
+        
+        return enrolledCourses.map(enrolledCourse => {
+            const courseDetails = allCourses.find(course => course.id === enrolledCourse.id);
+            // Return a combined object with user-specific data (progress) and full course details
+            return courseDetails ? { ...courseDetails, progress: enrolledCourse.progress, completedLessons: enrolledCourse.completedLessons } : null;
+        }).filter(Boolean); // Filter out any courses that weren't found
+    };
+
+    const fullEnrolledCourses = getFullEnrolledCourses();
+
+    // Filter courses based on progress status
+    const inProgressCourses = fullEnrolledCourses.filter(course => (course.progress || 0) < 100);
+    const completedCourses = fullEnrolledCourses.filter(course => (course.progress || 0) === 100);
+    const hasEnrolledCourses = fullEnrolledCourses.length > 0;
 
     const CourseCard = ({ course }) => (
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-[1.03]">
@@ -33,6 +48,7 @@ const EnrolledCourses = ({ isLoggedIn, onLogout, cartItemsCount, enrolledCourses
             onLogout={onLogout} 
             cartItemsCount={cartItemsCount} 
             title="Enrolled Courses"
+            user={user}
         >
             {hasEnrolledCourses ? (
                 <div className="space-y-8">

@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import MorePageTemplate from '../MorePageTemplate';
 import useInView from '../../hooks/useInView';
 import { Link, useNavigate } from 'react-router-dom';
-import { liveClassesData as liveClasses } from '../../data/liveClassesData';
 
 const LoginRequiredModal = ({ onClose, onLoginRedirect }) => {
     const modalRef = useRef(null);
@@ -137,7 +136,7 @@ const RegistrationFormModal = ({ event, onClose, onRegisterSuccess }) => {
     );
 };
 
-const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, onRegisterLiveClass, registeredLiveClasses = [] }) => {
+const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , onRegisterLiveClass, registeredLiveClasses = [], liveClassesData }) => {
     const [contentRef, contentInView] = useInView({ threshold: 0.2 });
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showRegistrationFormModal, setShowRegistrationFormModal] = useState(false);
@@ -165,7 +164,7 @@ const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, onRegisterLiveClass
     };
 
     const isClassRegistered = (classId) => {
-        return registeredLiveClasses.some(cls => cls.id === classId);
+        return registeredLiveClasses.includes(classId);
     };
 
     return (
@@ -182,7 +181,7 @@ const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, onRegisterLiveClass
                     </p>
 
                     <div className="w-full mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {liveClasses.map((event, index) => (
+                        {liveClassesData.map((event, index) => (
                             <div
                                 key={index}
                                 className="bg-white p-6 rounded-2xl shadow-lg space-y-4 text-left transition-all duration-300 hover:shadow-2xl hover:scale-105"

@@ -1,7 +1,7 @@
 import React from 'react';
 import DashboardPageTemplate from '../DashboardPageTemplate';
 
-const Settings = ({ isLoggedIn, onLogout, cartItemsCount }) => {
+const Settings = ({ isLoggedIn, onLogout, cartItemsCount, coursesData  }) => {
     return (
         <DashboardPageTemplate 
             isLoggedIn={isLoggedIn}

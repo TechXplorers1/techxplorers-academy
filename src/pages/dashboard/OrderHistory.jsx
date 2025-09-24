@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import DashboardPageTemplate from '../DashboardPageTemplate';
 
-const OrderHistory = ({ isLoggedIn, onLogout, cartItemsCount }) => {
+const OrderHistory = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , user }) => {
+    // This is hardcoded data. In a real app, this would be fetched from Firebase.
     const orders = [
         { id: 'ORD-12345', date: '2025-08-20', total: '$299', status: 'Completed', courses: ['Product Strategy', 'UI/UX Design'] },
         { id: 'ORD-67890', date: '2025-07-15', total: '$199', status: 'Completed', courses: ['Marketing'] },
@@ -31,6 +32,7 @@ const OrderHistory = ({ isLoggedIn, onLogout, cartItemsCount }) => {
             onLogout={onLogout}
             cartItemsCount={cartItemsCount}
             title="Order History"
+            user={user}
         >
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-transform transform duration-300 hover:scale-[1.01]">
                 <div className="overflow-x-auto">

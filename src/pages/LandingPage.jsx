@@ -1,14 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import Header from '../components/Header';
 import { Link } from 'react-router-dom';
-import { coursesData } from '../data/coursesData';
 import hero2 from '../assets/hero-2.jpg';
 import bg1 from '../assets/bg-1.jpg';
 import bg4 from '../assets/bg-4.jpg';
 import bg3 from '../assets/bg-7.jpg';
 import Footer from '../components/Footer';
 
-// Inline SVG Icons
+// Inline SVG Icons (components like PlayIcon, UserIcon, etc. remain the same)
 const PlayIcon = ({ size = 24, className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -98,17 +97,17 @@ const NumberCounter = ({ targetNumber, duration = 2000 }) => {
         threshold: 0.5,
       }
     );
-
-    if (countRef.current) {
-      observer.observe(countRef.current);
+    const currentRef = countRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (countRef.current) {
-        observer.unobserve(countRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
-  }, [targetNumber]);
+  }, [targetNumber, duration]);
 
   const startCount = () => {
     let startTimestamp = null;
@@ -164,13 +163,14 @@ const useInView = (options) => {
       }
     }, options);
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [options]);
@@ -179,120 +179,7 @@ const useInView = (options) => {
 };
 
 
-function LandingPage({ isLoggedIn, onLogout, cartItemsCount }) {
-  const [blogPosts] = useState([
-    {
-      id: "1",
-      title: "The Future of AI in Web Development",
-      author: "Alex Miller",
-      date: "Oct 26, 2023",
-      summary: "Explore how artificial intelligence is shaping the future of web development, from automated code generation to personalized user experiences. This post covers the latest trends and tools.",
-      image: "https://placehold.co/600x400/120D25/FFFFFF?text=AI+Web+Dev",
-      category: "Development"
-    },
-    {
-      id: "2",
-      title: "Getting Started with Tailwind CSS",
-      author: "Sarah Chen",
-      date: "Oct 24, 2023",
-      summary: "A beginner's guide to the utility-first CSS framework. Learn how to build beautiful, responsive designs without writing a single line of custom CSS efficiently.",
-      image: "https://placehold.co/600x400/120D25/FFFFFF?text=Tailwind+CSS",
-      category: "Development"
-    },
-    {
-      id: "3",
-      title: "The Importance of Accessibility in Design",
-      author: "Mark Davis",
-      date: "Oct 21, 2023",
-      summary: "Discover why accessible design is crucial for creating inclusive digital products and learn best practices for building websites for everyone, ensuring usability.",
-      image: "https://placehold.co/600x400/120D25/FFFFFF?text=Accessibility",
-      category: "Design"
-    },
-    {
-      id: "4",
-      title: "Marketing in the Digital Age",
-      author: "Emily White",
-      date: "Oct 18, 2023",
-      summary: "A comprehensive look at modern marketing strategies, from SEO to social media, and how to build a strong online presence to reach a wider audience effectively.",
-      image: "https://placehold.co/600x400/120D25/FFFFFF?text=Digital+Marketing",
-      category: "Marketing"
-    },
-    {
-      id: "5",
-      title: "Mastering the Business of Tech",
-      author: "Robert Brown",
-      date: "Oct 15, 2023",
-      summary: "Learn the fundamentals of business strategy and management tailored for the technology sector, focusing on growth, innovation, and leadership.",
-      image: "https://placehold.co/600x400/120D25/FFFFFF?text=Tech+Business",
-      category: "Business"
-    },
-    {
-      id: "6",
-      title: "Advanced JavaScript Concepts",
-      author: "John Smith",
-      date: "Oct 10, 2023",
-      summary: "Dive deep into advanced topics like closures, prototypes, and asynchronous JavaScript to write more efficient and clean code for complex applications.",
-      image: "https://placehold.co/600x400/120D25/FFFFFF?text=JS+Concepts",
-      category: "Development"
-    },
-  ]);
-
-  const [courses] = useState([
-    {
-      id: "1",
-      title: "Full-Stack Development with React & Node",
-      instructor: "John Doe",
-      rating: 4.8,
-      reviews: 120,
-      price: 99.99,
-      image: "https://placehold.co/600x400/2A1E4B/FFFFFF?text=React+%26+Node",
-    },
-    {
-      id: "2",
-      title: "Python for Data Science and Machine Learning",
-      instructor: "Jane Smith",
-      rating: 4.9,
-      reviews: 150,
-      price: 129.99,
-      image: "https://placehold.co/600x400/2A1E4B/FFFFFF?text=Python+for+Data+Science",
-    },
-    {
-      id: "3",
-      title: "UI/UX Design with Figma",
-      instructor: "Emily Clark",
-      rating: 4.7,
-      reviews: 95,
-      price: 79.99,
-      image: "https://placehold.co/600x400/2A1E4B/FFFFFF?text=Figma+UI/UX",
-    },
-    {
-      id: "4",
-      title: "Mobile App Development with Flutter",
-      instructor: "Michael Johnson",
-      rating: 4.6,
-      reviews: 110,
-      price: 89.99,
-      image: "https://placehold.co/600x400/2A1E4B/FFFFFF?text=Flutter+Mobile",
-    },
-    {
-      id: "5",
-      title: "DevOps and Cloud Computing with AWS",
-      instructor: "Sarah Williams",
-      rating: 5.0,
-      reviews: 190,
-      price: 149.99,
-      image: "https://placehold.co/600x400/2A1E4B/FFFFFF?text=DevOps+AWS",
-    },
-    {
-      id: "6",
-      title: "Cybersecurity Fundamentals",
-      instructor: "David Miller",
-      rating: 4.5,
-      reviews: 80,
-      price: 69.99,
-      image: "https://placehold.co/600x400/2A1E4B/FFFFFF?text=Cybersecurity",
-    },
-  ]);
+function LandingPage({ isLoggedIn, onLogout, cartItemsCount, coursesData, blogPostsData }) {
 
   const instructors = [
     {
@@ -370,6 +257,9 @@ function LandingPage({ isLoggedIn, onLogout, cartItemsCount }) {
   const [animatedCourses, setAnimatedCourses] = useState([]);
   const [showVideoModal, setShowVideoModal] = useState(false);
 
+  const allCourses = coursesData ? Object.values(coursesData).flat() : [];
+  const topCourses = allCourses.slice(0, 6);
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -397,7 +287,7 @@ function LandingPage({ isLoggedIn, onLogout, cartItemsCount }) {
         return () => clearTimeout(timer);
       });
     }
-  }, [coursesInView]);
+  }, [coursesInView, topCourses]);
 
 
   const goToTop = () => {
@@ -415,7 +305,7 @@ function LandingPage({ isLoggedIn, onLogout, cartItemsCount }) {
       const matrix = new WebKitCSSMatrix(currentTransform);
       const currentAngle = Math.atan2(matrix.m12, matrix.m16) * (180 / Math.PI);
 
-      const angleIncrement = 360 / filteredBlogPosts.length;
+      const angleIncrement = 360 / (filteredBlogPosts.length || 1);
       const newAngle = currentAngle + (direction === 'left' ? angleIncrement : -angleIncrement);
 
       carouselRef.current.style.transform = `perspective(1000px) rotateY(${newAngle}deg)`;
@@ -423,8 +313,8 @@ function LandingPage({ isLoggedIn, onLogout, cartItemsCount }) {
   };
 
   const filteredBlogPosts = activeCategory === "All"
-    ? blogPosts
-    : blogPosts.filter(post => post.category === activeCategory);
+    ? (blogPostsData || [])
+    : (blogPostsData || []).filter(post => post.category === activeCategory);
 
   const StarRating = ({ rating }) => {
     const fullStars = Math.floor(rating);
@@ -441,14 +331,7 @@ function LandingPage({ isLoggedIn, onLogout, cartItemsCount }) {
   };
 
   // Get a few top courses to display on the landing page
-  const topCourses = [
-    coursesData.productStrategy[0],
-    coursesData.productStrategy[1],
-    coursesData.engineeringDevelopment[0],
-    coursesData.dataAnalytics[0],
-    coursesData.uxUiDesign[0],
-    coursesData.freeStacks[0],
-  ];
+  
 
   const popularStacks = [
     {
@@ -584,7 +467,13 @@ function LandingPage({ isLoggedIn, onLogout, cartItemsCount }) {
       )}
 
       <main>
-        <Header isLandingPage={true} isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
+      <Header 
+        isLandingPage={true} 
+        isLoggedIn={isLoggedIn} 
+        onLogout={onLogout} 
+        cartItemsCount={cartItemsCount}
+        coursesData={coursesData} // Pass the coursesData prop to the Header
+      />
         {/* Enhanced Hero Section with Offers */}
         <section ref={heroRef} className={`relative overflow-hidden min-h-screen flex flex-col items-center justify-center pb-32 hero-section-container ${heroInView ? 'hero-section-visible' : ''}`}>
           {/* Background Image Container */}
@@ -1214,217 +1103,216 @@ function LandingPage({ isLoggedIn, onLogout, cartItemsCount }) {
 
       {/* Add custom animations */}
       <style>{`
-            /* 3D Carousel Animations */
-            @keyframes autoRun3d {
-                from { transform: perspective(1000px) rotateY(-360deg); }
-                to { transform: perspective(1000px) rotateY(0deg); }
-            }
+          /* 3D Carousel Animations */
+          @keyframes autoRun3d {
+              from { transform: perspective(1000px) rotateY(-360deg); }
+              to { transform: perspective(1000px) rotateY(0deg); }
+          }
 
-            @keyframes animateBrightness {
-                0%, 100% { filter: brightness(1); }
-                50% { filter: brightness(0.7); } /* Slightly dim when in background */
-            }
+          @keyframes animateBrightness {
+              0%, 100% { filter: brightness(1); }
+              50% { filter: brightness(0.7); } /* Slightly dim when in background */
+          }
 
-            /* Blog background gradient animation */
-            @keyframes gradientShift {
-                0% { background-position: 0% 50%; }
-                50% { background-position: 100% 50%; }
-                100% { background-position: 0% 50%; }
-            }
+          /* Blog background gradient animation */
+          @keyframes gradientShift {
+              0% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+          }
 
-            .blog-background-gradient {
-                background: linear-gradient(-45deg, #120D25, #2A1E4B, #120D25);
-                background-size: 400% 400%;
-                animation: gradientShift 15s ease infinite;
-            }
+          .blog-background-gradient {
+              background: linear-gradient(-45deg, #120D25, #2A1E4B, #120D25);
+              background-size: 400% 400%;
+              animation: gradientShift 15s ease infinite;
+          }
 
-            /* Utility Animations */
-            @keyframes float {
-                0%, 100% { transform: translateY(0); }
-                50% { transform: translateY(-10px); }
-            }
-            @keyframes pulse-slow {
-                0%, 100% { opacity: 0.2; }
-                50% { opacity: 0.4; }
-            }
-            @keyframes bounce-slow {
-                0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-                40% {transform: translateY(-10px);}
-                60% {transform: translateY(-5px);}
-            }
+          /* Utility Animations */
+          @keyframes float {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-10px); }
+          }
+          @keyframes pulse-slow {
+              0%, 100% { opacity: 0.2; }
+              50% { opacity: 0.4; }
+          }
+          @keyframes bounce-slow {
+              0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+              40% {transform: translateY(-10px);}
+              60% {transform: translateY(-5px);}
+          }
 
-            /* New on-scroll animations */
-            @keyframes slide-up {
-                0% { transform: translateY(20px); opacity: 0; }
-                100% { transform: translateY(0); opacity: 1; }
-            }
-            @keyframes fade-in-down {
-                0% { transform: translateY(-20px); opacity: 0; }
-                100% { transform: translateY(0); opacity: 1; }
-            }
-            
-            /* Hero V-shape animations */
-            .hero-v-card {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.8);
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transition: none;
-            }
+          /* New on-scroll animations */
+          @keyframes slide-up {
+              0% { transform: translateY(20px); opacity: 0; }
+              100% { transform: translateY(0); opacity: 1; }
+          }
+          @keyframes fade-in-down {
+              0% { transform: translateY(-20px); opacity: 0; }
+              100% { transform: translateY(0); opacity: 1; }
+          }
+         
+          /* Hero V-shape animations */
+          .hero-v-card {
+              opacity: 0;
+              transform: translate(-50%, -50%) scale(0.8);
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transition: none;
+          }
 
-            .hero-section-visible .hero-v-card-left {
-                animation: spread-out-left 0.8s ease-out forwards;
-                animation-delay: 1200ms;
-            }
-            .hero-section-visible .hero-v-card-right {
-                animation: spread-out-right 0.8s ease-out forwards;
-                animation-delay: 1400ms;
-            }
+          .hero-section-visible .hero-v-card-left {
+              animation: spread-out-left 0.8s ease-out forwards;
+              animation-delay: 1200ms;
+          }
+          .hero-section-visible .hero-v-card-right {
+              animation: spread-out-right 0.8s ease-out forwards;
+              animation-delay: 1400ms;
+          }
 
-            @keyframes spread-out-left {
-                from { opacity: 0; transform: translate(-50%, -50%) rotate(0deg) scale(0.8); }
-                to { opacity: 1; transform: translate(-100%, -50%) rotate(-6deg) scale(1); }
-            }
-            @keyframes spread-out-right {
-                from { opacity: 0; transform: translate(-50%, -50%) rotate(0deg) scale(0.8); }
-                to { opacity: 1; transform: translate(0%, -50%) rotate(6deg) scale(1); }
-            }
-            
-            /* Ribbon Animation for Stats */
-            @keyframes ribbon-wave {
-                0%, 100% { transform: scaleX(0); }
-                50% { transform: scaleX(1); }
-            }
-            .ribbon-animation {
-                transform: scaleX(0);
-                transition: all 0.6s ease-out;
-                transform-origin: center;
-            }
-            .is-visible .ribbon-animation {
-                animation: ribbon-wave 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-            }
+          @keyframes spread-out-left {
+              from { opacity: 0; transform: translate(-50%, -50%) rotate(0deg) scale(0.8); }
+              to { opacity: 1; transform: translate(-100%, -50%) rotate(-6deg) scale(1); }
+          }
+          @keyframes spread-out-right {
+              from { opacity: 0; transform: translate(-50%, -50%) rotate(0deg) scale(0.8); }
+              to { opacity: 1; transform: translate(0%, -50%) rotate(6deg) scale(1); }
+          }
+         
+          /* Ribbon Animation for Stats */
+          @keyframes ribbon-wave {
+              0%, 100% { transform: scaleX(0); }
+              50% { transform: scaleX(1); }
+          }
+          .ribbon-animation {
+              transform: scaleX(0);
+              transition: all 0.6s ease-out;
+              transform-origin: center;
+          }
+          .is-visible .ribbon-animation {
+              animation: ribbon-wave 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+          }
 
-            @keyframes text-glow {
-                0%, 100% { text-shadow: 0 0 5px rgba(139, 92, 246, 0.8); }
-                50% { text-shadow: 0 0 20px rgba(139, 92, 246, 1); }
-            }
-            .text-glow {
-                animation: none;
-            }
-            .is-visible .text-glow {
-                animation: text-glow 2s infinite ease-in-out;
-            }
-            
-            /* Glowing Border for Testimonials */
-            .glowing-border {
-                position: relative;
-                background: #f3f4f6; /* Tailwind gray-100 */
-                z-index: 1;
-                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-                transition: box-shadow 0.3s ease-out;
-            }
+          @keyframes text-glow {
+              0%, 100% { text-shadow: 0 0 5px rgba(139, 92, 246, 0.8); }
+              50% { text-shadow: 0 0 20px rgba(139, 92, 246, 1); }
+          }
+          .text-glow {
+              animation: none;
+          }
+          .is-visible .text-glow {
+              animation: text-glow 2s infinite ease-in-out;
+          }
+         
+          /* Glowing Border for Testimonials */
+          .glowing-border {
+              position: relative;
+              background: #f3f4f6; /* Tailwind gray-100 */
+              z-index: 1;
+              box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+              transition: box-shadow 0.3s ease-out;
+          }
 
-            .glowing-border:hover {
-                box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1), 0 0 20px 0px #8b5cf6, 0 0 40px 0px #d8b4fe; /* glow effect */
-            }
+          .glowing-border:hover {
+              box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1), 0 0 20px 0px #8b5cf6, 0 0 40px 0px #d8b4fe; /* glow effect */
+          }
 
-            /* General animation styles */
-            .animate-on-scroll {
-                opacity: 0;
-                transform: translateY(20px);
-                transition: all 0.6s ease-out;
-            }
+          /* General animation styles */
+          .animate-on-scroll {
+              opacity: 0;
+              transform: translateY(20px);
+              transition: all 0.6s ease-out;
+          }
 
-            .is-visible .animate-on-scroll {
-                opacity: 1;
-                transform: translateY(0);
-            }
+          .is-visible .animate-on-scroll {
+              opacity: 1;
+              transform: translateY(0);
+          }
 
-            /* Hero section-specific animations */
-            .hero-section-container .animate-fade-in-down,
-            .hero-section-container .animate-slide-up-200,
-            .hero-section-container .animate-slide-up-500,
-            .hero-section-container .animate-slide-up-700,
-            .hero-section-container .animate-slide-up-900,
-            .hero-section-container .animate-slide-up-1100,
-            .hero-section-container .animate-slide-up-1300,
-            .hero-section-container .animate-slide-up-1500 {
-                opacity: 0;
-                transform: translateY(20px);
-                transition: all 0.6s ease-out;
-            }
-            
-            .hero-section-visible .animate-fade-in-down { animation: fade-in-down 0.6s ease-out forwards; animation-delay: 500ms; }
-            .hero-section-visible .animate-slide-up-200 { animation: slide-up 0.6s ease-out forwards; animation-delay: 200ms; }
-            .hero-section-visible .animate-slide-up-500 { animation: slide-up 0.6s ease-out forwards; animation-delay: 500ms; }
-            .hero-section-visible .animate-slide-up-700 { animation: slide-up 0.6s ease-out forwards; animation-delay: 700ms; }
-            .hero-section-visible .animate-slide-up-900 { animation: slide-up 0.6s ease-out forwards; animation-delay: 900ms; }
-            .hero-section-visible .animate-slide-up-1100 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1100ms; }
-            .hero-section-visible .animate-slide-up-1300 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1300ms; }
-            .hero-section-visible .animate-slide-up-1500 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1500ms; }
-            
+          /* Hero section-specific animations */
+          .hero-section-container .animate-fade-in-down,
+          .hero-section-container .animate-slide-up-200,
+          .hero-section-container .animate-slide-up-500,
+          .hero-section-container .animate-slide-up-700,
+          .hero-section-container .animate-slide-up-900,
+          .hero-section-container .animate-slide-up-1100,
+          .hero-section-container .animate-slide-up-1300,
+          .hero-section-container .animate-slide-up-1500 {
+              opacity: 0;
+              transform: translateY(20px);
+              transition: all 0.6s ease-out;
+          }
+         
+          .hero-section-visible .animate-fade-in-down { animation: fade-in-down 0.6s ease-out forwards; animation-delay: 500ms; }
+          .hero-section-visible .animate-slide-up-200 { animation: slide-up 0.6s ease-out forwards; animation-delay: 200ms; }
+          .hero-section-visible .animate-slide-up-500 { animation: slide-up 0.6s ease-out forwards; animation-delay: 500ms; }
+          .hero-section-visible .animate-slide-up-700 { animation: slide-up 0.6s ease-out forwards; animation-delay: 700ms; }
+          .hero-section-visible .animate-slide-up-900 { animation: slide-up 0.6s ease-out forwards; animation-delay: 900ms; }
+          .hero-section-visible .animate-slide-up-1100 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1100ms; }
+          .hero-section-visible .animate-slide-up-1300 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1300ms; }
+          .hero-section-visible .animate-slide-up-1500 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1500ms; }
+         
 
-            .animate-float { animation: float 3s ease-in-out infinite; }
-            .animate-pulse-slow { animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-            .animate-bounce-slow { animation: bounce-slow 2s infinite; }
-            .animation-delay-2000 { animation-delay: 2s; }
-            
-            .card-3d {
-                position: relative;
-                width: 500px;
-                height: 400px;
-                transform-style: preserve-3d;
-                transform: perspective(1000px) rotateY(0deg);
-                animation: autoRun3d 25s linear infinite;
-                will-change: transform;
-            }
+          .animate-float { animation: float 3s ease-in-out infinite; }
+          .animate-pulse-slow { animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+          .animate-bounce-slow { animation: bounce-slow 2s infinite; }
+          .animation-delay-2000 { animation-delay: 2s; }
+         
+          .card-3d {
+              position: relative;
+              width: 500px;
+              height: 400px;
+              transform-style: preserve-3d;
+              transform: perspective(1000px) rotateY(0deg);
+              animation: autoRun3d 25s linear infinite;
+              will-change: transform;
+          }
 
-            .card-3d:hover { animation-play-state: paused !important; }
+          .card-3d:hover { animation-play-state: paused !important; }
 
-            .blog-card {
-                position: absolute;
-                width: 220px;
-                height: 280px;
-                top: 50%;
-                left: 50%;
-                transform-origin: center center;
-                animation: animateBrightness 25s linear infinite;
-                transition-duration: 300ms;
-                will-change: transform, filter;
-            }
+          .blog-card {
+              position: absolute;
+              width: 220px;
+              height: 280px;
+              top: 50%;
+              left: 50%;
+              transform-origin: center center;
+              animation: animateBrightness 25s linear infinite;
+              transition-duration: 300ms;
+              will-change: transform, filter;
+          }
 
-            .card-3d:hover .blog-card { animation-play-state: paused !important; }
+          .card-3d:hover .blog-card { animation-play-state: paused !important; }
 
-            .blog-card-inner {
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
-            }
+          .blog-card-inner {
+              width: 100%;
+              height: 100%;
+          }
 
-            .line-clamp-2 {
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
-            .line-clamp-3 {
-                display: -webkit-box;
-                -webkit-line-clamp: 3;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
+          .line-clamp-2 {
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+          }
+          .line-clamp-3 {
+              display: -webkit-box;
+              -webkit-line-clamp: 3;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+          }
 
-            .course-card {
-                opacity: 0;
-                transform: translateY(20px);
-                transition: all 0.6s ease-out;
-            }
-            .course-card.is-visible {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        `}</style>
+          .course-card {
+              opacity: 0;
+              transform: translateY(20px);
+              transition: all 0.6s ease-out;
+          }
+          .course-card.is-visible {
+              opacity: 1;
+              transform: translateY(0);
+          }
+      `}</style>
     </div>
   );
 }

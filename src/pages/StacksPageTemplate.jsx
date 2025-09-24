@@ -3,7 +3,6 @@ import Header from '../components/Header';
 import Footer from '../components/Footer'; 
 import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
-import bg5 from '../assets/bg-6.jpg';
 
 const StarRating = ({ rating }) => {
     const fullStars = Math.floor(rating);
@@ -54,6 +53,17 @@ const StacksPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, bread
     const [filteredCourses, setFilteredCourses] = useState(courses);
 
     useEffect(() => {
+        const lowerCaseSearchTerm = searchTerm.toLowerCase();
+        const newFilteredCourses = courses.filter(course => 
+            course.title.toLowerCase().includes(lowerCaseSearchTerm) ||
+            course.instructor.toLowerCase().includes(lowerCaseSearchTerm) ||
+            course.category.toLowerCase().includes(lowerCaseSearchTerm)
+        );
+        setFilteredCourses(newFilteredCourses);
+        setAnimatedCourses([]);
+    }, [searchTerm, courses]);
+
+    useEffect(() => {
         if (contentInView) {
             filteredCourses.forEach((_, index) => {
                 const timer = setTimeout(() => {
@@ -63,17 +73,6 @@ const StacksPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, bread
             });
         }
     }, [contentInView, filteredCourses]);
-
-    useEffect(() => {
-        const lowerCaseSearchTerm = searchTerm.toLowerCase();
-        const newFilteredCourses = courses.filter(course => 
-            course.title.toLowerCase().includes(lowerCaseSearchTerm) ||
-            course.instructor.toLowerCase().includes(lowerCaseSearchTerm) ||
-            course.category.toLowerCase().includes(lowerCaseSearchTerm)
-        );
-        setFilteredCourses(newFilteredCourses);
-        setAnimatedCourses([]); // Reset animation for new filtered list
-    }, [searchTerm, courses]);
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
@@ -163,41 +162,38 @@ const StacksPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, bread
             <Footer />
             
             <style>{`
-                @keyframes slide-up {
-                    0% { transform: translateY(20px); opacity: 0; }
-                    100% { transform: translateY(0); opacity: 1; }
-                }
                 @keyframes fade-in-down {
-                    0% { transform: translateY(-20px); opacity: 0; }
-                    100% { transform: translateY(0); opacity: 1; }
+                    from { opacity: 0; transform: translateY(-20px); }
+                    to { opacity: 1; transform: translateY(0); }
                 }
-                @keyframes fade-in-left {
-                    0% { transform: translateX(-20px); opacity: 0; }
-                    100% { transform: translateX(0); opacity: 1; }
-                }
-
-                .is-visible .animate-fade-in-left {
-                    animation: fade-in-left 0.6s ease-out forwards;
-                }
-
-                .animate-on-scroll {
+                @keyframes slide-in-right {
                     opacity: 0;
-                    transform: translateY(20px);
-                    transition: all 0.6s ease-out;
+                    transform: translateX(20px);
+                    animation: slide-in-right 0.5s ease-out forwards;
                 }
-                .is-visible .animate-on-scroll {
-                    opacity: 1;
-                    transform: translateY(0);
+                @keyframes fade-in {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                .animate-fade-in-down {
+                    animation: fade-in-down 0.6s ease-out forwards;
+                }
+                .animate-slide-in-right {
+                    opacity: 0;
+                    transform: translateX(20px);
+                    animation: slide-in-right 0.5s ease-out forwards;
+                }
+                .animate-fade-in {
+                    animation: fade-in 0.3s ease-out forwards;
                 }
 
-                .course-card {
-                    opacity: 0;
-                    transform: translateY(20px);
-                    transition: all 0.6s ease-out;
+                /* Hide scrollbar for the carousel on Webkit browsers */
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
                 }
-                .course-card.is-visible {
-                    opacity: 1;
-                    transform: translateY(0);
+                /* Hide scrollbar for the carousel on Firefox */
+                .scrollbar-hide {
+                    scrollbar-width: none;
                 }
             `}</style>
         </div>

@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { categoryMap, toKebabCase } from '../utils/categoryHelper';
 
 const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
-    const menuRef = useRef(null);
+    const menuRef = React.useRef(null);
 
     if (!isOpen) {
         return null;
@@ -30,11 +31,11 @@ const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
     );
 };
 
-const Header = ({ isLoggedIn, onLogout, cartItemsCount }) => {
-    const [isAllStacksOpen, setIsAllStacksOpen] = useState(false);
-    const [isForBusinessOpen, setIsForBusinessOpen] = useState(false);
-    const [isResourcesOpen, setIsResourcesOpen] = useState(false);
-    const [isMoreOpen, setIsMoreOpen] = useState(false);
+const Header = ({ isLoggedIn, onLogout, cartItemsCount, coursesData }) => {
+    const [isAllStacksOpen, setIsAllStacksOpen] = React.useState(false);
+    const [isForBusinessOpen, setIsForBusinessOpen] = React.useState(false);
+    const [isResourcesOpen, setIsResourcesOpen] = React.useState(false);
+    const [isMoreOpen, setIsMoreOpen] = React.useState(false);
     const navigate = useNavigate();
 
     const handleHover = (dropdownName, isOpen) => {
@@ -62,16 +63,11 @@ const Header = ({ isLoggedIn, onLogout, cartItemsCount }) => {
         navigate('/search');
     };
 
-    const allStacksItems = [
-        { name: 'Free Stacks', path: '/all-stacks/free-stacks' },
-        { name: 'Product & Strategy', path: '/all-stacks/product-strategy' },
-        { name: 'UX & UI Design', path: '/all-stacks/ux-ui-design' },
-        { name: 'Engineering & Development', path: '/all-stacks/engineering-development' },
-        { name: 'Data & Analytics', path: '/all-stacks/data-analytics' },
-        { name: 'Cybersecurity & Compliance', path: '/all-stacks/cybersecurity-compliance' },
-        { name: 'AI & Automation', path: '/all-stacks/ai-automation' },
-        { name: 'Marketing', path: '/all-stacks/marketing' },
-    ];
+    // Dynamically generate the "All Stacks" menu items from the coursesData prop
+    const allStacksItems = coursesData ? Object.keys(coursesData).map(key => ({
+        name: categoryMap[key] || key, // Get the display-friendly name
+        path: `/all-stacks/${toKebabCase(key)}` // Create a URL-friendly path
+    })) : [];
 
     const forBusinessItems = [
         { name: 'BraveBusiness', path: '/for-business/Brave-business' },

@@ -3,7 +3,6 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Hero from '../../components/Hero';
-import { coursesData } from '../../data/coursesData';
 
 // Login Required Modal Component
 const LoginRequiredModal = ({ onClose, onLoginRedirect }) => {
@@ -80,6 +79,7 @@ const useInView = (options) => {
 
         return () => {
             if (ref.current) {
+                // Corrected line: use ref.current
                 observer.unobserve(ref.current);
             }
         };
@@ -88,7 +88,7 @@ const useInView = (options) => {
     return [ref, inView];
 };
 
-const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishlist, onRemoveFromCart, cart, wishlist, isLoggedIn, onLogout, cartItemsCount, enrolledCourses }) => {
+const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishlist, onRemoveFromCart, cart, wishlist, isLoggedIn, onLogout, cartItemsCount, enrolledCourses, coursesData }) => {
     const { courseId } = useParams();
     const [course, setCourse] = useState(null);
     const [expandedModules, setExpandedModules] = useState({});
@@ -103,13 +103,9 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
     const relatedCourses = allCourses.filter(c => c.id !== courseId).slice(0, 3);
 
     useEffect(() => {
-        let foundCourse = null;
-        for (const category in coursesData) {
-            foundCourse = allCourses.find(c => c.id === courseId);
-            if (foundCourse) break;
-        }
+        const foundCourse = allCourses.find(c => c.id === courseId);
         setCourse(foundCourse);
-    }, [courseId]);
+    }, [courseId, coursesData]);
 
     const handleCourseClick = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -404,4 +400,4 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
     );
 };
 
-export default CourseDetailsTemplate;
+export default CourseDetailsTemplate; // update this too with a database dynamically

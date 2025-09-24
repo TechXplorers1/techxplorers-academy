@@ -2,15 +2,25 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import DashboardPageTemplate from '../DashboardPageTemplate';
 
-const MyLiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, registeredLiveClasses }) => {
+const MyLiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , user, registeredLiveClasses, liveClassesData }) => {
 
+    const getFullLiveClasses = () => {
+        // Since registeredLiveClasses is now an array of IDs, we can map directly
+        return registeredLiveClasses.map(classId => {
+            const liveClass = liveClassesData.find(cls => cls.id === classId);
+            return liveClass || null;
+        }).filter(Boolean);
+    };
+
+    const fullRegisteredClasses = getFullLiveClasses();
+    
     return (
-        <DashboardPageTemplate isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} title="My Live Classes">
+        <DashboardPageTemplate isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} title="My Live Classes" user={user}>
             <div className="bg-white p-8 rounded-2xl shadow-lg">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Your Live Class Recordings</h3>
-                {registeredLiveClasses.length > 0 ? (
+                {fullRegisteredClasses && fullRegisteredClasses.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {registeredLiveClasses.map((liveClass) => (
+                        {fullRegisteredClasses.map((liveClass) => (
                             <Link
                                 key={liveClass.id}
                                 to={`/dashboard/live-class/${liveClass.id}`}
