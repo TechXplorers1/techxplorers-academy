@@ -6,6 +6,7 @@ import bg1 from '../assets/bg-1.jpg';
 import bg4 from '../assets/bg-4.jpg';
 import bg3 from '../assets/bg-7.jpg';
 import Footer from '../components/Footer';
+import { toCamelCase, toKebabCase } from '../utils/categoryHelper';
 
 // Inline SVG Icons (components like PlayIcon, UserIcon, etc. remain the same)
 const PlayIcon = ({ size = 24, className }) => (
@@ -336,35 +337,32 @@ function LandingPage({ isLoggedIn, onLogout, cartItemsCount, coursesData, blogPo
   const popularStacks = [
     {
       name: 'Product & Strategy',
-      path: '/all-stacks/product-strategy',
       icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-purple-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0h2.204a2 2 0 01.838.188l4.095 2.048a1 1 0 001.122-.163l4.581-4.581c.31-.31.056-.879-.318-1.026l-4.095-1.638a2 2 0 01-1.47-.537L9 20z" /></svg>
     },
     {
       name: 'UX & UI Design',
-      path: '/all-stacks/ux-ui-design',
       icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8l-6 6 6 6M6 12h18" /></svg>
     },
     {
       name: 'Engineering & Development',
-      path: '/all-stacks/engineering-development',
       icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4m-4 4l-4-4m-4-4l-4 4m-4-4l-4 4" /></svg>
     },
     {
       name: 'Data & Analytics',
-      path: '/all-stacks/data-analytics',
       icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-yellow-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18.5a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18.5a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" strokeDasharray="3 3" /></svg>
     },
     {
       name: 'Cybersecurity & Compliance',
-      path: '/all-stacks/cybersecurity-compliance',
       icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-red-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5-6a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V6z" /></svg>
     },
     {
       name: 'AI & Automation',
-      path: '/all-stacks/ai-automation',
       icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-pink-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
     }
-  ];
+  ].map(stack => ({
+    ...stack,
+    path: `/all-stacks/${toKebabCase(toCamelCase(stack.name))}`
+  }));
 
   const offers = [
     {

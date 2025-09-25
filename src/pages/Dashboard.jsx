@@ -1,12 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Import Link
 import DashboardPageTemplate from './DashboardPageTemplate';
 
 const Dashboard = ({ isLoggedIn, onLogout, cartItemsCount, registeredLiveClassesCount, enrolledCourses = [], user }) => {
     const totalEnrolled = enrolledCourses.length;
     const completedCoursesCount = enrolledCourses.filter(course => (course.progress || 0) === 100).length;
 
-    const DashboardCard = ({ title, value, icon, bgColor, textColor }) => (
-        <div className={`p-6 rounded-2xl shadow-lg flex items-center space-x-4 transform transition-transform duration-300 hover:scale-[1.03] ${bgColor} ${textColor}`}>
+    // The DashboardCard is now wrapped in a Link component
+    const DashboardCard = ({ title, value, icon, bgColor, textColor, to }) => (
+        <Link to={to} className={`block p-6 rounded-2xl shadow-lg flex items-center space-x-4 transform transition-transform duration-300 hover:scale-[1.03] ${bgColor} ${textColor}`}>
             <div className="flex-shrink-0">
                 <div className="rounded-full bg-white bg-opacity-30 p-3">
                     <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -18,14 +20,15 @@ const Dashboard = ({ isLoggedIn, onLogout, cartItemsCount, registeredLiveClasses
                 <p className="text-xl font-semibold">{title}</p>
                 <h3 className="text-3xl font-bold">{value}</h3>
             </div>
-        </div>
+        </Link>
     );
 
     return (
         <DashboardPageTemplate isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} title="Dashboard" user={user}>
-            {/* Stat Cards */}
+            {/* Stat Cards with 'to' prop for navigation */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <DashboardCard
+                    to="/dashboard/enrolled-courses"
                     title="Enrolled Courses"
                     value={totalEnrolled}
                     icon="M12 14l9-5-9-5-9 5 9 5z"
@@ -33,6 +36,7 @@ const Dashboard = ({ isLoggedIn, onLogout, cartItemsCount, registeredLiveClasses
                     textColor="text-white"
                 />
                 <DashboardCard
+                    to="/dashboard/enrolled-courses"
                     title="Completed Courses"
                     value={completedCoursesCount}
                     icon="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
@@ -40,6 +44,7 @@ const Dashboard = ({ isLoggedIn, onLogout, cartItemsCount, registeredLiveClasses
                     textColor="text-white"
                 />
                 <DashboardCard
+                    to="/dashboard/my-live-classes"
                     title="Live Classes"
                     value={registeredLiveClassesCount}
                     icon="M15 10l4.553-2.276A1 1 0 0121 8.71v6.58a1 1 0 01-1.447.894L15 14m-5-4v4m0 0v4H6a2 2 0 01-2-2v-4a2 2 0 012-2h4z"
