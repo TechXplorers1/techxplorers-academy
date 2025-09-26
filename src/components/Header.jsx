@@ -31,7 +31,8 @@ const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
     );
 };
 
-const Header = ({ isLoggedIn, onLogout, cartItemsCount, coursesData }) => {
+const Header = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, userRole }) => {
+
     const [isAllStacksOpen, setIsAllStacksOpen] = React.useState(false);
     const [isForBusinessOpen, setIsForBusinessOpen] = React.useState(false);
     const [isResourcesOpen, setIsResourcesOpen] = React.useState(false);
@@ -63,10 +64,9 @@ const Header = ({ isLoggedIn, onLogout, cartItemsCount, coursesData }) => {
         navigate('/search');
     };
 
-    // Dynamically generate the "All Stacks" menu items from the coursesData prop
     const allStacksItems = coursesData ? Object.keys(coursesData).map(key => ({
-        name: categoryMap[key] || key, // Get the display-friendly name
-        path: `/all-stacks/${toKebabCase(key)}` // Create a URL-friendly path
+        name: categoryMap[key] || key,
+        path: `/all-stacks/${toKebabCase(key)}`
     })) : [];
 
     const forBusinessItems = [
@@ -96,7 +96,7 @@ const Header = ({ isLoggedIn, onLogout, cartItemsCount, coursesData }) => {
     return (
         <header className={headerClass}>
             <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-                <Link to="/" className="text-xl font-bold">TechXplorers Academy</Link>
+                <Link to="/" className="text-xl font-bold">Digitally Brave</Link>
                 <div className="hidden lg:flex items-center space-x-8">
                     <div className="relative" onMouseEnter={() => handleHover('allStacks', true)} onMouseLeave={() => handleHover('allStacks', false)}>
                         <button className="flex items-center hover:text-purple-400 transition-colors">
@@ -158,6 +158,11 @@ const Header = ({ isLoggedIn, onLogout, cartItemsCount, coursesData }) => {
                     )}
                     {isLoggedIn ? (
                         <>
+                            {userRole === 'admin' && (
+                                <Link to="/admin/dashboard" className="hover:text-purple-400 transition-colors">
+                                    Admin Dashboard
+                                </Link>
+                            )}
                             <Link to="/dashboard" className="hover:text-purple-400 transition-colors">
                                 Dashboard
                             </Link>

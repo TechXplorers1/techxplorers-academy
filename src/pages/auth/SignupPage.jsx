@@ -32,12 +32,13 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
       const userCredential = await createUserWithEmailAndPassword(auth, signupForm.email, signupForm.password);
       const user = userCredential.user;
 
-      // Create a user entry in Realtime Database with first name and last name
+      // Create a user entry in Realtime Database with first name, last name, and role
       const userRef = ref(db, 'users/' + user.uid);
       await set(userRef, {
         firstName: signupForm.firstName,
         lastName: signupForm.lastName,
         email: signupForm.email,
+        role: 'user', // Assign role as user
         cart: {},
         wishlist: {},
         enrolledCourses: {},

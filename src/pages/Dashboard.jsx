@@ -1,12 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Import Link
+import { Link } from 'react-router-dom';
 import DashboardPageTemplate from './DashboardPageTemplate';
 
-const Dashboard = ({ isLoggedIn, onLogout, cartItemsCount, registeredLiveClassesCount, enrolledCourses = [], user }) => {
+const Dashboard = (props) => {
+    const { enrolledCourses = [], registeredLiveClassesCount } = props;
+    
     const totalEnrolled = enrolledCourses.length;
     const completedCoursesCount = enrolledCourses.filter(course => (course.progress || 0) === 100).length;
 
-    // The DashboardCard is now wrapped in a Link component
     const DashboardCard = ({ title, value, icon, bgColor, textColor, to }) => (
         <Link to={to} className={`block p-6 rounded-2xl shadow-lg flex items-center space-x-4 transform transition-transform duration-300 hover:scale-[1.03] ${bgColor} ${textColor}`}>
             <div className="flex-shrink-0">
@@ -24,7 +25,7 @@ const Dashboard = ({ isLoggedIn, onLogout, cartItemsCount, registeredLiveClasses
     );
 
     return (
-        <DashboardPageTemplate isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} title="Dashboard" user={user}>
+        <DashboardPageTemplate {...props} title="Dashboard">
             {/* Stat Cards with 'to' prop for navigation */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <DashboardCard
@@ -67,4 +68,4 @@ const Dashboard = ({ isLoggedIn, onLogout, cartItemsCount, registeredLiveClasses
     );
 };
 
-export default Dashboard;
+export default Dashboard; 

@@ -180,7 +180,8 @@ const useInView = (options) => {
 };
 
 
-function LandingPage({ isLoggedIn, onLogout, cartItemsCount, coursesData, blogPostsData }) {
+function LandingPage(props) {
+  const { coursesData, blogPostsData } = props;
 
   const instructors = [
     {
@@ -465,13 +466,7 @@ function LandingPage({ isLoggedIn, onLogout, cartItemsCount, coursesData, blogPo
       )}
 
       <main>
-      <Header 
-        isLandingPage={true} 
-        isLoggedIn={isLoggedIn} 
-        onLogout={onLogout} 
-        cartItemsCount={cartItemsCount}
-        coursesData={coursesData} // Pass the coursesData prop to the Header
-      />
+      <Header {...props} isLandingPage={true} />
         {/* Enhanced Hero Section with Offers */}
         <section ref={heroRef} className={`relative overflow-hidden min-h-screen flex flex-col items-center justify-center pb-32 hero-section-container ${heroInView ? 'hero-section-visible' : ''}`}>
           {/* Background Image Container */}

@@ -30,7 +30,7 @@ const AboutUs = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                     <p className="text-purple-600 font-bold text-sm uppercase">About The Stack</p>
                     <h2 className="text-4xl md:text-5xl font-extrabold leading-tight">Where Bold Learners Become Limitless Doers.</h2>
                     <p className="text-lg text-gray-700">
-                        We believe that the future of work belongs to those who are Brave enough to learn, adapt, and build. TechXplorers Academy is more than a platform; it's a global community dedicated to providing hands-on, project-based learning experiences.
+                        We believe that the future of work belongs to those who are Brave enough to learn, adapt, and build. Digitally Brave is more than a platform; it's a global community dedicated to providing hands-on, project-based learning experiences.
                     </p>
                     <p className="text-lg text-gray-700">
                         Our mission is to bridge the gap between theoretical knowledge and practical, job-ready skills, empowering you to thrive in the digital age.

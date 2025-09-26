@@ -20,7 +20,7 @@ const JoinBraveProjects = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                     <p className="text-purple-600 font-bold text-sm uppercase">For Learners</p>
                     <h2 className="text-4xl md:text-5xl font-extrabold leading-tight">Step Into Real-World Digital Experience</h2>
                     <p className="text-lg text-gray-700">
-                        At TechXplorers Academy, our projects are a sandbox for your skills. You'll join a dedicated team to tackle real-world challenges, build impactful products, and gain portfolio-worthy experience that employers notice.
+                        At Digitally Brave, our projects are a sandbox for your skills. You'll join a dedicated team to tackle real-world challenges, build impactful products, and gain portfolio-worthy experience that employers notice.
                     </p>
                 </div>
             </div>
