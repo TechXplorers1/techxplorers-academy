@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer'; 
-// The static import has been removed
-// import { blogPosts } from '../data/blogPosts';
+import ReactMarkdown from 'react-markdown';
 
 const BlogPage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, blogPostsData }) => {
     const { id } = useParams();
@@ -11,12 +10,11 @@ const BlogPage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, blogPosts
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check if blogPostsData has been loaded
         if (blogPostsData && blogPostsData.length > 0) {
             const foundPost = blogPostsData.find(p => p.id === id);
             setPost(foundPost);
             setLoading(false);
-        } else if (blogPostsData) { // This condition handles the case where data is loaded but is empty
+        } else if (blogPostsData) {
             setLoading(false);
         }
     }, [id, blogPostsData]);
@@ -83,19 +81,10 @@ const BlogPage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, blogPosts
                                     {post.date}
                                 </span>
                             </div>
-                            <p className="text-lg text-gray-300">
-                                {post.summary}
-                            </p>
-                            {/* Placeholder for full blog post content, using Tailwind Prose for styling */}
-                            <div className="mt-8 prose prose-lg prose-invert text-gray-300">
-                                <p>This is the full content of the blog post. Here you would expand on the summary with more detailed information, examples, and images. The blog content is crucial for providing value to your readers. It should be well-structured with headings and paragraphs to ensure readability.</p>
-                                <p>For example, you could include code snippets, expert interviews, or a step-by-step guide on the topic. The goal is to make the content both informative and easy to digest.</p>
-                                <h3>Key Takeaways</h3>
-                                <ul className="list-disc list-inside">
-                                    <li>Highlighting the main points helps readers quickly grasp the core message.</li>
-                                    <li>Using bullet points breaks up large blocks of text.</li>
-                                    <li>Summarizing the article at the end reinforces the main ideas.</li>
-                                </ul>
+                            
+                            {/* Dynamic content rendering with Tailwind CSS Prose for styling */}
+                            <div className="mt-8 prose prose-lg prose-invert text-gray-300 max-w-none">
+                                <ReactMarkdown>{post.content}</ReactMarkdown>
                             </div>
                         </div>
                     </article>

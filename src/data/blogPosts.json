@@ -1,0 +1,63 @@
+[
+  null,
+  {
+    "author": "Alex Miller",
+    "category": "Development",
+    "content": "Artificial intelligence is no longer a futuristic concept; it's a present-day reality transforming industries, and web development is no exception. From AI-powered code assistants to hyper-personalized user experiences, AI is fundamentally changing how we build for the web.\n\n### Key Areas of Impact\n\n* **Automated Code Generation:** Tools like GitHub Copilot can now write entire functions and components based on simple text descriptions, drastically speeding up development time.\n* **Personalized UX:** AI algorithms can analyze user behavior in real-time to dynamically adjust layouts, recommend content, and create a unique experience for every visitor.\n* **Automated Testing:** AI can intelligently crawl applications to find bugs, test for accessibility issues, and generate comprehensive test cases, reducing the manual QA workload.",
+    "date": "Oct 26, 2023",
+    "id": "1",
+    "image": "https://placehold.co/600x400/120D25/FFFFFF?text=AI+Web+Dev",
+    "summary": "Explore how artificial intelligence is shaping the future of web development, from automated code generation to personalized user experiences. This post covers the latest trends and tools.",
+    "title": "The Future of AI in Web Development"
+  },
+  {
+    "author": "Sarah Chen",
+    "category": "Development",
+    "content": "Tailwind CSS has taken the frontend world by storm with its utility-first approach. Instead of writing custom CSS classes, you build designs directly in your HTML by applying pre-existing, single-purpose utility classes.\n\n### Why Use Tailwind?\n\n* **Rapid Prototyping:** Quickly build complex interfaces without ever leaving your HTML.\n* **Consistency:** By using a predefined design system, you ensure consistent spacing, colors, and typography across your entire application.\n* **Performance:** Tailwind automatically removes all unused CSS during the build process, resulting in the smallest possible file size.",
+    "date": "Oct 24, 2023",
+    "id": "2",
+    "image": "https://placehold.co/600x400/120D25/FFFFFF?text=Tailwind+CSS",
+    "summary": "A beginner's guide to the utility-first CSS framework. Learn how to build beautiful, responsive designs without writing a single line of custom CSS efficiently.",
+    "title": "Getting Started with Tailwind CSS"
+  },
+  {
+    "author": "Mark Davis",
+    "category": "Design",
+    "content": "Web accessibility (often abbreviated as a11y) is the practice of ensuring that your websites and applications are usable by everyone, regardless of disability. This isn't just a compliance checkbox; it's a fundamental aspect of good design.\n\n### Core Principles\n\n* **Perceivable:** Users must be able to perceive the information being presented. This means providing text alternatives for images and captions for videos.\n* **Operable:** Users must be able to operate the interface. This includes making sure all functionality is available from a keyboard.\n* **Understandable:** Information and the operation of the user interface must be understandable.\n* **Robust:** Content must be robust enough that it can be interpreted reliably by a wide variety of user agents, including assistive technologies.",
+    "date": "Oct 21, 2023",
+    "id": "3",
+    "image": "https://placehold.co/600x400/120D25/FFFFFF?text=Accessibility",
+    "summary": "Discover why accessible design is crucial for creating inclusive digital products and learn best practices for building websites for everyone, ensuring usability.",
+    "title": "The Importance of Accessibility in Design"
+  },
+  {
+    "author": "Emily White",
+    "category": "Marketing",
+    "content": "The marketing landscape has shifted dramatically. Billboards and print ads have given way to SEO, social media, and content marketing. To succeed today, you need a robust digital strategy.\n\n### Pillars of Digital Marketing\n\n* **Search Engine Optimization (SEO):** Optimizing your site to rank higher in search results for relevant keywords.\n* **Content Marketing:** Creating valuable content (like blog posts, videos, and ebooks) to attract and engage your target audience.\n* **Social Media Marketing:** Building a community and engaging with customers on platforms like Instagram, Twitter, and LinkedIn.",
+    "date": "Oct 18, 2023",
+    "id": "4",
+    "image": "https://placehold.co/600x400/120D25/FFFFFF?text=Digital+Marketing",
+    "summary": "A comprehensive look at modern marketing strategies, from SEO to social media, and how to build a strong online presence to reach a wider audience effectively.",
+    "title": "Marketing in the Digital Age"
+  },
+  {
+    "author": "Robert Brown",
+    "category": "Business",
+    "content": "Building a successful tech company requires more than just a great product; it demands a solid understanding of business fundamentals. From validating your idea to achieving product-market fit, a clear strategy is essential.\n\n### Key Stages\n\n1.  **Ideation & Validation:** Is the problem you're solving a real and painful one for a specific market?\n2.  **MVP (Minimum Viable Product):** What is the simplest version of your product you can build to start getting feedback?\n3.  **Go-to-Market:** How will you reach your first customers?\n4.  **Scaling:** How will you grow your team, operations, and customer base sustainably?",
+    "date": "Oct 15, 2023",
+    "id": "5",
+    "image": "https://placehold.co/600x400/120D25/FFFFFF?text=Tech+Business",
+    "summary": "Learn the fundamentals of business strategy and management tailored for the technology sector, focusing on growth, innovation, and leadership.",
+    "title": "Mastering the Business of Tech"
+  },
+  {
+    "author": "John Smith",
+    "category": "Development",
+    "content": "Once you've mastered the basics of JavaScript, a whole new world of powerful concepts opens up. Understanding these advanced features is what separates a junior developer from a senior one.\n\n### Must-Know Concepts\n\n* **Closures:** A closure gives you access to an outer function's scope from an inner function. This is fundamental to concepts like data privacy and callbacks.\n* **Prototypes:** JavaScript is a prototype-based language. Understanding how objects inherit properties from other objects is key to writing efficient and organized code.\n* **Asynchronous JavaScript:** Modern web applications rely heavily on asynchronous operations. Mastering Promises and `async/await` is essential for handling API calls and other operations that take time.",
+    "date": "Oct 10, 2023",
+    "id": "6",
+    "image": "https://placehold.co/600x400/120D25/FFFFFF?text=JS+Concepts",
+    "summary": "Dive deep into advanced topics like closures, prototypes, and asynchronous JavaScript to write more efficient and clean code for complex applications.",
+    "title": "Advanced JavaScript Concepts"
+  }
+]
