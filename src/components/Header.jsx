@@ -96,7 +96,7 @@ const Header = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, userRole })
     return (
         <header className={headerClass}>
             <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-                <Link to="/" className="text-xl font-bold">Digitally Brave</Link>
+                <Link to="/" className="text-xl font-bold">TechXplorers Academy</Link>
                 <div className="hidden lg:flex items-center space-x-8">
                     <div className="relative" onMouseEnter={() => handleHover('allStacks', true)} onMouseLeave={() => handleHover('allStacks', false)}>
                         <button className="flex items-center hover:text-purple-400 transition-colors">
@@ -158,14 +158,22 @@ const Header = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, userRole })
                     )}
                     {isLoggedIn ? (
                         <>
+                            {/* UPDATED: Role-based dashboard links */}
                             {userRole === 'admin' && (
                                 <Link to="/admin/dashboard" className="hover:text-purple-400 transition-colors">
                                     Admin Dashboard
                                 </Link>
                             )}
-                            <Link to="/dashboard" className="hover:text-purple-400 transition-colors">
-                                Dashboard
-                            </Link>
+                            {userRole === 'instructor' && (
+                                <Link to="/instructor/dashboard" className="hover:text-purple-400 transition-colors">
+                                    Instructor Dashboard
+                                </Link>
+                            )}
+                            {userRole === 'user' && (
+                                <Link to="/dashboard" className="hover:text-purple-400 transition-colors">
+                                    Dashboard
+                                </Link>
+                            )}
                             <button onClick={onLogout} className="px-4 py-2 border border-white rounded-full text-white hover:bg-white hover:text-purple-600 transition-colors">
                                 Logout
                             </button>

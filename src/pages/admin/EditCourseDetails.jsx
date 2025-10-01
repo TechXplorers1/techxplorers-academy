@@ -1,13 +1,18 @@
+// src/pages/admin/EditCourseDetails.jsx
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { db } from '../../firebase';
+import { db, storage } from '../../firebase';
 import { ref, onValue, update } from 'firebase/database';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import AdminDashboardTemplate from './AdminDashboardTemplate';
 
 const EditCourseDetails = (props) => {
     const { courseId } = useParams();
     const [course, setCourse] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isUploading, setIsUploading] = useState(false);
+    const [imageInputMethod, setImageInputMethod] = useState('upload');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState({ type: null, mode: 'add', data: {}, indices: {} });
 
@@ -33,6 +38,23 @@ const EditCourseDetails = (props) => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setCourse(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        setIsUploading(true);
+        const imageRef = storageRef(storage, `course_images/${Date.now()}_${file.name}`);
+        try {
+            const snapshot = await uploadBytes(imageRef, file);
+            const downloadURL = await getDownloadURL(snapshot.ref);
+            setCourse(prev => ({ ...prev, image: downloadURL }));
+        } catch (error) {
+            console.error("Error uploading image:", error);
+            alert("Failed to upload image.");
+        } finally {
+            setIsUploading(false);
+        }
     };
     
     const handleModalInputChange = (e) => {
@@ -113,7 +135,6 @@ const EditCourseDetails = (props) => {
     return (
         <AdminDashboardTemplate {...props} title={`Edit: ${course.title}`}>
             <div className="space-y-8">
-                {/* --- Basic Details Card (Updated with Labels) --- */}
                 <div className="bg-white p-8 rounded-2xl shadow-lg">
                     <h3 className="text-xl font-bold text-gray-800 mb-4">Basic Details</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -140,13 +161,24 @@ const EditCourseDetails = (props) => {
                             <textarea id="description" name="description" value={course.description} onChange={handleInputChange} className="w-full px-4 py-2 border rounded-lg h-24" />
                         </div>
                         <div className="md:col-span-2">
-                            <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-                            <input type="text" id="image" name="image" value={course.image} onChange={handleInputChange} className="w-full px-4 py-2 border rounded-lg" />
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Course Image</label>
+                             <div className="flex items-center space-x-2 mb-2">
+                                <button type="button" onClick={() => setImageInputMethod('upload')} className={`text-xs px-3 py-1 rounded-full ${imageInputMethod === 'upload' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'}`}>Upload</button>
+                                <button type="button" onClick={() => setImageInputMethod('url')} className={`text-xs px-3 py-1 rounded-full ${imageInputMethod === 'url' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'}`}>URL</button>
+                            </div>
+                            {imageInputMethod === 'upload' ? (
+                                <div>
+                                    <input type="file" accept="image/*" onChange={handleImageUpload} className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"/>
+                                    {isUploading && <p className="text-sm text-purple-600 mt-1">Uploading...</p>}
+                                </div>
+                            ) : (
+                                <input type="text" id="image" name="image" value={course.image || ''} onChange={handleInputChange} placeholder="https://example.com/image.png" className="w-full p-2 border rounded-md" />
+                            )}
+                            {course.image && <img src={course.image} alt="Course preview" className="w-48 h-auto object-cover rounded-lg mt-2 border"/>}
                         </div>
                     </div>
                 </div>
 
-                {/* --- Learning Outcomes Card --- */}
                 <div className="bg-white p-8 rounded-2xl shadow-lg">
                     <div className="flex justify-between items-center mb-4">
                         <h3 className="text-xl font-bold text-gray-800">Learning Outcomes</h3>
@@ -165,7 +197,6 @@ const EditCourseDetails = (props) => {
                     </ul>
                 </div>
 
-                {/* --- Mentors Card --- */}
                 <div className="bg-white p-8 rounded-2xl shadow-lg">
                      <div className="flex justify-between items-center mb-4">
                         <h3 className="text-xl font-bold text-gray-800">Mentors</h3>
@@ -190,7 +221,6 @@ const EditCourseDetails = (props) => {
                     </div>
                 </div>
 
-                {/* --- Modules & Lessons Editor --- */}
                 <div className="bg-white p-8 rounded-2xl shadow-lg">
                     <div className="flex justify-between items-center mb-4">
                         <h3 className="text-xl font-bold text-gray-800">Modules & Lessons</h3>
@@ -238,7 +268,6 @@ const EditCourseDetails = (props) => {
                 </div>
             </div>
 
-            {/* --- Reusable Modal for All Forms --- */}
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-lg">

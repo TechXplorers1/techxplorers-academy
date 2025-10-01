@@ -73,14 +73,14 @@ const useInView = (options) => {
             }
         }, options);
 
-        if (ref.current) {
-            observer.observe(ref.current);
+        const currentRef = ref.current;
+        if (currentRef) {
+            observer.observe(currentRef);
         }
 
         return () => {
-            if (ref.current) {
-                // Corrected line: use ref.current
-                observer.unobserve(ref.current);
+            if (currentRef) {
+                observer.unobserve(currentRef);
             }
         };
     }, [options]);
@@ -105,7 +105,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
     useEffect(() => {
         const foundCourse = allCourses.find(c => c.id === courseId);
         setCourse(foundCourse);
-    }, [courseId, coursesData]);
+    }, [courseId, coursesData, allCourses]);
 
     const handleCourseClick = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -221,7 +221,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                         <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-200 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
                             <h2 className="text-3xl md:text-4xl font-bold mb-6">What You'll Learn</h2>
                             <ul className="grid md:grid-cols-2 gap-x-8 gap-y-4 text-lg">
-                                {course.learningOutcomes.map((item, index) => (
+                                {(course.learningOutcomes || []).map((item, index) => (
                                     <li key={index} className="flex items-start text-gray-700 animate-slide-in-right" style={{animationDelay: `${index * 100}ms`}}>
                                         <svg className="w-6 h-6 text-purple-600 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -235,7 +235,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                         <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-300 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
                             <h2 className="text-3xl md:text-4xl font-bold mb-6">Curriculum</h2>
                             <div className="space-y-6">
-                                {course.curriculum.map((module, index) => (
+                                {(course.curriculum || []).map((module, index) => (
                                     <div key={index} className="border-b border-gray-200 pb-4">
                                         <button
                                             className="w-full flex justify-between items-center text-left py-2 focus:outline-none"
@@ -248,7 +248,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                                         </button>
                                         <div className={`transition-all duration-300 ease-in-out overflow-hidden ${expandedModules[index] ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
                                             <ul className="text-gray-600 ml-4 space-y-1">
-                                                {module.lessons.map((lesson, lessonIndex) => (
+                                                {(module.lessons || []).map((lesson, lessonIndex) => (
                                                     <li key={lessonIndex} className="flex items-center text-lg">
                                                         <svg className="w-4 h-4 text-purple-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M2.5 5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0V5zM2.5 12.5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0v-.5zM12.5 5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0V5zM12.5 12.5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0v-.5z" />
@@ -266,7 +266,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                         <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-400 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
                             <h2 className="text-3xl md:text-4xl font-bold mb-6">Your Mentors</h2>
                             <div className="grid sm:grid-cols-2 gap-8">
-                                {course.mentors.map((mentor, index) => (
+                                {(course.mentors || []).map((mentor, index) => (
                                     <div key={index} className="flex items-center space-x-4">
                                         <img src={mentor.image} alt={mentor.name} className="w-20 h-20 rounded-full object-cover border-4 border-purple-600"/>
                                         <div>
@@ -367,9 +367,8 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                     to { opacity: 1; transform: translateY(0); }
                 }
                 @keyframes slide-in-right {
-                    opacity: 0;
-                    transform: translateX(20px);
-                    animation: slide-in-right 0.5s ease-out forwards;
+                    from { opacity: 0; transform: translateX(20px); }
+                    to { opacity: 1; transform: translateX(0); }
                 }
                 @keyframes fade-in {
                     from { opacity: 0; }
@@ -400,4 +399,4 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
     );
 };
 
-export default CourseDetailsTemplate; // update this too with a database dynamically
+export default CourseDetailsTemplate;

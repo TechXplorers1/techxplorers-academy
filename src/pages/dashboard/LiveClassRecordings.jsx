@@ -4,20 +4,26 @@ import DashboardPageTemplate from '../DashboardPageTemplate';
 
 const LiveClassRecordings = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, user, liveClassesData }) => {
     const { classId } = useParams();
-    const liveClass = liveClassesData.find(cls => cls.id === classId);
+    const [liveClass, setLiveClass] = useState(null);
     const [currentRecording, setCurrentRecording] = useState(null);
 
     useEffect(() => {
-        // Set the first recording as the current one when the component loads
-        if (liveClass && liveClass.recordings && liveClass.recordings.length > 0) {
-            setCurrentRecording(liveClass.recordings[0]);
+        // Find the specific live class from the data passed in props.
+        const foundClass = liveClassesData.find(cls => cls.id === classId);
+        setLiveClass(foundClass);
+
+        // This is a great check! It ensures 'recordings' exists and has content
+        // before trying to set the first video as the current one.
+        if (foundClass && foundClass.recordings && foundClass.recordings.length > 0) {
+            setCurrentRecording(foundClass.recordings[0]);
         }
-    }, [liveClass]);
+    }, [classId, liveClassesData]); // Added classId to dependencies for correctness
 
     const handleRecordingClick = (recording) => {
         setCurrentRecording(recording);
     };
 
+    // This is a good way to handle cases where the class isn't found.
     if (!liveClass) {
         return (
             <DashboardPageTemplate isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} coursesData={coursesData} title="Live Class Not Found" user={user}>
@@ -40,7 +46,7 @@ const LiveClassRecordings = ({ isLoggedIn, onLogout, cartItemsCount, coursesData
                     {currentRecording ? (
                         <div className="w-full h-full aspect-video">
                             <iframe
-                                className="w-full h-full rounded-xl shadow-2xl"
+                                className="w-full h-full rounded-xl shadow-2xl bg-black"
                                 src={currentRecording.videoUrl}
                                 title={currentRecording.title}
                                 frameBorder="0"
@@ -49,7 +55,7 @@ const LiveClassRecordings = ({ isLoggedIn, onLogout, cartItemsCount, coursesData
                             ></iframe>
                         </div>
                     ) : (
-                        <div className="text-gray-600 text-center">
+                        <div className="text-gray-600 text-center p-8 bg-white rounded-lg shadow">
                             <h2 className="text-2xl font-bold">Welcome!</h2>
                             <p className="mt-2">Select a recording from the sidebar to start watching.</p>
                         </div>
@@ -60,6 +66,8 @@ const LiveClassRecordings = ({ isLoggedIn, onLogout, cartItemsCount, coursesData
                 <aside className="lg:w-96 bg-white shadow-lg p-6 overflow-y-auto">
                     <h2 className="text-2xl font-bold text-gray-900 mb-4">Class Recordings</h2>
                     <p className="text-gray-600 mb-6 text-sm">{liveClass.description}</p>
+                    
+                    {/* This check correctly prevents the .map() error if recordings don't exist */}
                     {liveClass.recordings && liveClass.recordings.length > 0 ? (
                         <ul className="space-y-2">
                             {liveClass.recordings.map(rec => (
@@ -78,7 +86,7 @@ const LiveClassRecordings = ({ isLoggedIn, onLogout, cartItemsCount, coursesData
                             ))}
                         </ul>
                     ) : (
-                         <p className="text-gray-500">No recordings available for this class yet.</p>
+                         <p className="text-gray-500 italic">No recordings are available for this class yet.</p>
                     )}
                      <div className="mt-8 pt-6 border-t border-gray-200">
                         <Link to="/dashboard/my-live-classes" className="text-sm text-purple-600 font-semibold hover:underline">

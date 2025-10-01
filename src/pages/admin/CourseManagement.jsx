@@ -1,8 +1,11 @@
+// src/pages/admin/CourseManagement.jsx
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AdminDashboardTemplate from './AdminDashboardTemplate';
-import { db } from '../../firebase';
-import { ref, onValue, push, set, update, remove } from 'firebase/database';
+import { db, storage } from '../../firebase';
+import { ref, onValue, push, set, remove } from 'firebase/database';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const CourseManagement = (props) => {
     const [coursesList, setCoursesList] = useState([]);
@@ -10,9 +13,11 @@ const CourseManagement = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newCourseData, setNewCourseData] = useState(null);
-    
-    // NEW: State to track which category is open
     const [openCategory, setOpenCategory] = useState(null);
+    
+    // State for modal's image input
+    const [isUploading, setIsUploading] = useState(false);
+    const [imageInputMethod, setImageInputMethod] = useState('upload');
 
     const categories = [
         "Product & Strategy", "UX & UI Design", "Engineering & Development", 
@@ -46,17 +51,16 @@ const CourseManagement = (props) => {
         }
     }, [coursesList]);
 
-    // NEW: Handler to toggle the open/closed state of a category
     const handleCategoryToggle = (category) => {
         setOpenCategory(prevOpenCategory => prevOpenCategory === category ? null : category);
     };
 
-    // --- Modal and Form Handlers (No changes needed) ---
     const openAddModal = () => {
         setNewCourseData({
             title: '', category: categories[0], price: 0, instructor: '',
-            description: '', image: 'https://placehold.co/600x400/A78BFA/FFFFFF?text=New+Course'
+            description: '', image: ''
         });
+        setImageInputMethod('upload'); // Reset to default when opening
         setIsModalOpen(true);
     };
 
@@ -68,6 +72,23 @@ const CourseManagement = (props) => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewCourseData(prevState => ({ ...prevState, [name]: value }));
+    };
+
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        setIsUploading(true);
+        const imageRef = storageRef(storage, `course_images/${Date.now()}_${file.name}`);
+        try {
+            const snapshot = await uploadBytes(imageRef, file);
+            const downloadURL = await getDownloadURL(snapshot.ref);
+            setNewCourseData(prevState => ({ ...prevState, image: downloadURL }));
+        } catch (error) {
+            console.error("Error uploading image:", error);
+            alert("Failed to upload image.");
+        } finally {
+            setIsUploading(false);
+        }
     };
 
     const handleAddCourseSubmit = async (e) => {
@@ -110,7 +131,6 @@ const CourseManagement = (props) => {
                     </button>
                 </div>
 
-                {/* UPDATED: Accordion Layout for Categories */}
                 <div className="space-y-2">
                     {isLoading ? (
                         <p>Loading Courses...</p>
@@ -154,9 +174,8 @@ const CourseManagement = (props) => {
                 </div>
             </div>
             
-            {/* Modal for ADDING a new course (No changes) */}
             {isModalOpen && (
-                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-lg">
                         <h2 className="text-2xl font-bold mb-6">Add New Course</h2>
                         <form onSubmit={handleAddCourseSubmit}>
@@ -168,7 +187,22 @@ const CourseManagement = (props) => {
                                 <input type="number" name="price" placeholder="Price" value={newCourseData.price} onChange={handleInputChange} className="w-full px-4 py-2 border rounded-lg" required step="0.01" />
                                 <input type="text" name="instructor" placeholder="Instructor Name" value={newCourseData.instructor} onChange={handleInputChange} className="w-full px-4 py-2 border rounded-lg" />
                                 <textarea name="description" placeholder="Course Description" value={newCourseData.description} onChange={handleInputChange} className="w-full px-4 py-2 border rounded-lg h-24" />
-                                <input type="text" name="image" placeholder="Image URL" value={newCourseData.image} onChange={handleInputChange} className="w-full px-4 py-2 border rounded-lg" />
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Course Image</label>
+                                    <div className="flex items-center space-x-2 mb-2">
+                                        <button type="button" onClick={() => setImageInputMethod('upload')} className={`text-xs px-3 py-1 rounded-full ${imageInputMethod === 'upload' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'}`}>Upload</button>
+                                        <button type="button" onClick={() => setImageInputMethod('url')} className={`text-xs px-3 py-1 rounded-full ${imageInputMethod === 'url' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'}`}>URL</button>
+                                    </div>
+                                    {imageInputMethod === 'upload' ? (
+                                        <div>
+                                            <input type="file" accept="image/*" onChange={handleImageUpload} className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"/>
+                                            {isUploading && <p className="text-sm text-purple-600 mt-1">Uploading...</p>}
+                                        </div>
+                                    ) : (
+                                        <input type="text" name="image" value={newCourseData.image || ''} onChange={handleInputChange} placeholder="https://example.com/image.png" className="w-full p-2 border rounded-md" />
+                                    )}
+                                    {newCourseData.image && <img src={newCourseData.image} alt="Preview" className="w-32 h-auto object-cover rounded-lg mt-2 border"/>}
+                                </div>
                             </div>
                             <div className="flex justify-end space-x-4 mt-6">
                                 <button type="button" onClick={closeModal} className="px-5 py-2 bg-gray-200 text-gray-800 font-semibold rounded-full hover:bg-gray-300">
