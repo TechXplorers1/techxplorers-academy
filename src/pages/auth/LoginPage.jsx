@@ -5,10 +5,32 @@ import Footer from '../../components/Footer';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../../firebase'; // Import auth only
 
+// Eye Icon SVG component with CORRECT logic
+const EyeIcon = ({ onClick, isVisible }) => (
+    <button type="button" onClick={onClick} className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-gray-500 hover:text-purple-600 transition-colors">
+        {isVisible ? (
+            // Slashed Eye: Password IS VISIBLE, clicking will hide it
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+                <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c4.77 0 8.35 3.33 10 7-1.42 2.65-4.22 4.67-7.44 5.34" />
+                <path d="M2.72 2.72 2 3.44l2.84 2.84c-1.74 1.13-3.23 2.5-4.84 4.88 1.65 2.52 4.13 4.54 7.63 5.25" />
+                <line x1="2" y1="22" x2="22" y2="2" strokeWidth="2"/>
+            </svg>
+        ) : (
+            // Open Eye: Password IS HIDDEN, clicking will show it
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                <circle cx="12" cy="12" r="3" />
+            </svg>
+        )}
+    </button>
+);
+
 const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleLoginSubmit = async (e) => {
@@ -17,7 +39,8 @@ const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setIsLoggedIn(true);
-      navigate('/dashboard');
+      // Redirect to the root path
+      navigate('/'); 
     } catch (error) {
       alert(error.message);
       setIsLoading(false);
@@ -26,7 +49,7 @@ const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center font-inter text-gray-900 relative">
-      <Header cartItemsCount={cartItemsCount} />
+      <Header cartItemsCount={cartItemsCount} /> 
       
       <div className="absolute top-0 left-0 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-2xl opacity-40 animate-blob"></div>
       <div className="absolute top-0 right-0 w-80 h-80 bg-orange-200 rounded-full mix-blend-multiply filter blur-2xl opacity-40 animate-blob animation-delay-2000"></div>
@@ -75,19 +98,25 @@ const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
                   disabled={isLoading}
                 />
               </div>
-              <div>
+              <div className="relative">
                 <label htmlFor="login-password" className="sr-only">Password</label>
                 <input
                   id="login-password"
                   name="password"
-                  type="password"
+                  // Toggle type between password and text
+                  type={showPassword ? "text" : "password"} 
                   autoComplete="current-password"
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                  className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 transition-colors"
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={isLoading}
+                />
+                {/* Password toggle button */}
+                <EyeIcon 
+                    onClick={() => setShowPassword(!showPassword)} 
+                    isVisible={showPassword} 
                 />
               </div>
               <div className="flex items-center justify-between">
@@ -104,9 +133,10 @@ const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
                   </label>
                 </div>
                 <div className="text-sm">
-                  <a href="#" className="font-medium text-purple-600 hover:text-purple-500">
+                  {/* Link to the new ForgotPasswordPage */}
+                  <Link to="/forgot-password" className="font-medium text-purple-600 hover:text-purple-500">
                     Forgot your password?
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div>

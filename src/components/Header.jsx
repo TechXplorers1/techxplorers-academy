@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { categoryMap, toKebabCase } from '../utils/categoryHelper';
+import { useAuth } from '../AuthContext'; // NEW: Import useAuth hook
 
 const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
     const menuRef = React.useRef(null);
@@ -31,7 +32,16 @@ const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
     );
 };
 
-const Header = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, userRole }) => {
+// UPDATED: Header component no longer accepts props
+const Header = () => {
+    // NEW: Use the custom hook to access all necessary data
+    const { 
+        isLoggedIn, 
+        onLogout, 
+        cartItemsCount, 
+        coursesData, 
+        userRole 
+    } = useAuth(); 
 
     const [isAllStacksOpen, setIsAllStacksOpen] = React.useState(false);
     const [isForBusinessOpen, setIsForBusinessOpen] = React.useState(false);
@@ -158,7 +168,7 @@ const Header = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, userRole })
                     )}
                     {isLoggedIn ? (
                         <>
-                            {/* UPDATED: Role-based dashboard links */}
+                            {/* Role-based dashboard links using userRole from context */}
                             {userRole === 'admin' && (
                                 <Link to="/admin/dashboard" className="hover:text-purple-400 transition-colors">
                                     Admin Dashboard

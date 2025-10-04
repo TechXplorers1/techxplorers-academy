@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Header from '../components/Header';
 import { Link } from 'react-router-dom';
 import hero2 from '../assets/hero-2.jpg';
@@ -8,7 +8,7 @@ import bg3 from '../assets/bg-7.jpg';
 import Footer from '../components/Footer';
 import { toCamelCase, toKebabCase } from '../utils/categoryHelper';
 
-// Inline SVG Icons (components like PlayIcon, UserIcon, etc. remain the same)
+// --- Inline SVG Icons ---
 const PlayIcon = ({ size = 24, className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -79,10 +79,25 @@ const DiscordIcon = ({ size = 40, className }) => (
   </svg>
 );
 
+// NumberCounter component with Intersection Observer for animation
 const NumberCounter = ({ targetNumber, duration = 2000 }) => {
   const [count, setCount] = useState(0);
   const countRef = useRef(null);
   const hasBeenAnimated = useRef(false);
+
+  const startCount = () => {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = timestamp - startTimestamp;
+      const newCount = Math.min(Math.floor((progress / duration) * targetNumber), targetNumber);
+      setCount(newCount);
+      if (newCount < targetNumber) {
+        window.requestAnimationFrame(step);
+      }
+    };
+    window.requestAnimationFrame(step);
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -109,20 +124,6 @@ const NumberCounter = ({ targetNumber, duration = 2000 }) => {
       }
     };
   }, [targetNumber, duration]);
-
-  const startCount = () => {
-    let startTimestamp = null;
-    const step = (timestamp) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = timestamp - startTimestamp;
-      const newCount = Math.min(Math.floor((progress / duration) * targetNumber), targetNumber);
-      setCount(newCount);
-      if (newCount < targetNumber) {
-        window.requestAnimationFrame(step);
-      }
-    };
-    window.requestAnimationFrame(step);
-  };
 
   return (
     <span ref={countRef}>
@@ -151,27 +152,40 @@ const RightArrow = ({ size = 24, className, onClick }) => (
   </svg>
 );
 
-// Custom hook for on-scroll animations
+// REFACTORED: Custom hook for on-scroll animations
 const useInView = (options) => {
   const [inView, setInView] = useState(false);
   const ref = useRef(null);
+  const observerRef = useRef(null);
+  const hasObserved = useRef(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setInView(true);
-        observer.unobserve(entry.target);
-      }
-    }, options);
+    // Check if the observer instance exists, if not, create it
+    if (!observerRef.current) {
+      observerRef.current = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting && !hasObserved.current) {
+          setInView(true);
+          hasObserved.current = true;
+          // Stop observing once in view
+          if (observerRef.current && entry.target) {
+            observerRef.current.unobserve(entry.target);
+          }
+        }
+      }, options);
+    }
 
     const currentRef = ref.current;
     if (currentRef) {
-      observer.observe(currentRef);
+      // Only observe if we haven't already marked it as observed
+      if (!hasObserved.current) {
+        observerRef.current.observe(currentRef);
+      }
     }
 
     return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
+      // Clean up observer on unmount
+      if (currentRef && observerRef.current) {
+        observerRef.current.unobserve(currentRef);
       }
     };
   }, [options]);
@@ -184,65 +198,26 @@ function LandingPage(props) {
   const { coursesData, blogPostsData } = props;
 
   const instructors = [
-    {
-      name: "Alex Johnson",
-      title: "Senior Developer",
-      image: "https://placehold.co/100x100",
-    },
-    {
-      name: "Maria Garcia",
-      title: "UI/UX Expert",
-      image: "https://placehold.co/100x100",
-    },
-    {
-      name: "Sam Lee",
-      title: "Data Scientist",
-      image: "https://placehold.co/100x100",
-    },
-    {
-      name: "Ben Carter",
-      title: "Cloud Architect",
-      image: "https://placehold.co/100x100",
-    },
-    {
-      name: "Chris Evans",
-      title: "Mobile Dev",
-      image: "https://placehold.co/100x100",
-    },
+    { name: "Alex Johnson", title: "Senior Developer", image: "https://placehold.co/100x100" },
+    { name: "Maria Garcia", title: "UI/UX Expert", image: "https://placehold.co/100x100" },
+    { name: "Sam Lee", title: "Data Scientist", image: "https://placehold.co/100x100" },
+    { name: "Ben Carter", title: "Cloud Architect", image: "https://placehold.co/100x100" },
+    { name: "Chris Evans", title: "Mobile Dev", image: "https://placehold.co/100x100" },
   ];
 
   const testimonials = [
-    {
-      text: "The courses are phenomenal! I learned so much in such a short time. Highly recommended for anyone looking to upskill.",
-      author: "Jane Doe",
-      image: "https://placehold.co/100x100",
-    },
-    {
-      text: "I was able to get a new job thanks to the skills I learned here. The instructors are top-notch and the content is very practical.",
-      author: "John Smith",
-      image: "https://placehold.co/100x100",
-    },
-    {
-      text: "A truly great platform for learning. The content is well-structured and the community is very supportive. Will be back for more!",
-      author: "Emily White",
-      image: "https://placehold.co/100x100",
-    },
-    {
-      text: "The instructors are incredibly knowledgeable and the courses are well-structured and easy to follow.",
-      author: "Michael Lee",
-      image: "https://placehold.co/100x100",
-    },
-    {
-      text: "I've been a professional developer for years, and I still learned new things. The content is very high quality.",
-      author: "Sarah Brown",
-      image: "https://placehold.co/100x100",
-    },
+    { text: "The courses are phenomenal! I learned so much in such a short time. Highly recommended for anyone looking to upskill.", author: "Jane Doe", image: "https://placehold.co/100x100" },
+    { text: "I was able to get a new job thanks to the skills I learned here. The instructors are top-notch and the content is very practical.", author: "John Smith", image: "https://placehold.co/100x100" },
+    { text: "A truly great platform for learning. The content is well-structured and the community is very supportive. Will be back for more!", author: "Emily White", image: "https://placehold.co/100x100" },
+    { text: "The instructors are incredibly knowledgeable and the courses are well-structured and easy to follow.", author: "Michael Lee", image: "https://placehold.co/100x100" },
+    { text: "I've been a professional developer for years, and I still learned new things. The content is very high quality.", author: "Sarah Brown", image: "https://placehold.co/100x100" },
   ];
 
   const [activeCategory, setActiveCategory] = useState("All");
   const [showGoTop, setShowGoTop] = useState(false);
   const carouselRef = useRef(null);
 
+  // Animation state hooks
   const [heroRef, heroInView] = useInView({ threshold: 0.1 });
   const [statsRef, statsInView] = useInView({ threshold: 0.5 });
   const [popularStacksRef, popularStacksInView] = useInView({ threshold: 0.3 });
@@ -255,12 +230,14 @@ function LandingPage(props) {
   const [learningMethodologyRef, learningMethodologyInView] = useInView({ threshold: 0.3 });
 
 
-  // State to track which course cards have been animated
+  // State to track which course cards have been animated & video modal
   const [animatedCourses, setAnimatedCourses] = useState([]);
   const [showVideoModal, setShowVideoModal] = useState(false);
+  const [rotationAngle, setRotationAngle] = useState(0); // State for 3D carousel rotation
 
-  const allCourses = coursesData ? Object.values(coursesData).flat() : [];
-  const topCourses = allCourses.slice(0, 6);
+  // FIX 1: Use useMemo to avoid recalculating these expensive lists on every re-render
+  const allCourses = useMemo(() => coursesData ? Object.values(coursesData).flat() : [], [coursesData]);
+  const topCourses = useMemo(() => allCourses.slice(0, 6), [allCourses]);
 
 
   useEffect(() => {
@@ -279,17 +256,12 @@ function LandingPage(props) {
     };
   }, []);
 
-  // New useEffect to handle course card animation
+  // FIX 2: Simplified course card animation logic. 
   useEffect(() => {
-    if (coursesInView) {
-      topCourses.forEach((_, index) => {
-        const timer = setTimeout(() => {
-          setAnimatedCourses(prev => [...prev, index]);
-        }, index * 150);
-        return () => clearTimeout(timer);
-      });
+    if (coursesInView && animatedCourses.length === 0 && topCourses.length > 0) {
+      setAnimatedCourses(topCourses.map((_, index) => index));
     }
-  }, [coursesInView, topCourses]);
+  }, [coursesInView, topCourses, animatedCourses.length]);
 
 
   const goToTop = () => {
@@ -299,18 +271,17 @@ function LandingPage(props) {
     });
   };
 
+  // FIX 3: Simplified manual carousel scroll handler using state
   const handleManualScroll = (direction) => {
+    const angleIncrement = 360 / (filteredBlogPosts.length || 1);
+    const newAngle = rotationAngle + (direction === 'left' ? angleIncrement : -angleIncrement);
+
+    setRotationAngle(newAngle);
+    
+    // Manually ensure the CSS animation is paused/overridden during manual movement
     if (carouselRef.current) {
-      carouselRef.current.style.animationPlayState = 'paused';
-
-      const currentTransform = window.getComputedStyle(carouselRef.current).getPropertyValue('transform');
-      const matrix = new WebKitCSSMatrix(currentTransform);
-      const currentAngle = Math.atan2(matrix.m12, matrix.m16) * (180 / Math.PI);
-
-      const angleIncrement = 360 / (filteredBlogPosts.length || 1);
-      const newAngle = currentAngle + (direction === 'left' ? angleIncrement : -angleIncrement);
-
-      carouselRef.current.style.transform = `perspective(1000px) rotateY(${newAngle}deg)`;
+        carouselRef.current.style.animationPlayState = 'paused';
+        carouselRef.current.style.transform = `perspective(1000px) rotateY(${newAngle}deg)`;
     }
   };
 
@@ -331,9 +302,6 @@ function LandingPage(props) {
       </div>
     );
   };
-
-  // Get a few top courses to display on the landing page
-  
 
   const popularStacks = [
     {
@@ -466,6 +434,7 @@ function LandingPage(props) {
       )}
 
       <main>
+      {/* Header component now correctly uses Context and no longer requires many props to be passed */}
       <Header {...props} isLandingPage={true} />
         {/* Enhanced Hero Section with Offers */}
         <section ref={heroRef} className={`relative overflow-hidden min-h-screen flex flex-col items-center justify-center pb-32 hero-section-container ${heroInView ? 'hero-section-visible' : ''}`}>
@@ -629,6 +598,7 @@ function LandingPage(props) {
                   <Link
                     key={index}
                     to={`/course-details/${course.id}`}
+                    // Animation: uses coursesInView check via the ref to trigger 'is-visible'
                     className={`group bg-white rounded-2xl relative overflow-hidden transition-all duration-500 hover:translate-y-[-10px] hover:shadow-2xl border border-white/20 hover:border-purple-600/20 w-full md:w-auto course-card ${animatedCourses.includes(index) ? 'is-visible' : ''}`}
                     style={{ transitionDelay: `${index * 150}ms` }}
                   >
@@ -738,8 +708,6 @@ function LandingPage(props) {
             </div>
           </div>
         </section>
-
-        {/* --- */}
 
         {/* New Section: Practical & Supported Learning */}
         <section ref={featureRef} className={`py-16 bg-white text-gray-900 ${featureInView ? 'is-visible' : ''}`}>
@@ -877,12 +845,15 @@ function LandingPage(props) {
                     carouselRef.current.style.animationPlayState = 'running';
                   }
                 }}
+                // Bind rotation angle state for manual control
+                style={{ transform: `perspective(1000px) rotateY(${rotationAngle}deg)` }} 
               >
                 {filteredBlogPosts.map((post, index) => (
                   <div
                     key={post.id}
                     className="blog-card"
                     style={{
+                      // Use the post index to determine initial position in the circle
                       transform: `translate(-50%, -50%) rotateY(${(index / filteredBlogPosts.length) * 360}deg) translateZ(350px)`,
                       animationDelay: `-${index * (25 / filteredBlogPosts.length)}s`,
                     }}
@@ -910,7 +881,6 @@ function LandingPage(props) {
             </div>
           </div>
         </section>
-
 
 
         {/* How it Works Section */}
@@ -1144,7 +1114,7 @@ function LandingPage(props) {
               0% { transform: translateY(-20px); opacity: 0; }
               100% { transform: translateY(0); opacity: 1; }
           }
-         
+          
           /* Hero V-shape animations */
           .hero-v-card {
               opacity: 0;
@@ -1172,7 +1142,7 @@ function LandingPage(props) {
               from { opacity: 0; transform: translate(-50%, -50%) rotate(0deg) scale(0.8); }
               to { opacity: 1; transform: translate(0%, -50%) rotate(6deg) scale(1); }
           }
-         
+          
           /* Ribbon Animation for Stats */
           @keyframes ribbon-wave {
               0%, 100% { transform: scaleX(0); }
@@ -1197,7 +1167,7 @@ function LandingPage(props) {
           .is-visible .text-glow {
               animation: text-glow 2s infinite ease-in-out;
           }
-         
+          
           /* Glowing Border for Testimonials */
           .glowing-border {
               position: relative;
@@ -1236,7 +1206,7 @@ function LandingPage(props) {
               transform: translateY(20px);
               transition: all 0.6s ease-out;
           }
-         
+          
           .hero-section-visible .animate-fade-in-down { animation: fade-in-down 0.6s ease-out forwards; animation-delay: 500ms; }
           .hero-section-visible .animate-slide-up-200 { animation: slide-up 0.6s ease-out forwards; animation-delay: 200ms; }
           .hero-section-visible .animate-slide-up-500 { animation: slide-up 0.6s ease-out forwards; animation-delay: 500ms; }
@@ -1245,21 +1215,22 @@ function LandingPage(props) {
           .hero-section-visible .animate-slide-up-1100 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1100ms; }
           .hero-section-visible .animate-slide-up-1300 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1300ms; }
           .hero-section-visible .animate-slide-up-1500 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1500ms; }
-         
+          
 
           .animate-float { animation: float 3s ease-in-out infinite; }
           .animate-pulse-slow { animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
           .animate-bounce-slow { animation: bounce-slow 2s infinite; }
           .animation-delay-2000 { animation-delay: 2s; }
-         
+          
           .card-3d {
               position: relative;
               width: 500px;
               height: 400px;
               transform-style: preserve-3d;
-              transform: perspective(1000px) rotateY(0deg);
-              animation: autoRun3d 25s linear infinite;
+              /* FIX: Ensure initial rotation is controlled by state for smooth transitions */
+              animation: autoRun3d 25s linear infinite; 
               will-change: transform;
+              transition: transform 0.5s ease-out; /* Added smooth transition for manual scroll */
           }
 
           .card-3d:hover { animation-play-state: paused !important; }
@@ -1296,10 +1267,12 @@ function LandingPage(props) {
               overflow: hidden;
           }
 
+          /* Course Card Animation */
           .course-card {
               opacity: 0;
               transform: translateY(20px);
-              transition: all 0.6s ease-out;
+              /* FIX: Added transition property for the delay to work */
+              transition: all 0.6s ease-out; 
           }
           .course-card.is-visible {
               opacity: 1;

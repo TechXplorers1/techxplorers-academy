@@ -6,6 +6,27 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { ref, set } from "firebase/database";
 import { auth, db } from '../../firebase';
 
+// Eye Icon SVG component (reused and corrected)
+const EyeIcon = ({ onClick, isVisible }) => (
+    <button type="button" onClick={onClick} className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-gray-500 hover:text-purple-600 transition-colors">
+        {isVisible ? (
+            // Icon when password IS visible (should be the 'slashed out' eye or hide icon)
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+                <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c4.77 0 8.35 3.33 10 7-1.42 2.65-4.22 4.67-7.44 5.34" />
+                <path d="M2.72 2.72 2 3.44l2.84 2.84c-1.74 1.13-3.23 2.5-4.84 4.88 1.65 2.52 4.13 4.54 7.63 5.25" />
+                <line x1="2" y1="2" x2="22" y2="22" />
+            </svg>
+        ) : (
+            // Icon when password IS NOT visible (should be the 'open' eye or show icon)
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                <circle cx="12" cy="12" r="3" />
+            </svg>
+        )}
+    </button>
+);
+
 const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [signupForm, setSignupForm] = useState({
@@ -16,6 +37,8 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
     confirmPassword: ''
   });
   const [passwordError, setPasswordError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -46,7 +69,8 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
       });
 
       setIsLoggedIn(true);
-      navigate('/dashboard');
+      // Redirect to the root path
+      navigate('/');
     } catch (error) {
       alert(error.message);
       setIsLoading(false);
@@ -144,34 +168,46 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
                 disabled={isLoading}
               />
             </div>
-            <div>
+            <div className="relative">
               <label htmlFor="signup-password" className="sr-only">Password</label>
               <input
                 id="signup-password"
                 name="password"
-                type="password"
+                // Toggle type between password and text
+                type={showPassword ? "text" : "password"} 
                 autoComplete="new-password"
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 transition-colors"
                 placeholder="Password"
                 value={signupForm.password}
                 onChange={handleSignupChange}
                 disabled={isLoading}
               />
+              {/* Password toggle button */}
+              <EyeIcon 
+                  onClick={() => setShowPassword(!showPassword)} 
+                  isVisible={showPassword} 
+              />
             </div>
-            <div>
+            <div className="relative">
               <label htmlFor="confirmPassword" className="sr-only">Confirm Password</label>
               <input
                 id="confirmPassword"
                 name="confirmPassword"
-                type="password"
+                // Toggle type between password and text
+                type={showConfirmPassword ? "text" : "password"} 
                 autoComplete="new-password"
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 transition-colors"
                 placeholder="Confirm Password"
                 value={signupForm.confirmPassword}
                 onChange={handleSignupChange}
                 disabled={isLoading}
+              />
+              {/* Confirm Password toggle button */}
+              <EyeIcon 
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)} 
+                  isVisible={showConfirmPassword} 
               />
             </div>
             {passwordError && (
