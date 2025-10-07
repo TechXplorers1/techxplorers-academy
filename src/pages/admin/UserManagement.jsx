@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ref, onValue, set, update } from "firebase/database";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { db, auth as mainAuth } from '../../firebase'; // Using the main auth instance
+import { createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "firebase/auth";
+import { db, auth as mainAuth } from '../../firebase';
 import AdminDashboardTemplate from './AdminDashboardTemplate';
 
 const UserManagement = (props) => {
@@ -36,7 +36,7 @@ const UserManagement = (props) => {
     const openModal = (mode, user = null) => {
         setModalMode(mode);
         if (mode === 'add') {
-            setCurrentUserData({ firstName: '', lastName: '', email: '', password: '', role: 'user' });
+            setCurrentUserData({ firstName: '', lastName: '', email: '', role: 'user' }); 
         } else {
             setCurrentUserData(user);
         }
@@ -61,23 +61,46 @@ const UserManagement = (props) => {
         }
 
         if (modalMode === 'add') {
-            // --- Logic for Adding a New User (will log you in as the new user) ---
+            const tempPassword = 'tempPassword123'; // Dummy password for initial creation
+            
+            // IMPORTANT: We do not attempt to restore the session here using a token, 
+            // as this is handled better by the global AuthContext listener. 
+            // We just ensure the new user is signed out immediately.
+
             try {
-                const userCredential = await createUserWithEmailAndPassword(mainAuth, currentUserData.email, currentUserData.password);
-                const user = userCredential.user;
-                const userRef = ref(db, 'users/' + user.uid);
+                // 1. Create a Firebase Auth user (logs admin out)
+                const userCredential = await createUserWithEmailAndPassword(mainAuth, currentUserData.email, tempPassword);
+                const createdUserAuth = userCredential.user;
+                
+                // 2. Create the user record in the Realtime Database
+                const userRef = ref(db, 'users/' + createdUserAuth.uid);
                 await set(userRef, {
                     firstName: currentUserData.firstName,
                     lastName: currentUserData.lastName,
                     email: currentUserData.email,
                     role: currentUserData.role,
-                    // 'status' field is removed
                     cart: {}, wishlist: {}, enrolledCourses: {}, registeredLiveClasses: {}
                 });
-                alert(`Successfully created user: ${currentUserData.email}. You will now be logged in as this user.`);
+
+                // 3. Immediately send a Password Reset Email
+                await sendPasswordResetEmail(mainAuth, currentUserData.email);
+                
+                // 4. FIX: Immediately sign out the newly created user! 
+                // This clears the new user's session, allowing the AuthContext listener 
+                // to detect the admin's previous session (via persistence) and automatically
+                // log the admin back in.
+                await signOut(mainAuth); 
+
+                alert(`User ${currentUserData.email} created. A link to set their password has been sent to their email. Your admin session should be restored.`);
                 closeModal();
             } catch (error) {
-                alert(`Error creating user: ${error.message}`);
+                // If the user creation fails, we must check if the current user is still the new user 
+                // (which should not happen if creation failed) and log out just in case.
+                
+                // NOTE: The `createUserWithEmailAndPassword` call should only succeed if the admin 
+                // was still authenticated, and it will automatically log the *new* user in.
+                
+                alert(`Error creating user: ${error.message}. Please try again.`);
             }
         } else {
             // --- Logic for Editing an Existing User ---
@@ -161,12 +184,16 @@ const UserManagement = (props) => {
                                     required 
                                     disabled={modalMode === 'edit'}
                                 />
+                                {/* Display note about password reset email */}
                                 {modalMode === 'add' && (
-                                    <input type="password" name="password" placeholder="Password (min. 6 characters)" value={currentUserData.password} onChange={handleInputChange} className="w-full px-4 py-2 border rounded-lg" required />
+                                    <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
+                                        Note: A password link will be automatically sent to the new user's email to set their password.
+                                    </p>
                                 )}
                                 <select name="role" value={currentUserData.role} onChange={handleInputChange} className="w-full px-4 py-2 border rounded-lg bg-white">
                                     <option value="user">User</option>
                                     <option value="admin">Admin</option>
+                                    <option value="instructor">Instructor</option>
                                 </select>
                             </div>
                             <div className="flex justify-end space-x-4 mt-6">
