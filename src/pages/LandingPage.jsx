@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Header from '../components/Header';
 import { Link } from 'react-router-dom';
-import hero2 from '../assets/hero-2.jpg';
+import hero2 from '../assets/hero-1.jpg';
 import bg1 from '../assets/bg-1.jpg';
-import bg4 from '../assets/bg-4.jpg';
-import bg3 from '../assets/bg-7.jpg';
+import bg4 from '../assets/bg-3.jpg';
+import bg3 from '../assets/bg-5.jpg';
 import Footer from '../components/Footer';
 import { toCamelCase, toKebabCase } from '../utils/categoryHelper';
 
@@ -1317,7 +1317,7 @@ function LandingPage(props) {
           .course-card.is-visible {
               opacity: 1;
               transform: translateY(0);
-          }
+        }
       `}</style>
     </div>
   );
