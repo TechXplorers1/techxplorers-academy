@@ -37,13 +37,12 @@ const BusinessPageTemplate = ({
   const filteredBreadcrumbs = breadcrumbs.filter(crumb => crumb.name !== "For Business");
 
   return (
+    // CHANGED: Background to white, text to dark gray
     <div className="bg-white text-gray-900 font-inter min-h-screen">
-      <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} coursesData={coursesData} // Pass prop
- />
+      <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} coursesData={coursesData} />
       <Hero
         title={title}
         breadcrumbs={filteredBreadcrumbs}
-        // No specific background image for this template
       />
 
       <main className="container mx-auto px-6 lg:px-12 py-20 space-y-28">
@@ -88,6 +87,7 @@ const BusinessPageTemplate = ({
                           className="flex items-start bg-gray-50 p-4 rounded-xl shadow-sm hover:shadow-md transition"
                           whileHover={{ scale: 1.03, x: 5 }}
                         >
+                          {/* CHANGED: List icon background color to blue-400 */}
                           <span className="w-8 h-8 mr-3 flex items-center justify-center rounded-full bg-blue-400 text-white font-bold">
                             ✓
                           </span>
@@ -115,6 +115,7 @@ const BusinessPageTemplate = ({
                           className="flex items-start bg-gray-50 p-4 rounded-xl shadow-sm hover:shadow-md transition"
                           whileHover={{ scale: 1.03, x: 5 }}
                         >
+                          {/* CHANGED: List icon background color to blue-400 */}
                           <span className="w-8 h-8 mr-3 flex items-center justify-center rounded-full bg-blue-400 text-white font-bold">
                             ✓
                           </span>
@@ -144,6 +145,8 @@ const BusinessPageTemplate = ({
         ))}
       </main>
 
+      {/* Contact Form CTA Section */}
+      {/* CHANGED: Background gradient to blue/cyan */}
       <div className="relative bg-gradient-to-br from-blue-400 via-blue-600 to-cyan-400 py-24 overflow-hidden">
         <div className="absolute inset-0 bg-blue-900/20 mix-blend-overlay"></div>
         <motion.div
@@ -154,6 +157,7 @@ const BusinessPageTemplate = ({
           variants={fadeInUp}
           transition={{ duration: 1 }}
         >
+          {/* CHANGED: Form background to white/95 */}
           <div className="bg-white/95 backdrop-blur-md p-12 rounded-2xl shadow-2xl max-w-4xl mx-auto text-center">
             <h3 className="text-4xl font-extrabold text-gray-900 mb-6">
               {formTitle}
@@ -175,12 +179,14 @@ const BusinessPageTemplate = ({
                         id={field.name}
                         name={field.name}
                         rows="4"
+                        // CHANGED: Focus ring color to blue-400
                         className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-400 focus:ring-blue-400"
                       />
                     ) : field.type === "select" ? (
                       <select
                         id={field.name}
                         name={field.name}
+                        // CHANGED: Focus ring color to blue-400
                         className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-400 focus:ring-blue-400"
                       >
                         {field.options.map((option, j) => (
@@ -192,6 +198,7 @@ const BusinessPageTemplate = ({
                         type={field.type}
                         id={field.name}
                         name={field.name}
+                        // CHANGED: Focus ring color to blue-400
                         className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-400 focus:ring-blue-400"
                       />
                     )}
@@ -203,6 +210,7 @@ const BusinessPageTemplate = ({
                   type="submit"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  // CHANGED: Submit button gradient to blue/cyan
                   className="bg-gradient-to-r from-blue-400 to-cyan-400 text-white text-lg font-semibold py-3 px-12 rounded-full shadow-lg hover:opacity-90 transition"
                 >
                   Submit Request

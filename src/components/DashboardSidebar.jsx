@@ -21,7 +21,9 @@ const DashboardSidebar = () => {
             <ul className="space-y-2">
                 {dashboardNavItems.map((item, index) => (
                     <li key={index}>
-                        <Link to={item.path} className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${location.pathname === item.path ? 'bg-purple-100 text-purple-700 font-bold' : 'text-gray-700 hover:bg-gray-100'}`}>
+                        <Link to={item.path} 
+                            // CHANGED: Active link colors to blue-based scheme
+                            className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${location.pathname === item.path ? 'bg-blue-100 text-blue-700 font-bold' : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'}`}>
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
                             </svg>

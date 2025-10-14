@@ -13,8 +13,10 @@ const MorePageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, breadcr
     ];
 
     return (
+        // CHANGED: Background to white, text to dark gray
         <div className="bg-white text-gray-900 min-h-screen font-inter">
-            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
+            {/* Header no longer needs to pass all props if it uses useAuth() */}
+            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} /> 
             <Hero
                 title={title}
                 breadcrumbs={breadcrumbs}

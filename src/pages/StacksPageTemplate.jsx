@@ -10,7 +10,8 @@ const StarRating = ({ rating }) => {
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
     return (
-        <div className="flex text-yellow-500">
+        // CHANGED: Star color to orange-500
+        <div className="flex text-orange-500">
             {'★'.repeat(fullStars)}
             {halfStar && '½'}
             {'☆'.repeat(emptyStars)}
@@ -65,14 +66,17 @@ const StacksPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, bread
 
     useEffect(() => {
         if (contentInView) {
-            filteredCourses.forEach((_, index) => {
-                const timer = setTimeout(() => {
-                    setAnimatedCourses(prev => [...prev, index]);
-                }, index * 150);
-                return () => clearTimeout(timer);
-            });
+            // Only animate if the list isn't huge and hasn't been animated yet
+            if (filteredCourses.length > 0 && animatedCourses.length === 0) {
+                 filteredCourses.forEach((_, index) => {
+                    const timer = setTimeout(() => {
+                        setAnimatedCourses(prev => [...prev, index]);
+                    }, index * 150);
+                    return () => clearTimeout(timer);
+                });
+            }
         }
-    }, [contentInView, filteredCourses]);
+    }, [contentInView, filteredCourses, animatedCourses.length]);
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
@@ -85,6 +89,7 @@ const StacksPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, bread
     ];
 
     return (
+        // CHANGED: Background to white, text to dark gray
         <div className="bg-white text-gray-900 min-h-screen font-inter">
             <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
             <Hero
@@ -99,6 +104,7 @@ const StacksPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, bread
                         placeholder="Search courses..."
                         value={searchTerm}
                         onChange={handleSearchChange}
+                        // CHANGED: Focus ring color to blue-400
                         className="w-full p-3 pl-12 border border-gray-300 bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow"
                     />
                     <svg className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -111,6 +117,7 @@ const StacksPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, bread
                 <div className={`flex flex-col md:flex-row justify-between items-center mb-8 animate-on-scroll ${contentInView ? 'is-visible' : ''}`}>
                     <h2 className="text-3xl font-bold mb-4 md:mb-0">Courses in this category</h2>
                     <div className="relative">
+                        {/* CHANGED: Focus ring color to blue-400 */}
                         <select className="bg-white border border-gray-300 rounded-md py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
                             <option>Release Date (newest first)</option>
                             <option>Popularity</option>
@@ -126,12 +133,12 @@ const StacksPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, bread
                             <Link
                                 key={index}
                                 to={`/course-details/${course.id}`}
-                                className={`group bg-white rounded-2xl relative overflow-hidden transition-all duration-300 w-full md:w-auto course-card hover:shadow-2xl hover:shadow-black/50 ${animatedCourses.includes(index) ? 'is-visible' : ''}`}
+                                className={`group bg-white rounded-2xl relative overflow-hidden transition-all duration-300 w-full md:w-auto course-card hover:shadow-xl hover:shadow-black/5 ${animatedCourses.includes(index) ? 'is-visible' : ''}`}
                                 style={{ transitionDelay: `${index * 150}ms` }}
                             >
                                 <div className="p-5 h-full flex flex-col gap-3 relative z-20">
                                     <div className="absolute top-3 right-3 bg-[#10b981] text-white py-1 px-2 rounded-full text-xs font-semibold scale-80 opacity-0 transition-all duration-400 delay-100 group-hover:scale-100 group-hover:opacity-100 z-30">NEW</div>
-                                    <div className="w-full aspect-video rounded-xl overflow-hidden bg-[#6D28D9] flex justify-center items-center text-white text-3xl font-bold">
+                                    <div className="w-full aspect-video rounded-xl overflow-hidden bg-gray-200 flex justify-center items-center text-white text-3xl font-bold">
                                         <img src={course.image} alt={course.title} className="w-full h-full object-cover"/>
                                     </div>
                                     <div className="flex flex-col gap-1">
@@ -144,7 +151,8 @@ const StacksPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, bread
                                     </div>
                                     <div className="flex justify-between items-center mt-auto">
                                         <p className="text-gray-900 font-bold text-base m-0">${course.price}</p>
-                                        <div className="w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center text-white cursor-pointer transition-all duration-300 scale-90 group-hover:scale-100 group-hover:shadow-lg group-hover:shadow-blue-400/30">
+                                        {/* CHANGED: Add button color to blue-600 */}
+                                        <div className="w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center text-white cursor-pointer transition-all duration-300 scale-90 group-hover:scale-100 group-hover:shadow-lg group-hover:shadow-blue-400/30">
                                             <svg height={16} width={16} viewBox="0 0 24 24">
                                                 <path strokeWidth={2} stroke="currentColor" d="M4 12H20M12 4V20" fill="currentColor" />
                                             </svg>

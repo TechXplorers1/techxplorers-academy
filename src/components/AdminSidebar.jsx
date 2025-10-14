@@ -14,8 +14,9 @@ const AdminSidebar = () => {
         { name: 'Coupon Management', path: '/admin/coupons' },
     ];
 
-    const activeLinkClass = "bg-purple-600 text-white";
-    const inactiveLinkClass = "text-gray-700 hover:bg-purple-100 hover:text-purple-700";
+    // CHANGED: Active/Inactive link classes to use blue accents
+    const activeLinkClass = "bg-blue-600 text-white";
+    const inactiveLinkClass = "text-gray-700 hover:bg-blue-50 hover:text-blue-700";
 
     return (
         <aside className="md:col-span-1 bg-white p-6 rounded-2xl shadow-lg">

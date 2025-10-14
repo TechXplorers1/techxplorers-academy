@@ -8,7 +8,7 @@ import bg3 from '../assets/bg-7.jpg';
 import Footer from '../components/Footer';
 import { toCamelCase, toKebabCase } from '../utils/categoryHelper';
 
-// --- Inline SVG Icons ---
+// --- Inline SVG Icons (RE-ADDED to fix ReferenceError) ---
 const PlayIcon = ({ size = 24, className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -79,7 +79,7 @@ const DiscordIcon = ({ size = 40, className }) => (
   </svg>
 );
 
-// NumberCounter component with Intersection Observer for animation
+// NumberCounter, useInView, and Arrow components remain the same for functionality
 const NumberCounter = ({ targetNumber, duration = 2000 }) => {
   const [count, setCount] = useState(0);
   const countRef = useRef(null);
@@ -152,7 +152,6 @@ const RightArrow = ({ size = 24, className, onClick }) => (
   </svg>
 );
 
-// REFACTORED: Custom hook for on-scroll animations
 const useInView = (options) => {
   const [inView, setInView] = useState(false);
   const ref = useRef(null);
@@ -160,13 +159,11 @@ const useInView = (options) => {
   const hasObserved = useRef(false);
 
   useEffect(() => {
-    // Check if the observer instance exists, if not, create it
     if (!observerRef.current) {
       observerRef.current = new IntersectionObserver(([entry]) => {
         if (entry.isIntersecting && !hasObserved.current) {
           setInView(true);
           hasObserved.current = true;
-          // Stop observing once in view
           if (observerRef.current && entry.target) {
             observerRef.current.unobserve(entry.target);
           }
@@ -176,14 +173,12 @@ const useInView = (options) => {
 
     const currentRef = ref.current;
     if (currentRef) {
-      // Only observe if we haven't already marked it as observed
       if (!hasObserved.current) {
         observerRef.current.observe(currentRef);
       }
     }
 
     return () => {
-      // Clean up observer on unmount
       if (currentRef && observerRef.current) {
         observerRef.current.unobserve(currentRef);
       }
@@ -295,7 +290,8 @@ function LandingPage(props) {
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
     return (
-      <div className="flex text-yellow-500">
+      // CHANGED: Star color to orange-500
+      <div className="flex text-orange-500">
         {'★'.repeat(fullStars)}
         {halfStar && '½'}
         {'☆'.repeat(emptyStars)}
@@ -306,7 +302,8 @@ function LandingPage(props) {
   const popularStacks = [
     {
       name: 'Product & Strategy',
-      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-purple-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0h2.204a2 2 0 01.838.188l4.095 2.048a1 1 0 001.122-.163l4.581-4.581c.31-.31.056-.879-.318-1.026l-4.095-1.638a2 2 0 01-1.47-.537L9 20z" /></svg>
+      // CHANGED: Icon color to blue-600
+      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0h2.204a2 2 0 01.838.188l4.095 2.048a1 1 0 001.122-.163l4.581-4.581c.31-.31.056-.879-.318-1.026l-4.095-1.638a2 2 0 01-1.47-.537L9 20z" /></svg>
     },
     {
       name: 'UX & UI Design',
@@ -314,19 +311,19 @@ function LandingPage(props) {
     },
     {
       name: 'Engineering & Development',
-      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4m-4 4l-4-4m-4-4l-4 4m-4-4l-4 4" /></svg>
+      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4m-4 4l-4-4m-4-4l-4 4m-4-4l-4 4" /></svg>
     },
     {
       name: 'Data & Analytics',
-      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-yellow-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18.5a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18.5a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" strokeDasharray="3 3" /></svg>
+      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18.5a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18.5a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" strokeDasharray="3 3" /></svg>
     },
     {
       name: 'Cybersecurity & Compliance',
-      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-red-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5-6a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V6z" /></svg>
+      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5-6a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V6z" /></svg>
     },
     {
       name: 'AI & Automation',
-      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-pink-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
     }
   ].map(stack => ({
     ...stack,
@@ -337,7 +334,8 @@ function LandingPage(props) {
     {
       title: "Get 50% Off",
       subtitle: "On your first BraveStack purchase.",
-      bgColor: "bg-purple-600",
+      // CHANGED: Colors
+      bgColor: "bg-blue-600",
       textColor: "text-white",
       linkText: "Claim Now",
       linkPath: "/all-stacks",
@@ -345,7 +343,8 @@ function LandingPage(props) {
     {
       title: "Buy One, Get One Free",
       subtitle: "On selected courses for a limited time.",
-      bgColor: "bg-blue-500",
+      // CHANGED: Colors
+      bgColor: "bg-cyan-500",
       textColor: "text-white",
       linkText: "See Courses",
       linkPath: "/all-stacks",
@@ -353,6 +352,7 @@ function LandingPage(props) {
     {
       title: "Free First Month",
       subtitle: "On our BraveMentor subscription.",
+      // CHANGED: Colors
       bgColor: "bg-orange-500",
       textColor: "text-white",
       linkText: "Learn More",
@@ -361,7 +361,8 @@ function LandingPage(props) {
     {
       title: "Free Access",
       subtitle: "To all free courses for a month",
-      bgColor: "bg-green-500",
+      // CHANGED: Colors
+      bgColor: "bg-green-600",
       textColor: "text-white",
       linkText: "Explore Now",
       linkPath: "/all-stacks",
@@ -369,7 +370,8 @@ function LandingPage(props) {
     {
       title: "Exclusive Content",
       subtitle: "Join our exclusive community",
-      bgColor: "bg-red-500",
+      // CHANGED: Colors
+      bgColor: "bg-red-600",
       textColor: "text-white",
       linkText: "Join Now",
       linkPath: "/more/plans",
@@ -395,12 +397,14 @@ function LandingPage(props) {
   };
 
   return (
-    <div className="bg-[#120D25] text-white font-inter">
+    // CHANGED: Main background and text to light theme
+    <div className="bg-white text-gray-900 font-inter">
       {/* Go to Top Button */}
       {showGoTop && (
         <button
           onClick={goToTop}
-          className="fixed bottom-4 right-4 bg-purple-600 text-white p-3 rounded-full shadow-lg transition-transform duration-300 hover:scale-110 z-50"
+          // CHANGED: Button color to blue-600
+          className="fixed bottom-4 right-4 bg-blue-600 text-white p-3 rounded-full shadow-lg transition-transform duration-300 hover:scale-110 z-50"
           aria-label="Go to top"
         >
           <ArrowUpIcon size={24} />
@@ -434,7 +438,6 @@ function LandingPage(props) {
       )}
 
       <main>
-      {/* Header component now correctly uses Context and no longer requires many props to be passed */}
       <Header {...props} isLandingPage={true} />
         {/* Enhanced Hero Section with Offers */}
         <section ref={heroRef} className={`relative overflow-hidden min-h-screen flex flex-col items-center justify-center pb-32 hero-section-container ${heroInView ? 'hero-section-visible' : ''}`}>
@@ -443,14 +446,15 @@ function LandingPage(props) {
             className="absolute inset-0 z-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${hero2})` }}
           >
-            {/* Optional: Add a semi-transparent overlay to keep the content readable */}
-            <div className="absolute inset-0 bg-[#00000066] opacity-90"></div>
+            {/* Dark overlay for contrast with white hero text */}
+            <div className="absolute inset-0 bg-gray-900/80 opacity-90"></div>
           </div>
 
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-24">
             <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div className="text-center md:text-left">
-                <div className="inline-flex items-center bg-gradient-to-r from-purple-600 to-blue-500 text-white px-4 py-2 rounded-full mb-8 animate-slide-up-200">
+              <div className="text-center md:text-left text-white">
+                {/* CHANGED: Badge gradient to Blue/Cyan */}
+                <div className="inline-flex items-center bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-4 py-2 rounded-full mb-8 animate-slide-up-200">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
@@ -458,23 +462,26 @@ function LandingPage(props) {
                 </div>
 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 animate-slide-up-500">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
+                  {/* CHANGED: Text gradient to Blue/Cyan */}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
                     Find Your Perfect Stack
                   </span>
                 </h1>
 
-                <p className="mt-4 text-xl text-gray-300 mb-8 max-w-lg mx-auto md:mx-0 animate-slide-up-700">
+                <p className="mt-4 text-xl text-blue-100 mb-8 max-w-lg mx-auto md:mx-0 animate-slide-up-700">
                   Discover the right skills and courses to land your dream job in tech.
                   Join thousands of students who have transformed their careers with us.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-12 animate-slide-up-900">
-                  <Link to="/all-stacks/free-stacks" className="relative group bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-4 px-8 rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105">
+                  {/* CHANGED: Primary CTA color gradient */}
+                  <Link to="/all-stacks/free-stacks" className="relative group bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold py-4 px-8 rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105">
                     <span className="relative z-10">Start Learning Free</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </Link>
 
-                  <button onClick={handleWatchDemoClick} className="relative group bg-transparent border-2 border-white text-white font-semibold py-4 px-8 rounded-full overflow-hidden transition-all duration-300 hover:bg-white hover:text-purple-600 hover:shadow-xl">
+                  {/* CHANGED: Secondary CTA hover color to blue-600 */}
+                  <button onClick={handleWatchDemoClick} className="relative group bg-transparent border-2 border-white text-white font-semibold py-4 px-8 rounded-full overflow-hidden transition-all duration-300 hover:bg-white hover:text-blue-600 hover:shadow-xl">
                     <span className="relative z-10 flex items-center justify-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
@@ -486,16 +493,19 @@ function LandingPage(props) {
 
                 <div className="grid grid-cols-3 gap-8 text-center md:text-left">
                   <div className="animate-slide-up-1100">
-                    <div className="text-3xl font-bold text-purple-400">10K+</div>
-                    <div className="text-sm text-gray-400">Students Enrolled</div>
+                    {/* CHANGED: Stat number color to blue-300 */}
+                    <div className="text-3xl font-bold text-blue-300">10K+</div>
+                    <div className="text-sm text-gray-300">Students Enrolled</div>
                   </div>
                   <div className="animate-slide-up-1300">
-                    <div className="text-3xl font-bold text-purple-400">200+</div>
-                    <div className="text-sm text-gray-400">Expert Instructors</div>
+                    {/* CHANGED: Stat number color to blue-300 */}
+                    <div className="text-3xl font-bold text-blue-300">200+</div>
+                    <div className="text-sm text-gray-300">Expert Instructors</div>
                   </div>
                   <div className="animate-slide-up-1500">
-                    <div className="text-3xl font-bold text-purple-400">50+</div>
-                    <div className="text-sm text-gray-400">Courses Available</div>
+                    {/* CHANGED: Stat number color to blue-300 */}
+                    <div className="text-3xl font-bold text-blue-300">50+</div>
+                    <div className="text-sm text-gray-300">Courses Available</div>
                   </div>
                 </div>
               </div>
@@ -503,15 +513,17 @@ function LandingPage(props) {
               <div className="relative flex flex-col md:flex-row justify-center items-center gap-12">
                 {/* Social Media Card */}
                 <div className="group relative z-10 w-[260px] h-[380px] rounded-2xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 transform hero-v-card hero-v-card-left">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_107%,_#ff89cc_0%,_#9cb8ec_30%,_#00ffee_60%,_#62c2fe_100%)] opacity-100 group-hover:opacity-0 transition-opacity duration-500"></div>
+                  {/* CHANGED: Social Card gradient to blue-focused blend */}
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_107%,_#3b82f6_0%,_#06b6d4_30%,_#1e3a8a_60%,_#2563eb_100%)] opacity-100 group-hover:opacity-0 transition-opacity duration-500"></div>
                   <div className="absolute inset-0 flex justify-center items-center text-white text-2xl font-bold transition-all duration-500 group-hover:transform group-hover:scale-0 group-hover:opacity-0">
                     Connect with Us
                   </div>
                   <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-300">
-                    <a href="#" className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center text-white transition-transform duration-300 hover:scale-110">
+                    {/* CHANGED: Icon colors to blue/cyan shades */}
+                    <a href="#" className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white transition-transform duration-300 hover:scale-110">
                       <InstagramIcon size={32} />
                     </a>
-                    <a href="#" className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white transition-transform duration-300 hover:scale-110">
+                    <a href="#" className="w-16 h-16 bg-cyan-500 rounded-full flex items-center justify-center text-white transition-transform duration-300 hover:scale-110">
                       <TwitterIcon size={32} />
                     </a>
                     <a href="#" className="w-16 h-16 bg-blue-800 rounded-full flex items-center justify-center text-white transition-transform duration-300 hover:scale-110">
@@ -530,8 +542,9 @@ function LandingPage(props) {
                   </Link>
                 </div>
 
-                <div className="absolute top-10 -left-10 w-20 h-20 bg-yellow-400/10 rounded-full blur-xl z-0"></div>
-                <div className="absolute bottom-10 -right-10 w-24 h-24 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+                {/* CHANGED: Blur colors to blue/cyan */}
+                <div className="absolute top-10 -left-10 w-20 h-20 bg-cyan-400/10 rounded-full blur-xl z-0"></div>
+                <div className="absolute bottom-10 -right-10 w-24 h-24 bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
               </div>
             </div>
           </div>
@@ -548,45 +561,53 @@ function LandingPage(props) {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
               <div className="flex flex-col items-center transform transition-all duration-300 hover:scale-110 animate-on-scroll animation-delay-0">
-                <span className="text-5xl font-bold text-purple-600 text-glow">
+                {/* CHANGED: Stat number color to blue-600 */}
+                <span className="text-5xl font-bold text-blue-600 text-glow">
                   <NumberCounter targetNumber={10} />K+
                 </span>
                 <p className="mt-2 text-sm text-gray-500">Online Courses</p>
-                <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full ribbon-animation"></div>
+                {/* CHANGED: Ribbon gradient to blue/cyan */}
+                <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full ribbon-animation"></div>
               </div>
               <div className="flex flex-col items-center transform transition-all duration-300 hover:scale-110 animate-on-scroll animation-delay-200">
-                <span className="text-5xl font-bold text-purple-600 text-glow">
+                {/* CHANGED: Stat number color to blue-600 */}
+                <span className="text-5xl font-bold text-blue-600 text-glow">
                   <NumberCounter targetNumber={460} />+
                 </span>
                 <p className="mt-2 text-sm text-gray-500">Students</p>
-                <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full ribbon-animation"></div>
+                {/* CHANGED: Ribbon gradient to blue/cyan */}
+                <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full ribbon-animation"></div>
               </div>
               <div className="flex flex-col items-center transform transition-all duration-300 hover:scale-110 animate-on-scroll animation-delay-400">
-                <span className="text-5xl font-bold text-purple-600 text-glow">
+                {/* CHANGED: Stat number color to blue-600 */}
+                <span className="text-5xl font-bold text-blue-600 text-glow">
                   <NumberCounter targetNumber={20} />+
                 </span>
                 <p className="mt-2 text-sm text-gray-500">Expert Instructors</p>
-                <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full ribbon-animation"></div>
+                {/* CHANGED: Ribbon gradient to blue/cyan */}
+                <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full ribbon-animation"></div>
               </div>
               <div className="flex flex-col items-center transform transition-all duration-300 hover:scale-110 animate-on-scroll animation-delay-600">
-                <span className="text-5xl font-bold text-purple-600 text-glow">
+                {/* CHANGED: Stat number color to blue-600 */}
+                <span className="text-5xl font-bold text-blue-600 text-glow">
                   <NumberCounter targetNumber={5} />+
                 </span>
                 <p className="mt-2 text-sm text-gray-500">Years of Experience</p>
-                <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full ribbon-animation"></div>
+                {/* CHANGED: Ribbon gradient to blue/cyan */}
+                <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full ribbon-animation"></div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Courses Section */}
-        <section ref={coursesRef} className={`py-16 relative text-white ${coursesInView ? 'is-visible' : ''}`}>
+        <section ref={coursesRef} className={`py-16 relative text-white bg-gray-900 ${coursesInView ? 'is-visible' : ''}`}>
           {/* Background Image Container with Overlay */}
           <div
             className="absolute inset-0 z-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${bg3})` }}
           >
-            {/* Adds a semi-transparent dark overlay for better text readability */}
+            {/* Dark overlay for course card contrast */}
             <div className="absolute inset-0 bg-black opacity-80"></div>
           </div>
 
@@ -598,25 +619,30 @@ function LandingPage(props) {
                   <Link
                     key={index}
                     to={`/course-details/${course.id}`}
-                    // Animation: uses coursesInView check via the ref to trigger 'is-visible'
-                    className={`group bg-white rounded-2xl relative overflow-hidden transition-all duration-500 hover:translate-y-[-10px] hover:shadow-2xl border border-white/20 hover:border-purple-600/20 w-full md:w-auto course-card ${animatedCourses.includes(index) ? 'is-visible' : ''}`}
+                    // CHANGED: Course card hover border to blue-600
+                    className={`group bg-white rounded-2xl relative overflow-hidden transition-all duration-500 hover:translate-y-[-10px] hover:shadow-2xl border border-white/20 hover:border-blue-600/20 w-full md:w-auto course-card ${animatedCourses.includes(index) ? 'is-visible' : ''}`}
                     style={{ transitionDelay: `${index * 150}ms` }}
                   >
                     <div className="p-5 h-full flex flex-col gap-3 relative z-20">
-                      <div className="w-full aspect-video rounded-xl overflow-hidden transition-all duration-500 group-hover:translate-y-[-5px] group-hover:scale-[1.03] group-hover:shadow-lg bg-[#6D28D9] flex justify-center items-center text-white text-3xl font-bold">
-                        <img src={course.image || "https://placehold.co/600x400/2A1E4B/FFFFFF?text=Course"} alt={course.title} className="w-full h-full object-cover" />
+                      {/* CHANGED: Course image placeholder background to blue-700 */}
+                      <div className="w-full aspect-video rounded-xl overflow-hidden transition-all duration-500 group-hover:translate-y-[-5px] group-hover:scale-[1.03] group-hover:shadow-lg bg-blue-700 flex justify-center items-center text-white text-3xl font-bold">
+                        <img src={course.image || "https://placehold.co/600x400/1D4ED8/FFFFFF?text=Course"} alt={course.title} className="w-full h-full object-cover" />
                       </div>
                       <div className="flex flex-col gap-1">
-                        <p className="text-gray-900 text-lg font-bold m-0 transition-all duration-300 group-hover:text-purple-600 group-hover:translate-x-0.5">{course.title}</p>
-                        <div className="flex items-center text-yellow-500 mb-2">
+                        {/* CHANGED: Course title hover text color to blue-600 */}
+                        <p className="text-gray-900 text-lg font-bold m-0 transition-all duration-300 group-hover:text-blue-600 group-hover:translate-x-0.5">{course.title}</p>
+                        {/* CHANGED: Star rating color to orange-500 */}
+                        <div className="flex items-center text-orange-500 mb-2">
                           <StarRating rating={course.rating} />
                           <span className="text-xs text-gray-500 ml-2">({course.reviews} reviews)</span>
                         </div>
                         <p className="text-gray-900 text-xs m-0 opacity-70 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0.5">by {course.instructor} in {course.category}</p>
                       </div>
                       <div className="flex justify-between items-center mt-auto">
-                        <p className="text-gray-900 font-bold text-base m-0 transition-all duration-300 group-hover:text-purple-600 group-hover:translate-x-0.5">${course.price}</p>
-                        <div className="w-7 h-7 bg-purple-600 rounded-full flex items-center justify-center text-white cursor-pointer transition-all duration-300 scale-90 group-hover:scale-100 group-hover:shadow-lg group-hover:shadow-purple-600/30">
+                        {/* CHANGED: Course price text color to blue-600 on hover */}
+                        <p className="text-gray-900 font-bold text-base m-0 transition-all duration-300 group-hover:text-blue-600 group-hover:translate-x-0.5">${course.price}</p>
+                        {/* CHANGED: Add button background color and shadow to blue-600 */}
+                        <div className="w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center text-white cursor-pointer transition-all duration-300 scale-90 group-hover:scale-100 group-hover:shadow-lg group-hover:shadow-blue-600/30">
                           <svg height={16} width={16} viewBox="0 0 24 24">
                             <path strokeWidth={2} stroke="currentColor" d="M4 12H20M12 4V20" fill="currentColor" />
                           </svg>
@@ -635,7 +661,7 @@ function LandingPage(props) {
         </section>
 
         {/* Popular Stacks Section */}
-        <section ref={popularStacksRef} className={`py-16 bg-white text-gray-900 ${popularStacksInView ? 'is-visible' : ''}`}>
+        <section ref={popularStacksRef} className={`py-16 bg-gray-50 text-gray-900 ${popularStacksInView ? 'is-visible' : ''}`}>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll animation-delay-0">Explore Our Popular Stacks</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-8">
@@ -643,14 +669,18 @@ function LandingPage(props) {
                 <Link
                   key={index}
                   to={stack.path}
-                  className={`relative flex flex-col items-center justify-center text-center p-6 rounded-2xl border border-gray-200 backdrop-blur-md bg-white/50 overflow-hidden transition-all duration-300 hover:bg-white hover:border-purple-600/50 hover:shadow-xl group animate-on-scroll`}
+                  // CHANGED: Hover background gradient to blue/cyan, hover border to blue-600
+                  className={`relative flex flex-col items-center justify-center text-center p-6 rounded-2xl border border-gray-200 backdrop-blur-md bg-white overflow-hidden transition-all duration-300 hover:bg-white hover:border-blue-600/50 hover:shadow-xl group animate-on-scroll`}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-blue-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-                  <div className="relative z-10 w-20 h-20 flex items-center justify-center rounded-full bg-white transition-all duration-300 group-hover:bg-purple-600 mb-4">
+                  {/* CHANGED: Hover overlay to blue/cyan */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                  {/* CHANGED: Icon background hover color to blue-600 */}
+                  <div className="relative z-10 w-20 h-20 flex items-center justify-center rounded-full bg-white transition-all duration-300 group-hover:bg-blue-600 mb-4">
                     {stack.icon}
                   </div>
-                  <h3 className="relative z-10 text-xl font-semibold transition-colors duration-300 group-hover:text-purple-600">{stack.name}</h3>
+                  {/* CHANGED: Text hover color to blue-600 */}
+                  <h3 className="relative z-10 text-xl font-semibold transition-colors duration-300 group-hover:text-blue-600">{stack.name}</h3>
                 </Link>
               ))}
             </div>
@@ -658,50 +688,53 @@ function LandingPage(props) {
         </section>
 
         {/* New Section: Our Learning Methodology */}
-        <section ref={learningMethodologyRef} className={`py-20 bg-[#120D25] text-white ${learningMethodologyInView ? 'is-visible' : ''}`}>
+        <section ref={learningMethodologyRef} className={`py-20 bg-gray-50 text-gray-900 ${learningMethodologyInView ? 'is-visible' : ''}`}>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4 animate-on-scroll">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 animate-on-scroll">
                 Our Learning Methodology
               </h2>
-              <p className="text-lg text-gray-400 max-w-3xl mx-auto mb-16 animate-on-scroll animation-delay-200">
+              <p className="text-lg text-gray-700 max-w-3xl mx-auto mb-16 animate-on-scroll animation-delay-200">
                 We believe in a **project-driven, community-supported, and flexible** approach to learning. Here's how we help you succeed.
               </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-12">
               <div className="flex flex-col items-center text-center animate-on-scroll animation-delay-400">
-                <div className="w-16 h-16 rounded-full bg-purple-600 flex items-center justify-center text-white mb-6 transform transition-transform duration-300 hover:scale-110 shadow-lg">
+                {/* CHANGED: Icon background color to blue-600 */}
+                <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white mb-6 transform transition-transform duration-300 hover:scale-110 shadow-lg">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m14-6h-2m2 6h-2M13 19h1a2 2 0 002-2v-4a2 2 0 00-2-2h-1a2 2 0 00-2 2v4a2 2 0 002 2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2m-9 4h10m-2 4h4m-4 4h4" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-semibold mb-2">Hands-On Projects</h3>
-                <p className="text-gray-400">
+                <h3 className="text-2xl font-semibold mb-2 text-gray-900">Hands-On Projects</h3>
+                <p className="text-gray-700">
                   Apply theory immediately with **real-world projects** that build your portfolio and confidence.
                 </p>
               </div>
 
               <div className="flex flex-col items-center text-center animate-on-scroll animation-delay-600">
-                <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white mb-6 transform transition-transform duration-300 hover:scale-110 shadow-lg">
+                {/* CHANGED: Icon background color to cyan-500 */}
+                <div className="w-16 h-16 rounded-full bg-cyan-500 flex items-center justify-center text-white mb-6 transform transition-transform duration-300 hover:scale-110 shadow-lg">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h-1a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4zm-1-12a2 2 0 100-4 2 2 0 000 4z" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-semibold mb-2">Expert-Led Support</h3>
-                <p className="text-gray-400">
+                <h3 className="text-2xl font-semibold mb-2 text-gray-900">Expert-Led Support</h3>
+                <p className="text-gray-700">
                   Get personalized guidance from **seasoned instructors** and a vibrant community every step of the way.
                 </p>
               </div>
 
               <div className="flex flex-col items-center text-center animate-on-scroll animation-delay-800">
-                <div className="w-16 h-16 rounded-full bg-yellow-600 flex items-center justify-center text-white mb-6 transform transition-transform duration-300 hover:scale-110 shadow-lg">
+                {/* CHANGED: Icon background color to orange-500 */}
+                <div className="w-16 h-16 rounded-full bg-orange-500 flex items-center justify-center text-white mb-6 transform transition-transform duration-300 hover:scale-110 shadow-lg">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h-1a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2zM9 11h6" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-semibold mb-2">Flexible Learning Paths</h3>
-                <p className="text-gray-400">
+                <h3 className="text-2xl font-semibold mb-2 text-gray-900">Flexible Learning Paths</h3>
+                <p className="text-gray-700">
                   Our structured stacks let you **learn at your own pace** while staying on track with career goals.
                 </p>
               </div>
@@ -723,8 +756,8 @@ function LandingPage(props) {
                 <div className="absolute top-12 left-12 p-4 bg-white rounded-lg shadow-xl animate-on-scroll animation-delay-400">
                   <h4 className="text-sm font-semibold text-gray-900 mb-2">Learning Chart</h4>
                   <div className="w-24 h-16 bg-gray-200 rounded">
-                    {/* This placeholder represents the bar chart */}
-                    <svg width="100%" height="100%" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg" className="text-purple-600">
+                    {/* CHANGED: Chart color to blue-600 */}
+                    <svg width="100%" height="100%" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg" className="text-blue-600">
                       <rect x="5" y="40" width="10" height="30" fill="currentColor" rx="2" />
                       <rect x="25" y="20" width="10" height="50" fill="currentColor" rx="2" />
                       <rect x="45" y="50" width="10" height="20" fill="currentColor" rx="2" />
@@ -737,10 +770,10 @@ function LandingPage(props) {
                 <div className="absolute bottom-12 right-12 p-4 bg-white rounded-lg shadow-xl animate-on-scroll animation-delay-600">
                   <h4 className="text-sm font-semibold text-gray-900 mb-2">Instructor</h4>
                   <div className="flex items-center space-x-2">
-                    {/* Avatars placeholder for instructors */}
-                    <img className="w-8 h-8 rounded-full border-2 border-white" src="https://placehold.co/100x100/A78BFA/FFFFFF?text=A" alt="Instructor 1" />
-                    <img className="w-8 h-8 rounded-full -ml-2 border-2 border-white" src="https://placehold.co/100x100/8B5CF6/FFFFFF?text=B" alt="Instructor 2" />
-                    <img className="w-8 h-8 rounded-full -ml-2 border-2 border-white" src="https://placehold.co/100x100/6D28D9/FFFFFF?text=C" alt="Instructor 3" />
+                    {/* CHANGED: Avatar colors to blue shades */}
+                    <img className="w-8 h-8 rounded-full border-2 border-white" src="https://placehold.co/100x100/3B82F6/FFFFFF?text=A" alt="Instructor 1" />
+                    <img className="w-8 h-8 rounded-full -ml-2 border-2 border-white" src="https://placehold.co/100x100/06B6D4/FFFFFF?text=B" alt="Instructor 2" />
+                    <img className="w-8 h-8 rounded-full -ml-2 border-2 border-white" src="https://placehold.co/100x100/1D4ED8/FFFFFF?text=C" alt="Instructor 3" />
                     <div className="flex items-center text-sm font-semibold text-gray-700 ml-2">
                       <NumberCounter targetNumber={200} />+
                     </div>
@@ -751,7 +784,8 @@ function LandingPage(props) {
 
               {/* Text content section */}
               <div className="lg:pr-12 animate-on-scroll animation-delay-800">
-                <div className="text-purple-600 text-sm font-semibold flex items-center mb-4">
+                {/* CHANGED: Accent text color to blue-600 */}
+                <div className="text-blue-600 text-sm font-semibold flex items-center mb-4">
                   <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                   </svg>
@@ -765,7 +799,8 @@ function LandingPage(props) {
                 </p>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4 animate-on-scroll animation-delay-1000">
-                    <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    {/* CHANGED: Icon background color to blue-600 */}
+                    <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                       <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h-1a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4zm-1-12a2 2 0 100-4 2 2 0 000 4z" />
                       </svg>
@@ -778,7 +813,8 @@ function LandingPage(props) {
                     </div>
                   </div>
                   <div className="flex items-start gap-4 animate-on-scroll animation-delay-1200">
-                    <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    {/* CHANGED: Icon background color to blue-600 */}
+                    <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                       <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13.5m0-13.5c-4.82 0-8.75 3.197-8.75 7.124 0 1.547.469 3.018 1.34 4.31a.879.879 0 001.458.077c.433-.655 1.353-.984 2.222-.894 1.13.116 2.062.632 2.73 1.488.802 1.042 1.144 2.146 1.056 3.084m-1.056-3.084c.888-1.04 1.947-1.465 3.024-1.285 1.41.229 2.508 1.258 3.18 2.536 1.232 2.378 1.446 5.166.417 7.027" />
                       </svg>
@@ -797,26 +833,28 @@ function LandingPage(props) {
         </section>
 
         {/* Blog Posts Section with 3D Carousel */}
-        <section className={`py-16 text-white relative overflow-hidden`}>
+        <section className={`py-16 text-white relative overflow-hidden bg-gray-900`}>
           {/* Background Image Container */}
           <div
             className="absolute inset-0 z-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${bg1})` }}
           >
-            {/* Optional: Add a semi-transparent dark overlay to keep content readable */}
+            {/* Dark overlay for better text readability */}
             <div className="absolute inset-0 bg-black opacity-80"></div>
           </div>
 
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
               Latest Blog Posts
-              <div className="h-1 bg-purple-600 w-24 mx-auto mt-2 rounded-full"></div>
+              {/* CHANGED: Accent line color to blue-600 */}
+              <div className="h-1 bg-blue-600 w-24 mx-auto mt-2 rounded-full"></div>
             </h2>
 
             {/* Carousel Controls */}
             <div className="absolute top-1/2 left-0 right-0 flex justify-between items-center z-20 px-4">
               <button
                 aria-label="Previous slide"
+                // CHANGED: Control button background to gray-800
                 onClick={() => handleManualScroll('left')}
                 className="bg-gray-800 text-white p-3 rounded-full shadow-lg transition-transform duration-300 hover:scale-110"
               >
@@ -824,6 +862,7 @@ function LandingPage(props) {
               </button>
               <button
                 aria-label="Next slide"
+                // CHANGED: Control button background to gray-800
                 onClick={() => handleManualScroll('right')}
                 className="bg-gray-800 text-white p-3 rounded-full shadow-lg transition-transform duration-300 hover:scale-110"
               >
@@ -858,7 +897,8 @@ function LandingPage(props) {
                       animationDelay: `-${index * (25 / filteredBlogPosts.length)}s`,
                     }}
                   >
-                    <div className="blog-card-inner bg-[#2A1E4B] rounded-xl overflow-hidden shadow-lg m-2 flex flex-col">
+                    {/* CHANGED: Blog card inner background to dark gray for contrast */}
+                    <div className="blog-card-inner bg-gray-800 rounded-xl overflow-hidden shadow-lg m-2 flex flex-col">
                       <img
                         src={post.image}
                         alt={post.title}
@@ -870,7 +910,8 @@ function LandingPage(props) {
                           <p className="text-xs text-gray-400">By {post.author}</p>
                           <p className="text-xs text-gray-400 mt-1 line-clamp-3">{post.summary}</p>
                         </div>
-                        <Link to={`/blog/${post.id}`} className="mt-2 w-full bg-purple-600 text-white py-1 px-2 rounded-full text-xs font-semibold hover:bg-purple-700 transition-colors text-center">
+                        {/* CHANGED: Read More button color to blue-600 */}
+                        <Link to={`/blog/${post.id}`} className="mt-2 w-full bg-blue-600 text-white py-1 px-2 rounded-full text-xs font-semibold hover:bg-blue-700 transition-colors text-center">
                           Read More
                         </Link>
                       </div>
@@ -884,82 +925,89 @@ function LandingPage(props) {
 
 
         {/* How it Works Section */}
-        <section ref={howItWorksRef} className={`py-16 bg-[#120D25] text-white ${howItWorksInView ? 'is-visible' : ''}`}>
+        <section ref={howItWorksRef} className={`py-16 bg-white text-gray-900 ${howItWorksInView ? 'is-visible' : ''}`}>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div className="relative p-8 rounded-xl shadow-lg bg-white/10 animate-on-scroll">
-                <div className="absolute inset-0 bg-[url('https://placehold.co/600x600/2A1E4B/FFFFFF?text=How+it+works')] bg-cover bg-center opacity-20 rounded-xl"></div>
+              <div className="relative p-8 rounded-xl shadow-lg bg-gray-100 animate-on-scroll">
+                {/* CHANGED: Background image overlay to be lighter */}
+                <div className="absolute inset-0 bg-[url('https://placehold.co/600x600/F3F4F6/374151?text=How+it+works')] bg-cover bg-center opacity-20 rounded-xl"></div>
                 <div className="relative z-10">
                   <h3 className="text-2xl font-bold">How it Works</h3>
-                  <p className="mt-2 text-gray-300">
+                  <p className="mt-2 text-gray-700">
                     Follow these simple steps to start your journey.
                   </p>
                   <div className="mt-8 space-y-6">
                     <div className="flex items-start gap-4 animate-on-scroll animation-delay-200">
-                      <div className="flex-shrink-0 bg-purple-600 text-white p-3 rounded-full">
+                      {/* CHANGED: Icon background color to blue-600 */}
+                      <div className="flex-shrink-0 bg-blue-600 text-white p-3 rounded-full">
                         <UserIcon size={24} />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-lg">1. Create an Account</h4>
-                        <p className="text-gray-400 text-sm">Sign up in seconds to get started.</p>
+                        <h4 className="font-semibold text-lg text-gray-900">1. Create an Account</h4>
+                        <p className="text-gray-700 text-sm">Sign up in seconds to get started.</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-4 animate-on-scroll animation-delay-400">
-                      <div className="flex-shrink-0 bg-purple-600 text-white p-3 rounded-full">
+                      {/* CHANGED: Icon background color to blue-600 */}
+                      <div className="flex-shrink-0 bg-blue-600 text-white p-3 rounded-full">
                         <BookIcon size={24} />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-lg">2. Find Your Course</h4>
-                        <p className="text-gray-400 text-sm">Browse our library of courses and choose your path.</p>
+                        <h4 className="font-semibold text-lg text-gray-900">2. Find Your Course</h4>
+                        <p className="text-gray-700 text-sm">Browse our library of courses and choose your path.</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-4 animate-on-scroll animation-delay-600">
-                      <div className="flex-shrink-0 bg-purple-600 text-white p-3 rounded-full">
+                      {/* CHANGED: Icon background color to blue-600 */}
+                      <div className="flex-shrink-0 bg-blue-600 text-white p-3 rounded-full">
                         <TrophyIcon size={24} />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-lg">3. Earn Your Certification</h4>
-                        <p className="text-gray-400 text-sm">Complete the course and get certified.</p>
+                        <h4 className="font-semibold text-lg text-gray-900">3. Earn Your Certification</h4>
+                        <p className="text-gray-700 text-sm">Complete the course and get certified.</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="text-center md:text-left animate-on-scroll animation-delay-400">
-                <div className="text-purple-600 text-sm font-semibold flex items-center mb-4">
+                {/* CHANGED: Accent text color to blue-600 */}
+                <div className="text-blue-600 text-sm font-semibold flex items-center mb-4 md:justify-start justify-center">
                   <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                   </svg>
-                  Get To Know Us
+                  Why Choose Us
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold leading-tight mb-6 text-white-900">
-                  Not Sure Where To Start? We've Got You.
+                <h2 className="text-3xl md:text-4xl font-bold leading-tight mb-6 text-gray-900">
+                  Focus on Practical Skills and Career Growth.
                 </h2>
                 <p className="text-gray-700 mb-8">
                   At **DigitallyBrave**, we don't just offer courses—we build **real-world learning experiences** with expert support and flexible stacks. We work with people, not just platforms. Whether you're starting fresh or switching careers, we're here to guide you—step by step.
                 </p>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4 animate-on-scroll animation-delay-1000">
-                    <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    {/* CHANGED: Icon background color to blue-600 */}
+                    <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                       <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h-1a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4zm-1-12a2 2 0 100-4 2 2 0 000 4z" />
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-1 text-white-900">Skilled, Supportive Mentors</h3>
+                      <h3 className="text-xl font-semibold mb-1 text-gray-900">Skilled, Supportive Mentors</h3>
                       <p className="text-gray-700">
                         Our mentors are experienced professionals here to guide you through every sprint.
                       </p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4 animate-on-scroll animation-delay-1200">
-                    <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    {/* CHANGED: Icon background color to blue-600 */}
+                    <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                       <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13.5m0-13.5c-4.82 0-8.75 3.197-8.75 7.124 0 1.547.469 3.018 1.34 4.31a.879.879 0 001.458.077c.433-.655 1.353-.984 2.222-.894 1.13.116 2.062.632 2.73 1.488.802 1.042 1.144 2.146 1.056 3.084m-1.056-3.084c.888-1.04 1.947-1.465 3.024-1.285 1.41.229 2.508 1.258 3.18 2.536 1.232 2.378 1.446 5.166.417 7.027" />
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-1 text-white-900">Practical, Project-Based Stacks</h3>
+                      <h3 className="text-xl font-semibold mb-1 text-gray-900">Practical, Project-Based Stacks</h3>
                       <p className="text-gray-700">
                         Learn by doing. Every DigitallyBrave stack builds real experience with smart systems and tools.
                       </p>
@@ -972,7 +1020,7 @@ function LandingPage(props) {
         </section>
 
         {/* Testimonials Section */}
-        <section ref={testimonialsRef} className={`py-16 bg-white text-gray-900 ${testimonialsInView ? 'is-visible' : ''}`}>
+        <section ref={testimonialsRef} className={`py-16 bg-gray-50 text-gray-900 ${testimonialsInView ? 'is-visible' : ''}`}>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll">
               What Our Students Say
@@ -981,7 +1029,8 @@ function LandingPage(props) {
               {testimonials.map((testimonial, index) => (
                 <div
                   key={index}
-                  className={`relative bg-gray-100 p-8 rounded-lg shadow-md overflow-hidden glowing-border transition-all duration-300 hover:shadow-xl animate-on-scroll`}
+                  // CHANGED: Glowing border hover color to blue-600
+                  className={`relative bg-white p-8 rounded-lg shadow-md overflow-hidden glowing-border transition-all duration-300 hover:shadow-xl animate-on-scroll`}
                   style={{ animationDelay: `${index * 150}ms` }}
                 >
                   <p className="text-lg italic text-gray-700">"{testimonial.text}"</p>
@@ -1008,10 +1057,11 @@ function LandingPage(props) {
         </section>
 
         {/* Expert Instructors Section */}
-        <section ref={instructorsRef} className={`py-16 bg-[#120D25] text-white ${instructorsInView ? 'is-visible' : ''}`}>
+        <section ref={instructorsRef} className={`py-16 bg-white text-gray-900 ${instructorsInView ? 'is-visible' : ''}`}>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 animate-on-scroll">Meet Our Expert Instructors</h2>
-            <p className="text-gray-400 max-w-2xl mx-auto mb-12 animate-on-scroll animation-delay-200">
+            {/* CHANGED: Sub-text color */}
+            <p className="text-gray-700 max-w-2xl mx-auto mb-12 animate-on-scroll animation-delay-200">
               Learn from the best in the industry. Our instructors are experienced professionals passionate about teaching.
             </p>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
@@ -1026,7 +1076,8 @@ function LandingPage(props) {
                     className="w-32 h-32 rounded-full object-cover shadow-lg transform transition-transform duration-300 group-hover:scale-110"
                   />
                   <h3 className="mt-4 text-xl font-semibold">{instructor.name}</h3>
-                  <p className="text-sm text-purple-300">{instructor.title}</p>
+                  {/* CHANGED: Title color to blue-600 */}
+                  <p className="text-sm text-blue-600">{instructor.title}</p>
                 </div>
               ))}
             </div>
@@ -1040,7 +1091,7 @@ function LandingPage(props) {
             className="absolute inset-0 z-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${bg4})` }}
           >
-            {/* Adds a semi-transparent dark overlay for better text readability */}
+            {/* Dark overlay for contrast with white CTA text */}
             <div className="absolute inset-0 bg-black opacity-70"></div>
           </div>
 
@@ -1048,12 +1099,14 @@ function LandingPage(props) {
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight animate-on-scroll">
               Buy The Premium Stack
             </h2>
-            <p className="mt-4 text-lg md:text-xl text-purple-200 animate-on-scroll animation-delay-200">
+            {/* CHANGED: Sub-text color */}
+            <p className="mt-4 text-lg md:text-xl text-blue-200 animate-on-scroll animation-delay-200">
               Get started now for free to unlock the full stack and start your journey now.
             </p>
             <Link
               to="/more/plans"
-              className="mt-8 bg-white text-purple-600 font-semibold py-4 px-10 rounded-full shadow-lg transition-all duration-300 hover:bg-purple-600 hover:text-white hover:scale-105 hover:shadow-2xl active:scale-95 transform animate-on-scroll animation-delay-400 inline-block"
+              // CHANGED: CTA button colors to use blue-600 as the accent
+              className="mt-8 bg-white text-blue-600 font-semibold py-4 px-10 rounded-full shadow-lg transition-all duration-300 hover:bg-blue-600 hover:text-white hover:scale-105 hover:shadow-2xl active:scale-95 transform animate-on-scroll animation-delay-400 inline-block"
             >
               Get Started Now
             </Link>
@@ -1061,7 +1114,7 @@ function LandingPage(props) {
         </section>
       </main>
 
-      {/* Footer Section */}
+      {/* Footer Section (assumed to be light-themed or adapts) */}
       <Footer />
 
       {/* Add custom animations */}
@@ -1074,20 +1127,7 @@ function LandingPage(props) {
 
           @keyframes animateBrightness {
               0%, 100% { filter: brightness(1); }
-              50% { filter: brightness(0.7); } /* Slightly dim when in background */
-          }
-
-          /* Blog background gradient animation */
-          @keyframes gradientShift {
-              0% { background-position: 0% 50%; }
-              50% { background-position: 100% 50%; }
-              100% { background-position: 0% 50%; }
-          }
-
-          .blog-background-gradient {
-              background: linear-gradient(-45deg, #120D25, #2A1E4B, #120D25);
-              background-size: 400% 400%;
-              animation: gradientShift 15s ease infinite;
+              50% { filter: brightness(0.7); }
           }
 
           /* Utility Animations */
@@ -1158,8 +1198,9 @@ function LandingPage(props) {
           }
 
           @keyframes text-glow {
-              0%, 100% { text-shadow: 0 0 5px rgba(139, 92, 246, 0.8); }
-              50% { text-shadow: 0 0 20px rgba(139, 92, 246, 1); }
+              /* CHANGED: Text glow color to blue-600 */
+              0%, 100% { text-shadow: 0 0 5px rgba(59, 130, 246, 0.8); }
+              50% { text-shadow: 0 0 20px rgba(59, 130, 246, 1); }
           }
           .text-glow {
               animation: none;
@@ -1171,14 +1212,15 @@ function LandingPage(props) {
           /* Glowing Border for Testimonials */
           .glowing-border {
               position: relative;
-              background: #f3f4f6; /* Tailwind gray-100 */
+              background: #f3f4f6;
               z-index: 1;
               box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
               transition: box-shadow 0.3s ease-out;
           }
 
           .glowing-border:hover {
-              box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1), 0 0 20px 0px #8b5cf6, 0 0 40px 0px #d8b4fe; /* glow effect */
+              /* CHANGED: Glow effect color to blue-600/300 */
+              box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1), 0 0 20px 0px #2563eb, 0 0 40px 0px #93c5fd; 
           }
 
           /* General animation styles */
@@ -1227,10 +1269,9 @@ function LandingPage(props) {
               width: 500px;
               height: 400px;
               transform-style: preserve-3d;
-              /* FIX: Ensure initial rotation is controlled by state for smooth transitions */
               animation: autoRun3d 25s linear infinite; 
               will-change: transform;
-              transition: transform 0.5s ease-out; /* Added smooth transition for manual scroll */
+              transition: transform 0.5s ease-out;
           }
 
           .card-3d:hover { animation-play-state: paused !important; }
@@ -1271,7 +1312,6 @@ function LandingPage(props) {
           .course-card {
               opacity: 0;
               transform: translateY(20px);
-              /* FIX: Added transition property for the delay to work */
               transition: all 0.6s ease-out; 
           }
           .course-card.is-visible {

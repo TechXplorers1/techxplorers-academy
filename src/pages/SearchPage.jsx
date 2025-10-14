@@ -11,7 +11,8 @@ const StarRating = ({ rating }) => {
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
     return (
-        <div className="flex text-yellow-500">
+        // CHANGED: Star color to orange-500
+        <div className="flex text-orange-500">
             {'★'.repeat(fullStars)}
             {halfStar && '½'}
             {'☆'.repeat(emptyStars)}
@@ -68,6 +69,7 @@ const SearchPage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, courses
     const hasResults = filteredResults.courses.length > 0 || filteredResults.stacks.length > 0;
 
     return (
+        // CHANGED: Background to white, text to dark gray
         <div className="bg-white text-gray-900 min-h-screen font-inter">
             <Header 
                 isLoggedIn={isLoggedIn} 
@@ -86,6 +88,7 @@ const SearchPage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, courses
                         placeholder="Search for courses, stacks, or instructors..."
                         value={searchTerm}
                         onChange={handleSearchChange}
+                        // CHANGED: Focus ring color to blue-400
                         className="w-full p-3 pl-12 border-2 border-transparent bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow"
                         ref={searchInputRef}
                     />
@@ -150,7 +153,8 @@ const SearchPage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, courses
                                             to={stack.path}
                                             className="group bg-white rounded-2xl relative overflow-hidden transition-all duration-300 hover:translate-y-[-5px] hover:shadow-2xl border border-gray-200 p-6 text-center flex flex-col items-center"
                                         >
-                                            <div className="text-blue-400 group-hover:text-blue-500 mb-4 transition-colors">
+                                            {/* CHANGED: Stack icon color to blue-500 */}
+                                            <div className="text-blue-500 group-hover:text-blue-600 mb-4 transition-colors">
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0h2.204a2 2 0 01.838.188l4.095 2.048a1 1 0 001.122-.163l4.581-4.581c.31-.31.056-.879-.318-1.026l-4.095-1.638a2 2 0 01-1.47-.537L9 20z" /></svg>
                                             </div>
                                             <h3 className="text-lg font-bold">{stack.name}</h3>

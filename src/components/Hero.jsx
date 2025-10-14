@@ -35,7 +35,8 @@ const Hero = ({ title, breadcrumbs }) => {
     const [headerRef, headerInView] = useInView({ threshold: 0.1 });
 
     return (
-        <div ref={headerRef} className={`relative pt-24 pb-12 overflow-hidden bg-[#120D25] text-white ${headerInView ? 'is-visible' : ''}`}>
+        // Removed dark background, keeping text white for contrast over the image
+        <div ref={headerRef} className={`relative pt-24 pb-12 overflow-hidden text-white ${headerInView ? 'is-visible' : ''}`}>
            
             
             {/* Background Image Container with Overlay */}
@@ -43,8 +44,8 @@ const Hero = ({ title, breadcrumbs }) => {
                 className="absolute inset-0 z-0 bg-cover bg-center"
                 style={{ backgroundImage: `url(${bg6})` }}
             >
-                {/* Add a semi-transparent overlay to keep the content readable */}
-                <div className="absolute inset-0 bg-[#00000066] opacity-90"></div>
+                {/* CHANGED: Overlay to be dark gray for contrast with white text */}
+                <div className="absolute inset-0 bg-gray-900/80 opacity-90"></div>
             </div>
             
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -56,7 +57,8 @@ const Hero = ({ title, breadcrumbs }) => {
                             {index === breadcrumbs.length - 1 ? (
                                 <span className="text-white">{crumb.name}</span>
                             ) : (
-                                <Link to={crumb.path} className="text-purple-300 hover:text-white">{crumb.name}</Link>
+                                // CHANGED: Link color to blue-300 for soft contrast
+                                <Link to={crumb.path} className="text-blue-300 hover:text-white">{crumb.name}</Link>
                             )}
                         </span>
                     ))}

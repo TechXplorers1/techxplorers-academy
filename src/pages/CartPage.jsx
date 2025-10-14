@@ -28,6 +28,7 @@ const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount, isLoggedIn, onL
     };
 
     return (
+        // CHANGED: Main background to light gray, text to dark gray
         <div className="bg-gray-100 text-gray-900 min-h-screen font-inter">
             <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} coursesData={coursesData}  />
             <Hero
@@ -40,7 +41,8 @@ const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount, isLoggedIn, onL
                     <div className="text-center py-20 bg-white rounded-3xl shadow-xl">
                         <h2 className="text-3xl font-bold mb-4 text-gray-800">Your cart is empty</h2>
                         <p className="text-gray-600 mb-6">Explore our courses and find the perfect stack for your career.</p>
-                        <Link to="/all-stacks/free-stacks" className="inline-flex items-center px-8 py-4 bg-purple-600 text-white font-semibold rounded-full shadow-lg hover:bg-purple-700 transition-colors transform hover:scale-105">
+                        {/* CHANGED: CTA button color to blue-600 */}
+                        <Link to="/all-stacks/free-stacks" className="inline-flex items-center px-8 py-4 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:bg-blue-700 transition-colors transform hover:scale-105">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 10a4 4 0 010 5.197" />
                             </svg>
@@ -55,7 +57,8 @@ const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount, isLoggedIn, onL
                                     <img src={item.image} alt={item.title} className="w-full md:w-48 h-32 object-cover rounded-2xl"/>
                                     <div className="flex-grow text-center md:text-left">
                                         <h2 className="text-2xl font-bold text-gray-900">{item.title}</h2>
-                                        <p className="text-lg font-semibold text-purple-600 mt-2">${item.price.toFixed(2)}</p>
+                                        {/* CHANGED: Price text color to blue-600 */}
+                                        <p className="text-lg font-semibold text-blue-600 mt-2">${item.price.toFixed(2)}</p>
                                     </div>
                                     <button
                                         onClick={() => onRemoveFromCart(item.id)}
@@ -89,7 +92,8 @@ const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount, isLoggedIn, onL
                                 </div>
                                 <button
                                     onClick={handleCheckoutClick}
-                                    className="w-full mt-8 py-4 bg-green-500 text-white font-bold text-lg rounded-full shadow-lg hover:bg-green-600 transition-colors transform hover:scale-105"
+                                    // CHANGED: Checkout button color to blue-600
+                                    className="w-full mt-8 py-4 bg-blue-600 text-white font-bold text-lg rounded-full shadow-lg hover:bg-blue-700 transition-colors transform hover:scale-105"
                                 >
                                     Proceed to Checkout
                                 </button>

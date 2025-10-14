@@ -1,7 +1,8 @@
+// src/components/Header.jsx
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { categoryMap, toKebabCase } from '../utils/categoryHelper';
-import { useAuth } from '../AuthContext'; // NEW: Import useAuth hook
+import { useAuth } from '../AuthContext'; 
 
 const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
     const menuRef = React.useRef(null);
@@ -10,6 +11,7 @@ const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
         return null;
     }
 
+    // Dropdown remains white background, dark text
     return (
         <div
             ref={menuRef}
@@ -22,7 +24,7 @@ const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
                     <Link
                         key={index}
                         to={item.path}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600"
                     >
                         {item.name}
                     </Link>
@@ -32,9 +34,7 @@ const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
     );
 };
 
-// UPDATED: Header component no longer accepts props
 const Header = () => {
-    // NEW: Use the custom hook to access all necessary data
     const { 
         isLoggedIn, 
         onLogout, 
@@ -101,15 +101,18 @@ const Header = () => {
         { name: 'Plans', path: '/more/plans' },
     ];
 
-    const headerClass = "w-full z-50 bg-[#120D25] text-white";
+    // CHANGED: Header class to light theme (white background, dark text, subtle shadow/border)
+    const headerClass = "w-full z-50 bg-white shadow-md text-gray-800 border-b border-gray-200";
 
     return (
         <header className={headerClass}>
             <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-                <Link to="/" className="text-xl font-bold">TechXplorers Academy</Link>
+                {/* CHANGED: Logo accent color to blue-600 */}
+                <Link to="/" className="text-xl font-bold text-blue-600">Digitally Brave</Link>
                 <div className="hidden lg:flex items-center space-x-8">
                     <div className="relative" onMouseEnter={() => handleHover('allStacks', true)} onMouseLeave={() => handleHover('allStacks', false)}>
-                        <button className="flex items-center hover:text-purple-400 transition-colors">
+                        {/* CHANGED: Navigation link hover color to blue-600 */}
+                        <button className="flex items-center hover:text-blue-600 transition-colors">
                             All Stacks
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -118,7 +121,8 @@ const Header = () => {
                         <DropdownMenu isOpen={isAllStacksOpen} items={allStacksItems} onMouseEnter={() => handleHover('allStacks', true)} onMouseLeave={() => handleHover('allStacks', false)} />
                     </div>
                     <div className="relative" onMouseEnter={() => handleHover('forBusiness', true)} onMouseLeave={() => handleHover('forBusiness', false)}>
-                        <button className="flex items-center hover:text-purple-400 transition-colors">
+                        {/* CHANGED: Navigation link hover color to blue-600 */}
+                        <button className="flex items-center hover:text-blue-600 transition-colors">
                             For Business
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -127,7 +131,8 @@ const Header = () => {
                         <DropdownMenu isOpen={isForBusinessOpen} items={forBusinessItems} onMouseEnter={() => handleHover('forBusiness', true)} onMouseLeave={() => handleHover('forBusiness', false)} />
                     </div>
                     <div className="relative" onMouseEnter={() => handleHover('resources', true)} onMouseLeave={() => handleHover('resources', false)}>
-                        <button className="flex items-center hover:text-purple-400 transition-colors">
+                        {/* CHANGED: Navigation link hover color to blue-600 */}
+                        <button className="flex items-center hover:text-blue-600 transition-colors">
                             Resources
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -136,7 +141,8 @@ const Header = () => {
                         <DropdownMenu isOpen={isResourcesOpen} items={resourcesItems} onMouseEnter={() => handleHover('resources', true)} onMouseLeave={() => handleHover('resources', false)} />
                     </div>
                     <div className="relative" onMouseEnter={() => handleHover('more', true)} onMouseLeave={() => handleHover('more', false)}>
-                        <button className="flex items-center hover:text-purple-400 transition-colors">
+                        {/* CHANGED: Navigation link hover color to blue-600 */}
+                        <button className="flex items-center hover:text-blue-600 transition-colors">
                             More
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -144,18 +150,21 @@ const Header = () => {
                         </button>
                         <DropdownMenu isOpen={isMoreOpen} items={moreItems} onMouseEnter={() => handleHover('more', true)} onMouseLeave={() => handleHover('more', false)} />
                     </div>
-                    <Link to="/more/live-classes" className="text-white font-bold py-2 px-4 rounded-full bg-purple-600 hover:bg-purple-700 transition-colors">
+                    {/* CHANGED: Live Classes CTA color to blue-600 */}
+                    <Link to="/more/live-classes" className="text-white font-bold py-2 px-4 rounded-full bg-blue-600 hover:bg-blue-700 transition-colors">
                         Live Classes
                     </Link>
                 </div>
                 <div className="hidden lg:flex items-center space-x-4">
-                    <button onClick={handleSearchClick} className="hover:text-purple-400 transition-colors">
+                    {/* CHANGED: Icon hover color to blue-600 */}
+                    <button onClick={handleSearchClick} className="hover:text-blue-600 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </button>
                     {isLoggedIn && (
-                        <Link to="/cart" className="relative hover:text-purple-400 transition-colors">
+                        // CHANGED: Icon hover color to blue-600
+                        <Link to="/cart" className="relative hover:text-blue-600 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63-.63-.185 1.705.707 1.705H17m0 0a2 2 0 100 4 2 2 0 010-4zm-8 2a2 2 0 110 4 2 2 0 010-4z" />
                             </svg>
@@ -168,35 +177,39 @@ const Header = () => {
                     )}
                     {isLoggedIn ? (
                         <>
-                            {/* Role-based dashboard links using userRole from context */}
+                            {/* Dashboard links hover color changed to blue-600 */}
                             {userRole === 'admin' && (
-                                <Link to="/admin/dashboard" className="hover:text-purple-400 transition-colors">
+                                <Link to="/admin/dashboard" className="hover:text-blue-600 transition-colors">
                                     Admin Dashboard
                                 </Link>
                             )}
                             {userRole === 'instructor' && (
-                                <Link to="/instructor/dashboard" className="hover:text-purple-400 transition-colors">
+                                <Link to="/instructor/dashboard" className="hover:text-blue-600 transition-colors">
                                     Instructor Dashboard
                                 </Link>
                             )}
                             {userRole === 'user' && (
-                                <Link to="/dashboard" className="hover:text-purple-400 transition-colors">
+                                <Link to="/dashboard" className="hover:text-blue-600 transition-colors">
                                     Dashboard
                                 </Link>
                             )}
-                            <button onClick={onLogout} className="px-4 py-2 border border-white rounded-full text-white hover:bg-white hover:text-purple-600 transition-colors">
+                            {/* CHANGED: Logout button color scheme (Blue border/text, White hover bg/text) */}
+                            <button onClick={onLogout} className="px-4 py-2 border border-blue-600 rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition-colors">
                                 Logout
                             </button>
                         </>
                     ) : (
-                        <Link to="/login" className="hover:text-purple-400 transition-colors">Login</Link>
+                        // CHANGED: Login link hover color to blue-600
+                        <Link to="/login" className="hover:text-blue-600 transition-colors">Login</Link>
                     )}
                 </div>
-                <button className="lg:hidden text-2xl text-white">
+                {/* CHANGED: Mobile menu button color to gray-800 */}
+                <button className="lg:hidden text-2xl text-gray-800">
                     ☰
                 </button>
             </nav>
-            <div className="bg-orange-500 text-sm py-2 text-center font-semibold text-white">
+            {/* CHANGED: Policy update bar color to secondary accent (cyan-500) */}
+            <div className="bg-cyan-500 text-sm py-2 text-center font-semibold text-white">
                 <span className="animate-pulse mr-2">📢</span>
                 POLICY UPDATE: Senior leaders from the world's leading research..
             </div>

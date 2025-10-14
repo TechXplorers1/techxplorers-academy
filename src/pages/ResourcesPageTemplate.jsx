@@ -22,7 +22,7 @@ const useInView = (options) => {
 
         return () => {
             if (ref.current) {
-                observer.unobserve(entry.target);
+                observer.unobserve(ref.current);
             }
         };
     }, [options]);
@@ -30,7 +30,9 @@ const useInView = (options) => {
     return [ref, inView];
 };
 
-const ResourcesPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, breadcrumb, children }) => {
+// Component only accepts necessary props for its function, not all of them. 
+// It relies on Header/Footer/Hero components to pull necessary data via context/props.
+const ResourcesPageTemplate = ({ title, breadcrumb, children }) => {
     const breadcrumbs = [
         { name: "Home", path: "/" },
         { name: "Resources", path: "/resources/free-resources" },
@@ -39,7 +41,8 @@ const ResourcesPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, br
 
     return (
         <div className="bg-white text-gray-900 min-h-screen font-inter">
-            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
+            {/* Header no longer needs to pass all props if it uses useAuth() */}
+            <Header /> 
             <Hero
                 title={title}
                 breadcrumbs={breadcrumbs}

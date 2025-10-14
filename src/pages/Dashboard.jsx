@@ -33,7 +33,8 @@ const Dashboard = (props) => {
                     title="Enrolled Courses"
                     value={totalEnrolled}
                     icon="M12 14l9-5-9-5-9 5 9 5z"
-                    bgColor="bg-purple-600"
+                    // CHANGED: Card color to blue-600
+                    bgColor="bg-blue-600"
                     textColor="text-white"
                 />
                 <DashboardCard
@@ -49,6 +50,7 @@ const Dashboard = (props) => {
                     title="Live Classes"
                     value={registeredLiveClassesCount}
                     icon="M15 10l4.553-2.276A1 1 0 0121 8.71v6.58a1 1 0 01-1.447.894L15 14m-5-4v4m0 0v4H6a2 2 0 01-2-2v-4a2 2 0 012-2h4z"
+                    // CHANGED: Card color to red-600
                     bgColor="bg-red-600"
                     textColor="text-white"
                 />
@@ -59,7 +61,8 @@ const Dashboard = (props) => {
                 <h3 className="text-xl font-bold mb-4">Set Your Profile Photo</h3>
                 <div className="p-6 border-2 border-dashed border-gray-300 rounded-xl text-center">
                     <p className="text-gray-500">Upload an image to personalize your profile.</p>
-                    <button className="mt-4 px-6 py-2 bg-purple-600 text-white font-semibold rounded-full hover:bg-purple-700 transition-colors">
+                    {/* CHANGED: Button color to blue-600 */}
+                    <button className="mt-4 px-6 py-2 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-colors">
                         Click Here
                     </button>
                 </div>
@@ -68,4 +71,4 @@ const Dashboard = (props) => {
     );
 };
 
-export default Dashboard; 
+export default Dashboard;

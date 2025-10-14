@@ -28,6 +28,7 @@ const DashboardPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, ch
     const userInitials = getInitials(userName);
 
     return (
+        // CHANGED: Main background to light gray, text to dark gray
         <div className="min-h-screen bg-gray-50 font-inter">
             <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} coursesData={coursesData} />
             <Hero
@@ -48,7 +49,8 @@ const DashboardPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, ch
                         </div>
                     </div>
                     {title === "Dashboard" && (
-                        <div className="md:ml-auto flex items-center justify-center space-x-2 text-blue-500 font-medium text-sm">
+                        // CHANGED: Accent color to blue-600
+                        <div className="md:ml-auto flex items-center justify-center space-x-2 text-blue-600 font-medium text-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                             </svg>
@@ -60,6 +62,7 @@ const DashboardPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, ch
 
             <div className="container mx-auto px-4 md:px-8 mt-12 space-y-8">
                 <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+                    {/* DashboardSidebar component needs to be updated separately if it exists */}
                     <DashboardSidebar />
 
                     <div className="md:col-span-3 space-y-8">

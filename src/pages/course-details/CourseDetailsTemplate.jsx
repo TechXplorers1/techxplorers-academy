@@ -36,9 +36,10 @@ const LoginRequiredModal = ({ onClose, onLoginRedirect }) => {
             >
                 <h3 className="text-xl font-bold mb-4">Login Required</h3>
                 <p className="text-gray-700 mb-6">You need to be logged in to access this feature.</p>
+                {/* CHANGED: Modal CTA color to blue-600 */}
                 <button
                     onClick={onLoginRedirect}
-                    className="w-full px-4 py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 transition-colors"
+                    className="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors"
                 >
                     Go to Login
                 </button>
@@ -52,8 +53,9 @@ const StarRating = ({ rating }) => {
     const halfStar = rating % 1 !== 0;
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
+    // CHANGED: Star color to orange-500
     return (
-        <div className="flex text-yellow-500">
+        <div className="flex text-orange-500">
             {'★'.repeat(fullStars)}
             {halfStar && '½'}
             {'☆'.repeat(emptyStars)}
@@ -191,9 +193,10 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
     ];
 
     return (
+        // CHANGED: Background to light gray, text to dark gray
         <div className="bg-gray-50 text-gray-900 min-h-screen font-inter">
             {showLoginModal && <LoginRequiredModal onClose={() => setShowLoginModal(false)} onLoginRedirect={handleLoginRedirect} />}
-            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
+            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} coursesData={coursesData} />
             <Hero 
                 title={course.title}
                 breadcrumbs={breadcrumbs}
@@ -201,142 +204,155 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
 
             <main ref={pageRef} className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 {showPopup && (
+                    // Pop-up message color remains green for success
                     <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-green-500 text-white py-3 px-6 rounded-full shadow-lg z-50 animate-fade-in-down">
                         {popupMessage}
                     </div>
                 )}
                 <div className="grid lg:grid-cols-3 gap-12">
-                    {/* Left Column */}
-                    <div className="lg:col-span-2 space-y-12">
-                        <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-100 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                            <div className="w-full aspect-video rounded-2xl overflow-hidden mb-6">
-                                <img src={course.image} alt={course.title} className="w-full h-full object-cover"/>
+                    <>
+                        {/* Left Column */}
+                        <div className="lg:col-span-2 space-y-12">
+                            <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-100 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                                <div className="w-full aspect-video rounded-2xl overflow-hidden mb-6">
+                                    <img src={course.image} alt={course.title} className="w-full h-full object-cover"/>
+                                </div>
+                                <h2 className="text-3xl md:text-4xl font-bold mb-4">Course Overview</h2>
+                                <p className="text-gray-700 leading-relaxed text-lg">
+                                    {course.description}
+                                </p>
                             </div>
-                            <h2 className="text-3xl md:text-4xl font-bold mb-4">Course Overview</h2>
-                            <p className="text-gray-700 leading-relaxed text-lg">
-                                {course.description}
-                            </p>
-                        </div>
 
-                        <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-200 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                            <h2 className="text-3xl md:text-4xl font-bold mb-6">What You'll Learn</h2>
-                            <ul className="grid md:grid-cols-2 gap-x-8 gap-y-4 text-lg">
-                                {(course.learningOutcomes || []).map((item, index) => (
-                                    <li key={index} className="flex items-start text-gray-700 animate-slide-in-right" style={{animationDelay: `${index * 100}ms`}}>
-                                        <svg className="w-6 h-6 text-purple-600 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                        </svg>
-                                        <span>{item}</span>
-                                    </li>
-                                ))}
-                            </ul>
+                            {/* What You'll Learn */}
+                            <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-200 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                                <h2 className="text-3xl md:text-4xl font-bold mb-6">What You'll Learn</h2>
+                                <ul className="grid md:grid-cols-2 gap-x-8 gap-y-4 text-lg">
+                                    {(course.learningOutcomes || []).map((item, index) => (
+                                        <li key={index} className="flex items-start text-gray-700 animate-slide-in-right" style={{animationDelay: `${index * 100}ms`}}>
+                                            {/* CHANGED: Checkmark icon color to blue-600 */}
+                                            <svg className="w-6 h-6 text-blue-600 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                            </svg>
+                                            <span>{item}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            
+                            {/* Curriculum */}
+                            <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-300 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                                <h2 className="text-3xl md:text-4xl font-bold mb-6">Curriculum</h2>
+                                <div className="space-y-6">
+                                    {(course.curriculum || []).map((module, index) => (
+                                        <div key={index} className="border-b border-gray-200 pb-4">
+                                            <button
+                                                className="w-full flex justify-between items-center text-left py-2 focus:outline-none"
+                                                onClick={() => toggleModule(index)}
+                                            >
+                                                <h3 className="text-xl font-semibold text-gray-800">{module.title}</h3>
+                                                <svg className={`w-6 h-6 text-gray-500 transform transition-transform duration-300 ${expandedModules[index] ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            </button>
+                                            <div className={`transition-all duration-300 ease-in-out overflow-hidden ${expandedModules[index] ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
+                                                <ul className="text-gray-600 ml-4 space-y-1">
+                                                    {(module.lessons || []).map((lesson, lessonIndex) => (
+                                                        <li key={lessonIndex} className="flex items-center text-lg">
+                                                            {/* CHANGED: Lesson icon color to blue-600 */}
+                                                            <svg className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M2.5 5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0V5zM2.5 12.5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0v-.5zM12.5 5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0V5zM12.5 12.5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0v-.5z" />
+                                                            </svg>
+                                                            {lesson}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Your Mentors */}
+                            <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-400 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                                <h2 className="text-3xl md:text-4xl font-bold mb-6">Your Mentors</h2>
+                                <div className="grid sm:grid-cols-2 gap-8">
+                                    {(course.mentors || []).map((mentor, index) => (
+                                        <div key={index} className="flex items-center space-x-4">
+                                            {/* CHANGED: Mentor border color to blue-600 */}
+                                            <img src={mentor.image} alt={mentor.name} className="w-20 h-20 rounded-full object-cover border-4 border-blue-600"/>
+                                            <div>
+                                                <h4 className="text-xl font-semibold">{mentor.name}</h4>
+                                                <p className="text-gray-600">{mentor.title}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                         
-                        <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-300 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                            <h2 className="text-3xl md:text-4xl font-bold mb-6">Curriculum</h2>
-                            <div className="space-y-6">
-                                {(course.curriculum || []).map((module, index) => (
-                                    <div key={index} className="border-b border-gray-200 pb-4">
-                                        <button
-                                            className="w-full flex justify-between items-center text-left py-2 focus:outline-none"
-                                            onClick={() => toggleModule(index)}
-                                        >
-                                            <h3 className="text-xl font-semibold text-gray-800">{module.title}</h3>
-                                            <svg className={`w-6 h-6 text-gray-500 transform transition-transform duration-300 ${expandedModules[index] ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                            </svg>
-                                        </button>
-                                        <div className={`transition-all duration-300 ease-in-out overflow-hidden ${expandedModules[index] ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
-                                            <ul className="text-gray-600 ml-4 space-y-1">
-                                                {(module.lessons || []).map((lesson, lessonIndex) => (
-                                                    <li key={lessonIndex} className="flex items-center text-lg">
-                                                        <svg className="w-4 h-4 text-purple-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M2.5 5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0V5zM2.5 12.5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0v-.5zM12.5 5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0V5zM12.5 12.5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0v-.5z" />
-                                                        </svg>
-                                                        {lesson}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
+                        {/* Right Column (Sticky Sidebar) */}
+                        <div className="lg:col-span-1">
+                            <div className={`bg-white rounded-3xl shadow-2xl p-6 sticky top-28 transition-all duration-700 delay-500 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                                <div className="flex items-center justify-between mb-4">
+                                    {/* CHANGED: Price text color to blue-600 */}
+                                    <h3 className="text-3xl font-bold text-blue-600">${course.price}</h3>
+                                    <div className="flex items-center">
+                                        <StarRating rating={course.rating} />
+                                        <span className="text-sm text-gray-500 ml-2">({course.rating})</span>
                                     </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-400 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                            <h2 className="text-3xl md:text-4xl font-bold mb-6">Your Mentors</h2>
-                            <div className="grid sm:grid-cols-2 gap-8">
-                                {(course.mentors || []).map((mentor, index) => (
-                                    <div key={index} className="flex items-center space-x-4">
-                                        <img src={mentor.image} alt={mentor.name} className="w-20 h-20 rounded-full object-cover border-4 border-purple-600"/>
-                                        <div>
-                                            <h4 className="text-xl font-semibold">{mentor.name}</h4>
-                                            <p className="text-gray-600">{mentor.title}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    {/* Right Column (Sticky Sidebar) */}
-                    <div className="lg:col-span-1">
-                        <div className={`bg-white rounded-3xl shadow-2xl p-6 sticky top-28 transition-all duration-700 delay-500 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                            <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-3xl font-bold text-purple-600">${course.price}</h3>
-                                <div className="flex items-center">
-                                    <StarRating rating={course.rating} />
-                                    <span className="text-sm text-gray-500 ml-2">({course.rating})</span>
                                 </div>
-                            </div>
-                            {isLoggedIn && isEnrolled ? (
-                                <Link to={`/course/${course.id}`} className="w-full py-4 bg-green-500 text-white font-semibold rounded-full text-lg shadow-lg hover:bg-green-600 transition-colors block text-center">
-                                    Go to Course
-                                </Link>
-                            ) : (
-                                <button
-                                    onClick={handleAddToCartClick}
-                                    className={`w-full py-4 font-semibold rounded-full text-lg shadow-lg transition-colors ${isInCart ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-purple-600 text-white hover:bg-purple-700'}`}
-                                >
-                                    {isInCart ? 'Remove from Cart' : 'Add to Cart'}
-                                </button>
-                            )}
-                            <div className="flex justify-between items-center mt-4 space-x-2">
-                                <button
-                                    className={`flex-1 py-3 px-4 rounded-full font-semibold border transition-colors ${isInWishlist ? 'bg-purple-600 text-white border-purple-600' : 'bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200'}`}
-                                    onClick={handleWishlistClick}
-                                    disabled={isEnrolled}
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 mr-2 inline-block ${isInWishlist ? 'text-white' : 'text-gray-500'}`} fill={isInWishlist ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                    </svg>
-                                    {isInWishlist ? 'Wishlisted' : 'Add to Wishlist'}
-                                </button>
-                                <div className="relative">
+                                {isEnrolled ? (
+                                    <Link to={`/course/${course.id}`} className="w-full py-4 bg-green-500 text-white font-semibold rounded-full text-lg shadow-lg hover:bg-green-600 transition-colors block text-center">
+                                        Go to Course
+                                    </Link>
+                                ) : (
                                     <button
-                                        className="py-3 px-4 rounded-full font-semibold border bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200 transition-colors"
-                                        onClick={handleShareClick}
+                                        onClick={handleAddToCartClick}
+                                        // CHANGED: CTA button color to blue-600
+                                        className={`w-full py-4 font-semibold rounded-full text-lg shadow-lg transition-colors ${isInCart ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.684l-2.618 2.618a1.5 1.5 0 01-2.122-2.122l2.618-2.618m4.936-4.936l2.618-2.618a1.5 1.5 0 012.122 2.122l-2.618 2.618m-4.936 4.936l2.618-2.618a1.5 1.5 0 00-2.122-2.122l-2.618 2.618" />
-                                        </svg>
-                                        <span className="ml-2 hidden lg:inline">Share</span>
+                                        {isInCart ? 'Remove from Cart' : 'Add to Cart'}
                                     </button>
-                                    {showSharePopup && (
-                                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded-lg py-1 px-3 animate-fade-in">
-                                            Link Copied!
-                                        </div>
-                                    )}
+                                )}
+                                <div className="flex justify-between items-center mt-4 space-x-2">
+                                    <button
+                                        // CHANGED: Wishlist button colors to blue-600
+                                        className={`flex-1 py-3 px-4 rounded-full font-semibold border transition-colors ${isInWishlist ? 'bg-blue-600 text-white border-blue-600' : 'bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200'}`}
+                                        onClick={handleWishlistClick}
+                                        disabled={isEnrolled}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 mr-2 inline-block ${isInWishlist ? 'text-white' : 'text-gray-500'}`} fill={isInWishlist ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                        </svg>
+                                        {isInWishlist ? 'Wishlisted' : 'Add to Wishlist'}
+                                    </button>
+                                    <div className="relative">
+                                        <button
+                                            className="py-3 px-4 rounded-full font-semibold border bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200 transition-colors"
+                                            onClick={handleShareClick}
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.684l-2.618 2.618a1.5 1.5 0 01-2.122-2.122l2.618-2.618m4.936-4.936l2.618-2.618a1.5 1.5 0 012.122 2.122l-2.618 2.618m-4.936 4.936l2.618-2.618a1.5 1.5 0 00-2.122-2.122l-2.618 2.618" />
+                                            </svg>
+                                            <span className="ml-2 hidden lg:inline">Share</span>
+                                        </button>
+                                        {showSharePopup && (
+                                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded-lg py-1 px-3 animate-fade-in">
+                                                Link Copied!
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
+                                <ul className="mt-6 space-y-3 text-gray-700">
+                                    {/* CHANGED: Checklist icon colors to blue-600 */}
+                                    <li className="flex items-center"><svg className="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>Fully On-Demand</li>
+                                    <li className="flex items-center"><svg className="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>Includes Mentorship</li>
+                                    <li className="flex items-center"><svg className="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>Certificate of Completion</li>
+                                    <li className="flex items-center"><svg className="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>Real-World Projects</li>
+                                </ul>
                             </div>
-                            <ul className="mt-6 space-y-3 text-gray-700">
-                                <li className="flex items-center"><svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>Fully On-Demand</li>
-                                <li className="flex items-center"><svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>Includes Mentorship</li>
-                                <li className="flex items-center"><svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>Certificate of Completion</li>
-                                <li className="flex items-center"><svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>Real-World Projects</li>
-                            </ul>
                         </div>
-                    </div>
+                    </>
                 </div>
 
                 <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 mt-12 transition-all duration-700 delay-600 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
