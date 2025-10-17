@@ -24,12 +24,16 @@ export const AuthProvider = ({ children }) => {
     const [wishlist, setWishlist] = useState([]);
     const [enrolledCourses, setEnrolledCourses] = useState([]);
     const [registeredLiveClasses, setRegisteredLiveClasses] = useState([]);
+    // NEW: State for Order History
+    const [orderHistory, setOrderHistory] = useState([]); 
+    
+    // Data states
     const [coursesData, setCoursesData] = useState({});
     const [liveClassesData, setLiveClassesData] = useState([]);
     const [blogPostsData, setBlogPostsData] = useState([]);
     const [instructorApplications, setInstructorApplications] = useState([]);
     
-    // NEW: State for the calculated course structures
+    // Calculated course structures
     const [allCoursesFlatList, setAllCoursesFlatList] = useState([]);
     const [allCoursesFullObject, setAllCoursesFullObject] = useState({});
 
@@ -76,6 +80,21 @@ export const AuthProvider = ({ children }) => {
             const data = snapshot.val();
             setInstructorApplications(data ? Object.values(data) : []);
         });
+
+        // NEW: Fetch ALL orders for Admin Order Management
+        let unsubscribeAllOrders = null;
+        if (userRole === 'admin') {
+             const allOrdersRef = ref(db, 'orders');
+             unsubscribeAllOrders = onValue(allOrdersRef, (snapshot) => {
+                const data = snapshot.val() || {};
+                const ordersArray = Object.values(data).flatMap(userOrders => Object.values(userOrders));
+                // Sort by date descending
+                ordersArray.sort((a, b) => new Date(b.date) - new Date(a.date)); 
+                // Store in a dedicated state if needed globally, or pass via context/props.
+                // For now, we'll rely on the dedicated fetch in OrderManagement.jsx if we needed real-time, 
+                // but a simple fetch is more idiomatic for admin data management. Let's keep it simple and rely on user data for now.
+             });
+        }
         
         // --- AUTH STATE LISTENER ---
         const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
@@ -92,6 +111,7 @@ export const AuthProvider = ({ children }) => {
                         setUserRole(data.role || 'user');
                         setCart(Object.values(data.cart || {}));
                         setWishlist(Object.values(data.wishlist || {}));
+                        
                         const enrolledCoursesObject = data.enrolledCourses || {};
                         setEnrolledCourses(Object.keys(enrolledCoursesObject).map(id => ({
                             id,
@@ -99,6 +119,12 @@ export const AuthProvider = ({ children }) => {
                             completedLessons: enrolledCoursesObject[id].completedLessons || {}
                         })));
                         setRegisteredLiveClasses(Object.keys(data.registeredLiveClasses || {}));
+                        
+                        // NEW: Fetch User Order History
+                        const userOrders = data.orderHistory || {};
+                        const ordersArray = Object.values(userOrders).sort((a, b) => new Date(b.date) - new Date(a.date));
+                        setOrderHistory(ordersArray);
+
                     } else if (auth.currentUser) {
                         // User creation logic for new Firebase users
                         set(userRef, {
@@ -109,7 +135,8 @@ export const AuthProvider = ({ children }) => {
                             cart: {},
                             wishlist: {},
                             enrolledCourses: {},
-                            registeredLiveClasses: {}
+                            registeredLiveClasses: {},
+                            orderHistory: {} // NEW: Initialize order history
                         });
                     }
                 });
@@ -124,6 +151,7 @@ export const AuthProvider = ({ children }) => {
                 setWishlist([]);
                 setEnrolledCourses([]);
                 setRegisteredLiveClasses([]);
+                setOrderHistory([]); // NEW: Clear order history
             }
             return () => {
                 if (unsubscribeDb) {
@@ -138,8 +166,9 @@ export const AuthProvider = ({ children }) => {
             unsubscribeLiveClasses();
             unsubscribeBlogPosts();
             unsubscribeApplications();
+            if(unsubscribeAllOrders) unsubscribeAllOrders();
         };
-    }, []);
+    }, [userRole]); // Re-run when userRole changes to potentially fetch admin data
 
     const handleLogout = async () => {
         try {
@@ -163,6 +192,7 @@ export const AuthProvider = ({ children }) => {
         wishlist,
         enrolledCourses,
         registeredLiveClasses,
+        orderHistory, // NEW: Export order history
         liveClassesData,
         blogPostsData,
         instructorApplications,

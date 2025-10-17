@@ -1,27 +1,28 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import DashboardPageTemplate from '../DashboardPageTemplate';
 
-const OrderHistory = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , user }) => {
-    // This is hardcoded data. In a real app, this would be fetched from Firebase.
-    const orders = [
-        { id: 'ORD-12345', date: '2025-08-20', total: '$299', status: 'Completed', courses: ['Product Strategy', 'UI/UX Design'] },
-        { id: 'ORD-67890', date: '2025-07-15', total: '$199', status: 'Completed', courses: ['Marketing'] },
-        { id: 'ORD-11223', date: '2025-06-10', total: '$499', status: 'Completed', courses: ['Data Analytics', 'AI Automation'] },
-    ];
+// MODIFIED: Accept orderHistory as prop
+const OrderHistory = ({ isLoggedIn, onLogout, cartItemsCount, user, orderHistory }) => {
+    
+    // Use the orderHistory prop, which is fetched and sorted in AuthContext
+    const orders = orderHistory; 
 
     const OrderRow = ({ order }) => (
         <tr className="border-b last:border-b-0 hover:bg-gray-50 transition-colors">
-            <td className="py-4 px-6 text-sm font-medium text-gray-900">{order.id}</td>
-            <td className="py-4 px-6 text-sm text-gray-500">{order.date}</td>
-            <td className="py-4 px-6 text-sm text-gray-500">{order.total}</td>
+            {/* Display the Order ID. We use a slice to make it shorter/cleaner as per App.jsx */}
+            <td className="py-4 px-6 text-sm font-medium text-gray-900">{order.id || order.userId.slice(0, 5) + '...' + order.date.split('T')[0].replace(/-/g, '')}</td>
+            {/* Format the ISO date into a more readable format */}
+            <td className="py-4 px-6 text-sm text-gray-500">{new Date(order.date).toLocaleDateString()}</td> 
+            {/* Display the total */}
+            <td className="py-4 px-6 text-sm text-gray-500">${order.total}</td>
             <td className="py-4 px-6">
                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                     {order.status}
                 </span>
             </td>
+            {/* List the courses purchased in the order */}
             <td className="py-4 px-6 text-sm text-gray-500">
-                {order.courses.join(', ')}
+                {order.courses.map(c => c.title).join(', ')}
             </td>
         </tr>
     );
@@ -48,7 +49,7 @@ const OrderHistory = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , user
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
                             {orders.map((order) => (
-                                <OrderRow key={order.id} order={order} />
+                                <OrderRow key={order.id || order.date} order={order} />
                             ))}
                         </tbody>
                     </table>

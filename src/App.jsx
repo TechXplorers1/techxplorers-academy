@@ -1,20 +1,19 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ref, set, update } from "firebase/database";
+import { ref, set, update, push } from "firebase/database"; // NEW: Import 'push' for unique ID generation
 import { db, auth } from './firebase';
-import { AuthProvider, useAuth } from './AuthContext'; // Import Context
+import { AuthProvider, useAuth } from './AuthContext';
 
 // Page imports (kept for route definitions)
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/auth/LoginPage';
 import SignupPage from './pages/auth/SignupPage';
-// NEW: Import ForgotPasswordPage
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage'; 
 import Dashboard from './pages/Dashboard';
 import MyProfile from './pages/dashboard/MyProfile';
 import EnrolledCourses from './pages/dashboard/EnrolledCourses';
 import { Wishlist } from './pages/dashboard/Wishlist';
-import OrderHistory from './pages/dashboard/OrderHistory';
+import OrderHistory from './pages/dashboard/OrderHistory'; // USED
 import Settings from './pages/dashboard/Settings';
 import MyLiveClasses from './pages/dashboard/MyLiveClasses';
 import LiveClassRecordings from './pages/dashboard/LiveClassRecordings';
@@ -46,7 +45,7 @@ import CourseManagement from './pages/admin/CourseManagement';
 import BlogManagement from './pages/admin/BlogManagement';
 import LiveClassManagement from './pages/admin/LiveClassManagement';
 import InstructorManagement from './pages/admin/InstructorManagement';
-import OrderManagement from './pages/admin/OrderManagement';
+import OrderManagement from './pages/admin/OrderManagement'; // USED
 import AnalyticsDashboard from './pages/admin/AnalyticsDashboard';
 import CouponManagement from './pages/admin/CouponManagement';
 import EditCourseDetails from './pages/admin/EditCourseDetails';
@@ -74,7 +73,7 @@ const InstructorRoute = ({ children }) => {
 const AppRoutes = () => {
     // Destructure ALL needed state and data from the context
     const { 
-        user, userRole, cart, wishlist, enrolledCourses, 
+        user, userRole, cart, wishlist, enrolledCourses, orderHistory, // NEW: orderHistory
         registeredLiveClasses, liveClassesData, coursesData, 
         blogPostsData, instructorApplications, firstName, lastName,
         setIsLoggedIn, setEnrolledCourses, isLoggedIn, onLogout, cartItemsCount,
@@ -82,9 +81,6 @@ const AppRoutes = () => {
     } = useAuth();
 
     // --- HELPER FUNCTIONS (Kept here as they involve database writes) ---
-    
-    // Note: handleUpdateUserInDB logic removed as it wasn't used in routes, 
-    // but the rest of the handlers are kept to pass as props.
     
     const handleAddToCart = (course) => {
         if (!user) return;
@@ -110,17 +106,52 @@ const AppRoutes = () => {
         set(userWishlistRef, null);
     };
 
-    const handleCheckout = () => {
-        if (!user) return;
+    // MODIFIED: Handle Checkout (Simulated Purchase)
+    const handleCheckout = async () => {
+        if (!user || cart.length === 0) return;
+        
         const userRef = ref(db, `users/${user.uid}`);
+        
+        // 1. Prepare new enrolled courses object
         const newEnrolledCoursesObject = cart.reduce((obj, item) => ({
           ...obj,
           [item.id]: { progress: 0, completedLessons: {} }
         }), {});
-        update(userRef, {
-          enrolledCourses: { ...enrolledCourses.reduce((o, c) => ({ ...o, [c.id]: c }), {}), ...newEnrolledCoursesObject },
-          cart: {}
+        
+        // 2. Create the order object
+        const orderData = {
+            id: 'ORD-' + Date.now().toString().slice(-8), // Simple unique ID
+            date: new Date().toISOString(),
+            total: cart.reduce((sum, item) => sum + (item.price || 0), 0).toFixed(2),
+            status: 'Completed',
+            courses: cart.map(item => ({ 
+                id: item.id, 
+                title: item.title, 
+                price: item.price || 0 
+            })),
+            userId: user.uid,
+            userEmail: user.email,
+        };
+
+        // 3. Save to User's Order History
+        const userOrderHistoryRef = push(ref(db, `users/${user.uid}/orderHistory`)); // Use push() for a unique key
+        await set(userOrderHistoryRef, orderData);
+
+        // 4. Save a copy to Global Orders (for Admin access)
+        const globalOrderRef = push(ref(db, `orders`)); // Global orders table
+        await set(globalOrderRef, orderData);
+
+
+        // 5. Update user enrollment and clear cart
+        const existingEnrolled = enrolledCourses.reduce((o, c) => ({ ...o, [c.id]: { progress: c.progress, completedLessons: c.completedLessons } }), {});
+
+        await update(userRef, {
+          enrolledCourses: { ...existingEnrolled, ...newEnrolledCoursesObject },
+          cart: {} // Clear the cart
         });
+
+        // The AuthContext listener will automatically update the local state (cart, enrolledCourses, orderHistory)
+        return true; // Indicate success for CartPage to handle UI
     };
 
     const handleRegisterLiveClass = (event) => {
@@ -137,9 +168,6 @@ const AppRoutes = () => {
         email: user?.email,
     };
   
-    // Common props object is no longer used, we pass props explicitly or rely on context where appropriate.
-    // However, for consistency with the original code structure (passing a commonProps object),
-    // let's define a minimal one that can be spread:
     const commonProps = {
         isLoggedIn,
         onLogout,
@@ -155,7 +183,6 @@ const AppRoutes = () => {
                 <Route path="/" element={<LandingPage {...commonProps} blogPostsData={blogPostsData} />} />
                 <Route path="/login" element={<LoginPage {...commonProps} setIsLoggedIn={setIsLoggedIn} />} />
                 <Route path="/signup" element={<SignupPage {...commonProps} setIsLoggedIn={setIsLoggedIn} />} />
-                {/* NEW: Forgot Password Route */}
                 <Route path="/forgot-password" element={<ForgotPasswordPage {...commonProps} />} />
                 <Route path="/more/become-a-mentor" element={<BecomeAMentor {...commonProps} />} />
 
@@ -184,7 +211,8 @@ const AppRoutes = () => {
                 <Route path="/dashboard/my-profile" element={<MyProfile {...commonProps} />} />
                 <Route path="/dashboard/enrolled-courses" element={<EnrolledCourses {...commonProps} enrolledCourses={enrolledCourses} coursesData={allCoursesFullObject} />} />
                 <Route path="/dashboard/wishlist" element={<Wishlist {...commonProps} wishlistItems={wishlist} onRemoveFromWishlist={handleRemoveFromWishlist} onAddToCart={handleAddToCart} />} />
-                <Route path="/dashboard/order-history" element={<OrderHistory {...commonProps} />} />
+                {/* MODIFIED: Pass orderHistory to OrderHistory page */}
+                <Route path="/dashboard/order-history" element={<OrderHistory {...commonProps} orderHistory={orderHistory} />} />
                 <Route path="/dashboard/settings" element={<Settings {...commonProps} />} />
                 <Route path="/dashboard/my-live-classes" element={<MyLiveClasses {...commonProps} registeredLiveClasses={registeredLiveClasses} liveClassesData={liveClassesData} />} />
                 <Route path="/dashboard/live-class/:classId" element={<LiveClassRecordings {...commonProps} liveClassesData={liveClassesData} />} />
@@ -201,6 +229,7 @@ const AppRoutes = () => {
                 <Route path="/admin/courses/edit/:courseId" element={<AdminRoute><EditCourseDetails {...commonProps} /></AdminRoute>} />
                 <Route path="/admin/blogs" element={<AdminRoute><BlogManagement {...commonProps} /></AdminRoute>} />
                 <Route path="/admin/live-classes" element={<AdminRoute><LiveClassManagement {...commonProps} /></AdminRoute>} />
+                {/* OrderManagement component will fetch its own data */}
                 <Route path="/admin/orders" element={<AdminRoute><OrderManagement {...commonProps} /></AdminRoute>} />
                 <Route path="/admin/coupons" element={<AdminRoute><CouponManagement {...commonProps} /></AdminRoute>} />
                 <Route path="/admin/analytics" element={<AdminRoute><AnalyticsDashboard {...commonProps} /></AdminRoute>} />
