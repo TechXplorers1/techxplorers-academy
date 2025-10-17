@@ -5,7 +5,7 @@ import Footer from '../../components/Footer';
 import { ref, update } from "firebase/database";
 import { auth, db } from '../../firebase';
 
-const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , user, enrolledCourses, setEnrolledCourses }) => {
+const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, user, enrolledCourses, setEnrolledCourses }) => {
     const { courseId } = useParams();
     const [course, setCourse] = useState(null);
     const [currentLesson, setCurrentLesson] = useState(null);
@@ -14,7 +14,7 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , user, 
     useEffect(() => {
         const allCourses = coursesData ? Object.values(coursesData).flat() : [];
         const foundCourseData = allCourses.find(c => c.id === courseId);
-        
+
         const enrolledCourse = enrolledCourses.find(c => c.id === courseId);
 
         if (foundCourseData && enrolledCourse) {
@@ -53,9 +53,9 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , user, 
             progress: newProgress,
             completedLessons: newCompletedLessons
         });
-        
+
         setCompletedLessons(newCompletedLessons);
-        
+
         setEnrolledCourses(prevEnrolled => {
             return prevEnrolled.map(c => c.id === courseId ? { ...c, progress: newProgress, completedLessons: newCompletedLessons } : c);
         });
@@ -87,7 +87,13 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , user, 
             </div>
         );
     }
-    
+    const convertYouTubeUrl = (url) => {
+        if (!url) return '';
+        const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/);
+        return match ? `https://www.youtube.com/embed/${match[1]}?rel=0&modestbranding=1` : url;
+    };
+
+
     return (
         <div className="min-h-screen bg-gray-100 font-inter">
             <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} user={user} />
@@ -99,12 +105,13 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , user, 
                             <div className="w-full h-full lg:w-4/5 xl:w-3/4 aspect-video">
                                 <iframe
                                     className="w-full h-full rounded-xl shadow-2xl bg-black"
-                                    src={currentLesson.videoUrl}
+                                    src={convertYouTubeUrl(currentLesson.videoUrl)}
                                     title={currentLesson.title}
                                     frameBorder="0"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                     allowFullScreen
                                 ></iframe>
+
                             </div>
                         ) : (
                             <div className="text-white text-center p-8 bg-gray-800 rounded-lg">
@@ -115,7 +122,7 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , user, 
                     </div>
                     {currentLesson && (
                         <div className="mt-4 text-center pb-4">
-                             <h2 className="text-2xl font-bold text-white mb-4">{currentLesson.title}</h2>
+                            <h2 className="text-2xl font-bold text-white mb-4">{currentLesson.title}</h2>
                             <button
                                 onClick={() => handleMarkAsComplete(currentLesson.id)}
                                 className={`px-6 py-2 rounded-full font-semibold transition-colors ${completedLessons[currentLesson.id] ? 'bg-green-600 text-white cursor-not-allowed' : 'bg-white text-gray-800 hover:bg-gray-200'}`}
@@ -142,9 +149,8 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , user, 
                                 {Object.values(module.lessons || {}).map(lesson => (
                                     <li
                                         key={lesson.id}
-                                        className={`flex items-center p-3 rounded-lg cursor-pointer transition-colors ${
-                                            currentLesson && currentLesson.id === lesson.id ? 'bg-blue-100 text-blue-800 font-medium' : 'hover:bg-gray-100'
-                                        }`}
+                                        className={`flex items-center p-3 rounded-lg cursor-pointer transition-colors ${currentLesson && currentLesson.id === lesson.id ? 'bg-blue-100 text-blue-800 font-medium' : 'hover:bg-gray-100'
+                                            }`}
                                         onClick={() => handleLessonClick(lesson)}
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 mr-3 flex-shrink-0 ${completedLessons[lesson.id] ? 'text-green-500' : 'text-gray-400'}`} viewBox="0 0 20 20" fill="currentColor">

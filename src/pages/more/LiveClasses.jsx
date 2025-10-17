@@ -141,6 +141,7 @@ const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , onReg
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showRegistrationFormModal, setShowRegistrationFormModal] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const [searchTerm, setSearchTerm] = useState(''); // 👈 New state for search term
     const navigate = useNavigate();
 
     const handleRegisterClick = (event) => {
@@ -167,6 +168,13 @@ const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , onReg
         return registeredLiveClasses.includes(classId);
     };
 
+    // 👈 Filtering logic
+    const filteredClasses = liveClassesData.filter(event =>
+        event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        event.instructor.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <>
             {showLoginModal && <LoginRequiredModal onClose={() => setShowLoginModal(false)} onLoginRedirect={handleLoginRedirect} />}
@@ -180,37 +188,57 @@ const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , onReg
                         Participate in real-time, expert-led classes and get your questions answered live.
                     </p>
 
+                    {/* 👈 Search Bar Added Here */}
+                    <div className="w-full max-w-lg mx-auto mb-10">
+                        <input
+                            type="text"
+                            placeholder="Search live classes by title, description, or instructor..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-shadow"
+                        />
+                    </div>
+                    {/* --------------------------- */}
+
                     <div className="w-full mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {liveClassesData.map((event, index) => (
-                            <div
-                                key={index}
-                                className="bg-white p-6 rounded-2xl shadow-lg space-y-4 text-left transition-all duration-300 hover:shadow-2xl hover:scale-105"
-                            >
-                                <img src={event.image} alt={event.title} className="w-full h-48 object-cover rounded-xl mb-4"/>
-                                <div className="flex justify-between items-center text-sm text-gray-600">
-                                    <span>{event.date}</span>
-                                    <span>{event.time}</span>
+                        {/* 👈 Using filteredClasses instead of liveClassesData */}
+                        {filteredClasses.length > 0 ? (
+                            filteredClasses.map((event, index) => (
+                                <div
+                                    key={event.id || index} // Use event.id if available, otherwise index
+                                    className="bg-white p-6 rounded-2xl shadow-lg space-y-4 text-left transition-all duration-300 hover:shadow-2xl hover:scale-105"
+                                >
+                                    <img src={event.image} alt={event.title} className="w-full h-48 object-cover rounded-xl mb-4"/>
+                                    <div className="flex justify-between items-center text-sm text-gray-600">
+                                        <span>{event.date}</span>
+                                        <span>{event.time}</span>
+                                    </div>
+                                    <h3 className="text-xl font-bold text-gray-900">{event.title}</h3>
+                                    <p className="text-sm text-gray-700">{event.description}</p>
+                                    <div className="flex items-center mt-4">
+                                        <img src={`https://placehold.co/40x40/E9D5FF/9333EA?text=${event.instructor.split(' ').map(n => n[0]).join('')}`} alt={event.instructor} className="w-8 h-8 rounded-full mr-2"/>
+                                        <span className="text-sm font-semibold text-purple-600">{event.instructor}</span>
+                                    </div>
+                                    {isLoggedIn && isClassRegistered(event.id) ? (
+                                        <Link to={`/dashboard/live-class/${event.id}`} className="w-full block text-center mt-4 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition-colors">
+                                            View Recordings
+                                        </Link>
+                                    ) : (
+                                        <button
+                                            className="w-full mt-4 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition-colors"
+                                            onClick={() => handleRegisterClick(event)}
+                                        >
+                                            {event.price > 0 ? `Register for $${event.price}` : 'Register for Free'}
+                                        </button>
+                                    )}
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900">{event.title}</h3>
-                                <p className="text-sm text-gray-700">{event.description}</p>
-                                <div className="flex items-center mt-4">
-                                    <img src={`https://placehold.co/40x40/E9D5FF/9333EA?text=${event.instructor.split(' ').map(n => n[0]).join('')}`} alt={event.instructor} className="w-8 h-8 rounded-full mr-2"/>
-                                    <span className="text-sm font-semibold text-purple-600">{event.instructor}</span>
-                                </div>
-                                {isLoggedIn && isClassRegistered(event.id) ? (
-                                    <Link to={`/dashboard/live-class/${event.id}`} className="w-full block text-center mt-4 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition-colors">
-                                        View Recordings
-                                    </Link>
-                                ) : (
-                                    <button
-                                        className="w-full mt-4 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition-colors"
-                                        onClick={() => handleRegisterClick(event)}
-                                    >
-                                        {event.price > 0 ? `Register for $${event.price}` : 'Register for Free'}
-                                    </button>
-                                )}
+                            ))
+                        ) : (
+                            <div className="lg:col-span-3 text-center py-10">
+                                <p className="text-xl text-gray-600">No live classes found matching your search. 🔎</p>
                             </div>
-                        ))}
+                        )}
+                        {/* --------------------------- */}
                     </div>
                 </div>
             </MorePageTemplate>
