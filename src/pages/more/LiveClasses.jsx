@@ -3,6 +3,53 @@ import MorePageTemplate from '../MorePageTemplate';
 import useInView from '../../hooks/useInView';
 import { Link, useNavigate } from 'react-router-dom';
 
+// NEW COMPONENT: Payment Modal (Adapted from CartPage)
+const PaymentModal = ({ event, onClose, onPayNow }) => {
+    // FIX APPLIED HERE: Use parseFloat() to ensure it's a number before calculating total.
+    const numericPrice = parseFloat(event.price) || 0; 
+    const total = numericPrice; 
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-70 z-[100] flex justify-center items-center p-4">
+            <div className="w-full max-w-lg bg-white text-gray-900 rounded-lg shadow-2xl p-8 transform transition-all duration-300 scale-100">
+                <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-2xl font-bold">Simulated Checkout for {event.title}</h3>
+                    <button onClick={onClose} className="text-gray-500 hover:text-gray-900 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+                
+                <p className="text-gray-700 mb-4">This simulates a third-party payment gateway for your class registration.</p>
+                
+                <div className="bg-gray-50 p-4 rounded-lg mb-6">
+                    <h4 className="text-lg font-semibold mb-2">Class Price</h4>
+                    <div className="flex justify-between font-bold text-3xl text-purple-600">
+                        <span>Total Due:</span>
+                        <span>${total.toFixed(2)}</span>
+                    </div>
+                </div>
+
+                <div className="space-y-4">
+                    {/* Dummy fields to simulate card entry */}
+                    <input type="text" placeholder="Card Number (4444 xxxx xxxx 1111)" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" disabled/>
+                    <div className="flex space-x-4">
+                        <input type="text" placeholder="MM/YY" className="w-1/3 p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" disabled/>
+                        <input type="text" placeholder="CVC" className="w-2/3 p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" disabled/>
+                    </div>
+                </div>
+
+                <button
+                    onClick={onPayNow}
+                    className="w-full mt-6 py-3 bg-purple-600 text-white font-bold text-lg rounded-lg shadow-lg hover:bg-purple-700 transition-colors transform hover:scale-[1.01]"
+                >
+                    Pay & Register (${total.toFixed(2)})
+                </button>
+                <p className="text-sm text-center text-gray-500 mt-3">By clicking 'Pay & Register', you confirm your enrollment.</p>
+            </div>
+        </div>
+    );
+}
+// ----------------------------------------------------
+
 const LoginRequiredModal = ({ onClose, onLoginRedirect }) => {
     const modalRef = useRef(null);
 
@@ -45,9 +92,11 @@ const LoginRequiredModal = ({ onClose, onLoginRedirect }) => {
     );
 };
 
-const RegistrationFormModal = ({ event, onClose, onRegisterSuccess }) => {
+// MODIFIED: Accepts 'user' prop
+const RegistrationFormModal = ({ event, user, onClose, onRegisterSuccess }) => {
     const modalRef = useRef(null);
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState(user?.email || '');
+    const [fullName, setFullName] = useState(user?.name || '');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -72,6 +121,9 @@ const RegistrationFormModal = ({ event, onClose, onRegisterSuccess }) => {
         alert(`You have successfully registered for: ${event.title}. A confirmation link has been sent to ${email}.`);
         onClose();
     };
+    
+    // Logic to disable/pre-fill fields
+    const isFieldReadOnly = !!user;
 
     return (
         <div
@@ -98,7 +150,11 @@ const RegistrationFormModal = ({ event, onClose, onRegisterSuccess }) => {
                                 type="text"
                                 id="name"
                                 name="name"
-                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                                value={fullName}
+                                onChange={(e) => setFullName(e.target.value)}
+                                // MODIFIED: Read-only and styling based on user login state
+                                readOnly={isFieldReadOnly}
+                                className={`mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 ${isFieldReadOnly ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                                 required
                             />
                         </div>
@@ -110,7 +166,9 @@ const RegistrationFormModal = ({ event, onClose, onRegisterSuccess }) => {
                                 name="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                                // MODIFIED: Read-only and styling based on user login state
+                                readOnly={isFieldReadOnly}
+                                className={`mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 ${isFieldReadOnly ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                                 required
                             />
                         </div>
@@ -127,7 +185,7 @@ const RegistrationFormModal = ({ event, onClose, onRegisterSuccess }) => {
                             type="submit"
                             className="w-full px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-purple-600 hover:bg-purple-700"
                         >
-                            {event.price > 0 ? `Pay $${event.price} and Register` : 'Register for Free'}
+                            {'Register for Free'}
                         </button>
                     </form>
                 </div>
@@ -136,21 +194,27 @@ const RegistrationFormModal = ({ event, onClose, onRegisterSuccess }) => {
     );
 };
 
-const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , onRegisterLiveClass, registeredLiveClasses = [], liveClassesData }) => {
+// MODIFIED: Added user state to props
+const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , onRegisterLiveClass, registeredLiveClasses = [], liveClassesData, user }) => {
     const [contentRef, contentInView] = useInView({ threshold: 0.2 });
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showRegistrationFormModal, setShowRegistrationFormModal] = useState(false);
+    // NEW: State for paid registration flow
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
-    const [searchTerm, setSearchTerm] = useState(''); // 👈 New state for search term
+    const [searchTerm, setSearchTerm] = useState(''); 
     const navigate = useNavigate();
 
     const handleRegisterClick = (event) => {
         if (!isLoggedIn) {
             setSelectedEvent(event);
             setShowLoginModal(true);
+        } else if (event.price > 0) {
+            setSelectedEvent(event);
+            setShowPaymentModal(true); // NEW: Show payment modal for paid classes
         } else {
             setSelectedEvent(event);
-            setShowRegistrationFormModal(true);
+            setShowRegistrationFormModal(true); // Show registration form for free classes
         }
     };
 
@@ -162,13 +226,21 @@ const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , onReg
     const handleRegisterSuccess = (event) => {
         onRegisterLiveClass(event);
         setShowRegistrationFormModal(false);
+        setShowPaymentModal(false); // Close payment modal too if successful
+    };
+
+    // NEW: Function executed when "Pay & Register" is clicked in the modal
+    const handlePayNow = () => {
+        // Simulate payment success immediately
+        alert(`Payment successful! You are now registered for: ${selectedEvent.title}.`);
+        handleRegisterSuccess(selectedEvent);
     };
 
     const isClassRegistered = (classId) => {
         return registeredLiveClasses.includes(classId);
     };
 
-    // 👈 Filtering logic
+    // Filtering logic
     const filteredClasses = liveClassesData.filter(event =>
         event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -178,7 +250,24 @@ const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , onReg
     return (
         <>
             {showLoginModal && <LoginRequiredModal onClose={() => setShowLoginModal(false)} onLoginRedirect={handleLoginRedirect} />}
-            {showRegistrationFormModal && <RegistrationFormModal event={selectedEvent} onClose={() => setShowRegistrationFormModal(false)} onRegisterSuccess={handleRegisterSuccess} />}
+            {/* MODIFIED: Passing 'user' prop to RegistrationFormModal */}
+            {showRegistrationFormModal && selectedEvent && (
+                <RegistrationFormModal 
+                    event={selectedEvent} 
+                    user={user}
+                    onClose={() => setShowRegistrationFormModal(false)} 
+                    onRegisterSuccess={handleRegisterSuccess} 
+                />
+            )}
+            {/* NEW: Payment Modal for paid classes */}
+            {showPaymentModal && selectedEvent && (
+                <PaymentModal
+                    event={selectedEvent}
+                    onClose={() => setShowPaymentModal(false)}
+                    onPayNow={handlePayNow}
+                />
+            )}
+
             <MorePageTemplate title="Live Classes" breadcrumb="Live Classes" isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount}>
                 <div ref={contentRef} className={`flex flex-col items-center text-center space-y-8 transition-all duration-700 ${contentInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
@@ -188,7 +277,7 @@ const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , onReg
                         Participate in real-time, expert-led classes and get your questions answered live.
                     </p>
 
-                    {/* 👈 Search Bar Added Here */}
+                    {/* Search Bar Added Here */}
                     <div className="w-full max-w-lg mx-auto mb-10">
                         <input
                             type="text"
@@ -201,7 +290,7 @@ const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , onReg
                     {/* --------------------------- */}
 
                     <div className="w-full mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {/* 👈 Using filteredClasses instead of liveClassesData */}
+                        {/* Using filteredClasses instead of liveClassesData */}
                         {filteredClasses.length > 0 ? (
                             filteredClasses.map((event, index) => (
                                 <div
@@ -228,14 +317,15 @@ const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , onReg
                                             className="w-full mt-4 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition-colors"
                                             onClick={() => handleRegisterClick(event)}
                                         >
-                                            {event.price > 0 ? `Register for $${event.price}` : 'Register for Free'}
+                                            {/* FIX APPLIED HERE: Use parseFloat(event.price) || 0 for robust conversion to number */}
+                                            {event.price > 0 ? `Register for $${(parseFloat(event.price) || 0).toFixed(2)}` : 'Register for Free'}
                                         </button>
                                     )}
                                 </div>
                             ))
                         ) : (
                             <div className="lg:col-span-3 text-center py-10">
-                                <p className="text-xl text-gray-600">No live classes found matching your search. 🔎</p>
+                                <p className="text-xl text-gray-600">No live classes found matching your search. ⚛️</p>
                             </div>
                         )}
                         {/* --------------------------- */}

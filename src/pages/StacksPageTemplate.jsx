@@ -52,17 +52,36 @@ const StacksPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, bread
     const [animatedCourses, setAnimatedCourses] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredCourses, setFilteredCourses] = useState(courses);
+    // ADDED: State for sorting
+    const [sortOrder, setSortOrder] = useState('low-to-high');
 
     useEffect(() => {
         const lowerCaseSearchTerm = searchTerm.toLowerCase();
-        const newFilteredCourses = courses.filter(course => 
+        
+        // 1. Filtering (Search)
+        let newFilteredCourses = courses.filter(course => 
             course.title.toLowerCase().includes(lowerCaseSearchTerm) ||
             course.instructor.toLowerCase().includes(lowerCaseSearchTerm) ||
             course.category.toLowerCase().includes(lowerCaseSearchTerm)
         );
+
+        // 2. Sorting (Price)
+        newFilteredCourses.sort((a, b) => {
+            const priceA = parseFloat(a.price);
+            const priceB = parseFloat(b.price);
+            
+            if (sortOrder === 'low-to-high') {
+                return priceA - priceB;
+            } else if (sortOrder === 'high-to-low') {
+                return priceB - priceA;
+            }
+            return 0; // Should not happen with current options
+        });
+
         setFilteredCourses(newFilteredCourses);
         setAnimatedCourses([]);
-    }, [searchTerm, courses]);
+    // UPDATED DEPENDENCIES: Now depends on sortOrder as well
+    }, [searchTerm, courses, sortOrder]); 
 
     useEffect(() => {
         if (contentInView) {
@@ -80,6 +99,11 @@ const StacksPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, bread
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
+    };
+
+    // ADDED: Handler for sorting change
+    const handleSortChange = (event) => {
+        setSortOrder(event.target.value);
     };
 
     const breadcrumbs = [
@@ -117,12 +141,14 @@ const StacksPageTemplate = ({ isLoggedIn, onLogout, cartItemsCount, title, bread
                 <div className={`flex flex-col md:flex-row justify-between items-center mb-8 animate-on-scroll ${contentInView ? 'is-visible' : ''}`}>
                     <h2 className="text-3xl font-bold mb-4 md:mb-0">Courses in this category</h2>
                     <div className="relative">
-                        {/* CHANGED: Focus ring color to blue-400 */}
-                        <select className="bg-white border border-gray-300 rounded-md py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
-                            <option>Release Date (newest first)</option>
-                            <option>Popularity</option>
-                            <option>Price (low to high)</option>
-                            <option>Price (high to low)</option>
+                        <select 
+                            className="bg-white border border-gray-300 rounded-md py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            value={sortOrder}
+                            onChange={handleSortChange}
+                        >
+                            {/* REMOVED: Release Date (newest first) and Popularity */}
+                            <option value="low-to-high">Price (low to high)</option>
+                            <option value="high-to-low">Price (high to low)</option>
                         </select>
                     </div>
                 </div>

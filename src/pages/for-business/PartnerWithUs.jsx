@@ -1,53 +1,58 @@
 import React from "react";
 import BusinessPageTemplate from "../BusinessPageTemplate";
 
+// --- IMAGE IMPORTS (Added based on user request) ---
+import bns6 from '../../assets/bns-6.jpg';
+import bns7 from '../../assets/bns-7.jpg';
+// --------------------------------------------------
+
 const pageData = {
-  title: "Partner With Us",
-  tagline: "Empowering The Future, Building The Future",
-  breadcrumbs: [
-    { name: "For Business", path: "/for-business" },
-    { name: "Partner With Us" },
-  ],
-  sections: [
-    {
-      title: "Why Partner With DigitallyBrave?",
-      description:
-        "We partner with leading organizations to create innovative learning solutions. Let’s build the future together by leveraging our expertise and community.",
-      list: [
-        "Access our talent pipeline to find skilled graduates.",
-        "Leverage our curriculum tailored to your workforce.",
-        "Work with our expert mentors for unparalleled support.",
-        "Join our vibrant learning community.",
-        "Receive marketing and branding support.",
-      ],
-      image: "https://picsum.photos/600/400?random=4",
-    },
-    {
-      title: "Partnership Opportunities",
-      description:
-        "We offer a range of partnership models designed to fit your unique business objectives, from content sharing to co-marketing initiatives.",
-      list: [
-        "Content & Curriculum Partnership",
-        "Sponsorship & Co-Marketing",
-        "Talent Pipeline Partnership",
-        "Affiliate & Reseller Partnerships",
-      ],
-      image: "https://picsum.photos/600/400?random=5",
-    },
-  ],
-  formTitle: "DigitallyBrave Partnership Interest Form",
-  formDescription:
-    "Tell us about your organization and how you envision a partnership with us.",
-  formFields: [
-    { label: "Company Information", type: "text", name: "companyInfo" },
-    { label: "Contact Person", type: "text", name: "contactPerson" },
-    { label: "Partnership Type", type: "textarea", name: "partnershipType" },
-    { label: "Tell Us More", type: "textarea", name: "tellUsMore" },
-  ],
+  title: "Partner With Us",
+  tagline: "Empowering The Future, Building The Future",
+  breadcrumbs: [
+    { name: "For Business", path: "/for-business" },
+    { name: "Partner With Us" },
+  ],
+  sections: [
+    {
+      title: "Why Partner With DigitallyBrave?",
+      description:
+        "We partner with leading organizations to create innovative learning solutions. Let’s build the future together by leveraging our expertise and community.",
+      list: [
+        "Access our talent pipeline to find skilled graduates.",
+        "Leverage our curriculum tailored to your workforce.",
+        "Work with our expert mentors for unparalleled support.",
+        "Join our vibrant learning community.",
+        "Receive marketing and branding support.",
+      ],
+      image: bns6, // UPDATED: Replaced random URL with imported asset bns6
+    },
+    {
+      title: "Partnership Opportunities",
+      description:
+        "We offer a range of partnership models designed to fit your unique business objectives, from content sharing to co-marketing initiatives.",
+      list: [
+        "Content & Curriculum Partnership",
+        "Sponsorship & Co-Marketing",
+        "Talent Pipeline Partnership",
+        "Affiliate & Reseller Partnerships",
+      ],
+      image: bns7, // UPDATED: Replaced random URL with imported asset bns7
+    },
+  ],
+  formTitle: "DigitallyBrave Partnership Interest Form",
+  formDescription:
+    "Tell us about your organization and how you envision a partnership with us.",
+  formFields: [
+    { label: "Company Information", type: "text", name: "companyInfo" },
+    { label: "Contact Person", type: "text", name: "contactPerson" },
+    { label: "Partnership Type", type: "textarea", name: "partnershipType" },
+    { label: "Tell Us More", type: "textarea", name: "tellUsMore" },
+  ],
 };
 
 const PartnerWithUs = ({ isLoggedIn, onLogout, cartItemsCount }) => (
-  <BusinessPageTemplate {...pageData} isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
+  <BusinessPageTemplate {...pageData} isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
 );
 
 export default PartnerWithUs;

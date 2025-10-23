@@ -1,13 +1,16 @@
 import React from 'react';
 import ResourcesPageTemplate from '../ResourcesPageTemplate';
 import useInView from '../../hooks/useInView';
+// NOTE: Assuming Link is imported from 'react-router-dom' in a real environment
+// For this example, we will import it directly or assume it's available.
+import { Link } from 'react-router-dom';
 
 const FreeResources = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const [contentRef, contentInView] = useInView({ threshold: 0.2 });
 
     return (
-        <ResourcesPageTemplate 
-            title="Free Resources" 
+        <ResourcesPageTemplate
+            title="Free Resources"
             breadcrumb="Free Resources"
             isLoggedIn={isLoggedIn}
             onLogout={onLogout}
@@ -22,7 +25,13 @@ const FreeResources = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                     <div className="bg-gray-100 p-8 rounded-2xl shadow-lg space-y-4">
                         <h3 className="text-2xl font-bold">Free Stacks</h3>
                         <p className="text-gray-500">Access to our beginner-friendly courses for free.</p>
-                        <button className="w-full py-3 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700">Explore</button>
+                        {/* CHANGED: Converted button to Link to match the LandingPage's Free Stacks route */}
+                        <Link 
+                            to="/all-stacks/free-stacks" 
+                            className="w-full py-3 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 inline-block"
+                        >
+                            Explore
+                        </Link>
                     </div>
                     <div className="bg-gray-100 p-8 rounded-2xl shadow-lg space-y-4">
                         <h3 className="text-2xl font-bold">E-books & Guides</h3>

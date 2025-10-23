@@ -8,6 +8,14 @@ import bg3 from '../assets/bg-5.jpg';
 import Footer from '../components/Footer';
 import { toCamelCase, toKebabCase } from '../utils/categoryHelper';
 
+// --- INSTRUCTOR IMAGE IMPORTS (Added based on user request) ---
+import ins1 from '../assets/ins-1.jpg';
+import ins2 from '../assets/ins-2.jpg';
+import ins3 from '../assets/ins-3.jpg';
+import ins4 from '../assets/ins-4.jpg';
+import ins5 from '../assets/ins-5.jpg';
+// -----------------------------------------------------------
+
 // --- Inline SVG Icons (RE-ADDED to fix ReferenceError) ---
 const PlayIcon = ({ size = 24, className }) => (
   <svg
@@ -193,11 +201,12 @@ function LandingPage(props) {
   const { coursesData, blogPostsData } = props;
 
   const instructors = [
-    { name: "Alex Johnson", title: "Senior Developer", image: "https://placehold.co/100x100" },
-    { name: "Maria Garcia", title: "UI/UX Expert", image: "https://placehold.co/100x100" },
-    { name: "Sam Lee", title: "Data Scientist", image: "https://placehold.co/100x100" },
-    { name: "Ben Carter", title: "Cloud Architect", image: "https://placehold.co/100x100" },
-    { name: "Chris Evans", title: "Mobile Dev", image: "https://placehold.co/100x100" },
+    // UPDATED: Using imported image variables
+    { name: "Prakashii", title: "Senior Developer", image: ins1 },
+    { name: "Krishna", title: "UI/UX Expert", image: ins2 },
+    { name: "Chaveen", title: "Data Scientist", image: ins3 },
+    { name: "Humer Resham", title: "Cloud Architect", image: ins4 },
+    { name: "Saparee", title: "Mobile Dev", image: ins5 },
   ];
 
   const testimonials = [
@@ -929,8 +938,8 @@ function LandingPage(props) {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="relative p-8 rounded-xl shadow-lg bg-gray-100 animate-on-scroll">
-                {/* CHANGED: Background image overlay to be lighter */}
-                <div className="absolute inset-0 bg-[url('https://placehold.co/600x600/F3F4F6/374151?text=How+it+works')] bg-cover bg-center opacity-20 rounded-xl"></div>
+                {/* REMOVED: Background image overlay/watermark for the How It Works section */}
+                {/* <div className="absolute inset-0 bg-[url('https://placehold.co/600x600/F3F4F6/374151?text=How+it+works')] bg-cover bg-center opacity-20 rounded-xl"></div> */}
                 <div className="relative z-10">
                   <h3 className="text-2xl font-bold">How it Works</h3>
                   <p className="mt-2 text-gray-700">
