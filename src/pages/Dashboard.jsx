@@ -3,9 +3,18 @@ import { Link } from 'react-router-dom';
 import DashboardPageTemplate from './DashboardPageTemplate';
 
 const Dashboard = (props) => {
-    const { enrolledCourses = [], registeredLiveClassesCount } = props;
+    const { 
+        enrolledCourses = [], 
+        registeredLiveClassesCount,
+        // Assuming these props come from useAuth via App.jsx
+        user, 
+        firstName, 
+        lastName, 
+        instructorApplications 
+    } = props;
     
     const totalEnrolled = enrolledCourses.length;
+    // Ensure course.progress is a number before comparison
     const completedCoursesCount = enrolledCourses.filter(course => (course.progress || 0) === 100).length;
 
     const DashboardCard = ({ title, value, icon, bgColor, textColor, to }) => (
@@ -27,7 +36,7 @@ const Dashboard = (props) => {
     return (
         <DashboardPageTemplate {...props} title="Dashboard">
             {/* Stat Cards with 'to' prop for navigation */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 <DashboardCard
                     to="/dashboard/enrolled-courses"
                     title="Enrolled Courses"
@@ -62,9 +71,9 @@ const Dashboard = (props) => {
                 <div className="p-6 border-2 border-dashed border-gray-300 rounded-xl text-center">
                     <p className="text-gray-500">Upload an image to personalize your profile.</p>
                     {/* CHANGED: Button color to blue-600 */}
-                    <button className="mt-4 px-6 py-2 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-colors">
+                    <Link to="/dashboard/my-profile" className="mt-4 px-6 py-2 inline-block bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-colors">
                         Click Here
-                    </button>
+                    </Link>
                 </div>
             </div>
         </DashboardPageTemplate>
