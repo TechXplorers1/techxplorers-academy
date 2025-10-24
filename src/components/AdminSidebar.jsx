@@ -11,6 +11,8 @@ const AdminSidebar = () => {
         { name: 'Instructor Management', path: '/admin/instructors' },
         { name: 'Blog Management', path: '/admin/blogs' },
         { name: 'Order Management', path: '/admin/orders' },
+        { name: 'Success Stories', path: '/admin/success-stories' },
+        { name: 'Community Events', path: '/admin/community-events' }, // NEW
         { name: 'Coupon Management', path: '/admin/coupons' },
     ];
 

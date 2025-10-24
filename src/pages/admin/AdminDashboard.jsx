@@ -11,6 +11,8 @@ const AdminDashboard = (props) => {
         { name: 'Instructor Mgt.', path: '/admin/instructors', icon: 'M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 012-2h4a2 2 0 012 2v1m-6 0h6' },
         { name: 'Blog Management', path: '/admin/blogs', icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.586-9.414a2 2 0 112.828 2.828L10.5 17.5-6 18l.5-6.5 7.086-7.086z' },
         { name: 'Order Management', path: '/admin/orders', icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' },
+        { name: 'Success Stories', path: '/admin/success-stories', icon: 'M14 10l4-4-4-4M7 7h10V4H7v3z' },
+        { name: 'Community Events', path: '/admin/community-events', icon: 'M8 7V3m8 4V3m-9 8h10M5 12h14' }, // NEW
         { name: 'Coupon Management', path: '/admin/coupons', icon: 'M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z' },
     ];
 

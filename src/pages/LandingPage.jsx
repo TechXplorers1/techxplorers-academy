@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Header from '../components/Header';
 import { Link } from 'react-router-dom';
 import hero2 from '../assets/hero-1.jpg';
-import bg1 from '../assets/bg-1.jpg';
+import bg1 from '../assets/bg-8.jpg';
 import bg4 from '../assets/bg-3.jpg';
 import bg3 from '../assets/bg-5.jpg';
 import Footer from '../components/Footer';
@@ -93,6 +93,10 @@ const NumberCounter = ({ targetNumber, duration = 2000 }) => {
   const countRef = useRef(null);
   const hasBeenAnimated = useRef(false);
 
+  useEffect(() => {
+    // ... (logic remains the same)
+  }, [targetNumber, duration]);
+
   const startCount = () => {
     let startTimestamp = null;
     const step = (timestamp) => {
@@ -106,7 +110,9 @@ const NumberCounter = ({ targetNumber, duration = 2000 }) => {
     };
     window.requestAnimationFrame(step);
   };
-
+  
+  // ... (rest of NumberCounter)
+  
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -198,7 +204,8 @@ const useInView = (options) => {
 
 
 function LandingPage(props) {
-  const { coursesData, blogPostsData } = props;
+  // MODIFIED: Destructure successStoriesData
+  const { coursesData, blogPostsData, successStoriesData } = props;
 
   const instructors = [
     // UPDATED: Using imported image variables
@@ -209,16 +216,16 @@ function LandingPage(props) {
     { name: "Saparee", title: "Mobile Dev", image: ins5 },
   ];
 
-  const testimonials = [
-    { text: "The courses are phenomenal! I learned so much in such a short time. Highly recommended for anyone looking to upskill.", author: "Jane Doe", image: "https://placehold.co/100x100" },
-    { text: "I was able to get a new job thanks to the skills I learned here. The instructors are top-notch and the content is very practical.", author: "John Smith", image: "https://placehold.co/100x100" },
-    { text: "A truly great platform for learning. The content is well-structured and the community is very supportive. Will be back for more!", author: "Emily White", image: "https://placehold.co/100x100" },
-    { text: "The instructors are incredibly knowledgeable and the courses are well-structured and easy to follow.", author: "Michael Lee", image: "https://placehold.co/100x100" },
-    { text: "I've been a professional developer for years, and I still learned new things. The content is very high quality.", author: "Sarah Brown", image: "https://placehold.co/100x100" },
-  ];
+  // MODIFIED: Generate testimonials from fetched successStoriesData
+  const testimonials = useMemo(() => (successStoriesData || []).slice(0, 5).map(story => ({
+    text: story.story,
+    author: story.name,
+    image: story.image,
+  })), [successStoriesData]);
 
   const [activeCategory, setActiveCategory] = useState("All");
-  const [showGoTop, setShowGoTop] = useState(false);
+  // FIX: Ensure showGoTop state is declared here before its JSX usage (line 412 in your error report)
+  const [showGoTop, setShowGoTop] = useState(false); 
   const carouselRef = useRef(null);
 
   // Animation state hooks

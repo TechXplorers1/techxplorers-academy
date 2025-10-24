@@ -2,29 +2,12 @@ import React from 'react';
 import ResourcesPageTemplate from '../ResourcesPageTemplate';
 import useInView from '../../hooks/useInView';
 
-const SuccessStories = ({ isLoggedIn, onLogout, cartItemsCount }) => {
+// MODIFIED: Accept stories via props
+const SuccessStories = ({ isLoggedIn, onLogout, cartItemsCount, stories }) => {
     const [contentRef, contentInView] = useInView({ threshold: 0.2 });
 
-    const stories = [
-        {
-            name: "Maria Garcia",
-            story: "Thanks to the BraveStack, I landed my dream job as a UX Designer at a leading tech company. The project-based learning and mentorship were invaluable.",
-            role: "UX Designer",
-            image: "https://placehold.co/100x100/9b59b6/ffffff?text=MG",
-        },
-        {
-            name: "Alex Chen",
-            story: "The Engineering & Development stack gave me the practical skills I needed to build a robust portfolio. I'm now a proud Full-Stack Developer.",
-            role: "Full-Stack Developer",
-            image: "https://placehold.co/100x100/3498db/ffffff?text=AC",
-        },
-        {
-            name: "Samira Ahmed",
-            story: "I switched careers from marketing to data science, and the Data & Analytics stack made the transition seamless. The community support was incredible.",
-            role: "Data Analyst",
-            image: "https://placehold.co/100x100/e67e22/ffffff?text=SA",
-        },
-    ];
+    // REMOVED: Static stories array
+    // const stories = [ ... ]; 
 
     return (
         <ResourcesPageTemplate 
@@ -40,7 +23,7 @@ const SuccessStories = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                     Read the inspiring journeys of our members who have transformed their careers and achieved their goals with the help of our community and stacks.
                 </p>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 w-full mt-12">
-                    {stories.map((story, index) => (
+                    {(stories || []).map((story, index) => ( // Use stories from props
                         <div key={index} className="bg-gray-100 p-8 rounded-2xl shadow-lg space-y-4 text-left transition-all duration-300 hover:shadow-2xl hover:scale-105">
                             <p className="text-gray-700 italic">"{story.story}"</p>
                             <div className="flex items-center space-x-4 mt-6">

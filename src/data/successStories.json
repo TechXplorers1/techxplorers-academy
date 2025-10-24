@@ -1,0 +1,32 @@
+{
+  "successStories": {
+    "story-1": {
+      "id": "story-1",
+      "name": "Maria Garcia",
+      "story": "Thanks to the BraveStack, I landed my dream job as a UX Designer at a leading tech company. The project-based learning and mentorship were invaluable.",
+      "role": "UX Designer",
+      "image": "https://placehold.co/100x100/9b59b6/ffffff?text=MG"
+    },
+    "story-2": {
+      "id": "story-2",
+      "name": "Alex Chen",
+      "story": "The Engineering & Development stack gave me the practical skills I needed to build a robust portfolio. I'm now a proud Full-Stack Developer.",
+      "role": "Full-Stack Developer",
+      "image": "https://placehold.co/100x100/3498db/ffffff?text=AC"
+    },
+    "story-3": {
+      "id": "story-3",
+      "name": "Samira Ahmed",
+      "story": "I switched careers from marketing to data science, and the Data & Analytics stack made the transition seamless. The community support was incredible.",
+      "role": "Data Analyst",
+      "image": "https://placehold.co/100x100/e67e22/ffffff?text=SA"
+    },
+    "story-4": {
+      "id": "story-4",
+      "name": "Ben Carter",
+      "story": "I switched careers and landed a role as a Cloud Architect. The structure and support from the mentors were world-class!",
+      "role": "Cloud Architect",
+      "image": "https://placehold.co/100x100/27ae60/ffffff?text=BC"
+    }
+  }
+}

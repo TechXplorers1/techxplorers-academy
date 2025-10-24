@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ref, set, update, push } from "firebase/database"; // NEW: Import 'push' for unique ID generation
+import { ref, set, update, push } from "firebase/database"; 
 import { db, auth } from './firebase';
 import { AuthProvider, useAuth } from './AuthContext';
 
@@ -13,7 +13,7 @@ import Dashboard from './pages/Dashboard';
 import MyProfile from './pages/dashboard/MyProfile';
 import EnrolledCourses from './pages/dashboard/EnrolledCourses';
 import { Wishlist } from './pages/dashboard/Wishlist';
-import OrderHistory from './pages/dashboard/OrderHistory'; // USED
+import OrderHistory from './pages/dashboard/OrderHistory'; 
 import Settings from './pages/dashboard/Settings';
 import MyLiveClasses from './pages/dashboard/MyLiveClasses';
 import LiveClassRecordings from './pages/dashboard/LiveClassRecordings';
@@ -45,10 +45,12 @@ import CourseManagement from './pages/admin/CourseManagement';
 import BlogManagement from './pages/admin/BlogManagement';
 import LiveClassManagement from './pages/admin/LiveClassManagement';
 import InstructorManagement from './pages/admin/InstructorManagement';
-import OrderManagement from './pages/admin/OrderManagement'; // USED
+import OrderManagement from './pages/admin/OrderManagement'; 
 import AnalyticsDashboard from './pages/admin/AnalyticsDashboard';
 import CouponManagement from './pages/admin/CouponManagement';
 import EditCourseDetails from './pages/admin/EditCourseDetails';
+import SuccessStoriesManagement from './pages/admin/SuccessStoriesManagement';
+import CommunityEventsManagement from './pages/admin/CommunityEventsManagement'; 
 
 // Instructor pages
 import InstructorDashboard from './pages/instructor/InstructorDashboard';
@@ -73,11 +75,13 @@ const InstructorRoute = ({ children }) => {
 const AppRoutes = () => {
     // Destructure ALL needed state and data from the context
     const { 
-        user, userRole, cart, wishlist, enrolledCourses, orderHistory, // NEW: orderHistory
+        user, userRole, cart, wishlist, enrolledCourses, orderHistory, 
         registeredLiveClasses, liveClassesData, coursesData, 
         blogPostsData, instructorApplications, firstName, lastName,
         setIsLoggedIn, setEnrolledCourses, isLoggedIn, onLogout, cartItemsCount,
-        allCoursesFlatList, allCoursesFullObject // ALL course data formats
+        allCoursesFlatList, allCoursesFullObject,
+        successStoriesData,
+        communityEventsData, // NEW: Destructure communityEventsData
     } = useAuth();
 
     // --- HELPER FUNCTIONS (Kept here as they involve database writes) ---
@@ -180,7 +184,8 @@ const AppRoutes = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<LandingPage {...commonProps} blogPostsData={blogPostsData} />} />
+                {/* MODIFIED: Pass successStoriesData to LandingPage */}
+                <Route path="/" element={<LandingPage {...commonProps} blogPostsData={blogPostsData} successStoriesData={successStoriesData} />} />
                 <Route path="/login" element={<LoginPage {...commonProps} setIsLoggedIn={setIsLoggedIn} />} />
                 <Route path="/signup" element={<SignupPage {...commonProps} setIsLoggedIn={setIsLoggedIn} />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage {...commonProps} />} />
@@ -196,10 +201,12 @@ const AppRoutes = () => {
                 <Route path="/for-business/partner-with-us" element={<PartnerWithUs {...commonProps} />} />
                 <Route path="/for-business/hire-from-us" element={<HireFromUs {...commonProps} />} />
                 <Route path="/resources/free-resources" element={<FreeResources {...commonProps} />} />
-                <Route path="/resources/success-stories" element={<SuccessStories {...commonProps} />} />
+                {/* MODIFIED: Pass successStoriesData as 'stories' prop */}
+                <Route path="/resources/success-stories" element={<SuccessStories {...commonProps} stories={successStoriesData} />} /> 
                 <Route path="/resources/masterclass-replays" element={<MasterclassReplays {...commonProps} />} />
                 <Route path="/resources/Brave-statistics" element={<BraveStatistics {...commonProps} />} />
-                <Route path="/resources/community-events" element={<CommunityEvents {...commonProps} />} />
+                {/* MODIFIED: Pass communityEventsData as 'events' prop */}
+                <Route path="/resources/community-events" element={<CommunityEvents {...commonProps} events={communityEventsData} />} />
                 <Route path="/more/about-us" element={<AboutUs {...commonProps} />} />
                 <Route path="/more/join-Brave-teams" element={<JoinBraveTeams {...commonProps} />} />
                 <Route path="/more/join-Brave-projects" element={<JoinBraveProjects {...commonProps} />} />
@@ -231,6 +238,10 @@ const AppRoutes = () => {
                 <Route path="/admin/live-classes" element={<AdminRoute><LiveClassManagement {...commonProps} /></AdminRoute>} />
                 {/* OrderManagement component will fetch its own data */}
                 <Route path="/admin/orders" element={<AdminRoute><OrderManagement {...commonProps} /></AdminRoute>} />
+                 {/* NEW ADMIN ROUTE: Pass stories prop */}
+                <Route path="/admin/success-stories" element={<AdminRoute><SuccessStoriesManagement {...commonProps} stories={successStoriesData} /></AdminRoute>} />
+                {/* NEW ADMIN ROUTE: Pass events prop */}
+                <Route path="/admin/community-events" element={<AdminRoute><CommunityEventsManagement {...commonProps} events={communityEventsData} /></AdminRoute>} />
                 <Route path="/admin/coupons" element={<AdminRoute><CouponManagement {...commonProps} /></AdminRoute>} />
                 <Route path="/admin/analytics" element={<AdminRoute><AnalyticsDashboard {...commonProps} /></AdminRoute>} />
         

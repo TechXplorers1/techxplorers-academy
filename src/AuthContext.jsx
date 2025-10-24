@@ -32,6 +32,10 @@ export const AuthProvider = ({ children }) => {
     const [liveClassesData, setLiveClassesData] = useState([]);
     const [blogPostsData, setBlogPostsData] = useState([]);
     const [instructorApplications, setInstructorApplications] = useState([]);
+    // NEW: Success Stories State
+    const [successStoriesData, setSuccessStoriesData] = useState([]); 
+    // NEW: Community Events State
+    const [communityEventsData, setCommunityEventsData] = useState([]); 
     
     // Calculated course structures
     const [allCoursesFlatList, setAllCoursesFlatList] = useState([]);
@@ -81,6 +85,18 @@ export const AuthProvider = ({ children }) => {
             setInstructorApplications(data ? Object.values(data) : []);
         });
 
+        // NEW: Fetch Success Stories
+        const storiesRef = ref(db, 'successStories');
+        const unsubscribeStories = onValue(storiesRef, (snapshot) => {
+            setSuccessStoriesData(Object.values(snapshot.val() || {}));
+        });
+        
+        // NEW: Fetch Community Events
+        const communityEventsRef = ref(db, 'communityEvents');
+        const unsubscribeCommunityEvents = onValue(communityEventsRef, (snapshot) => {
+            setCommunityEventsData(Object.values(snapshot.val() || {}));
+        });
+
         // NEW: Fetch ALL orders for Admin Order Management
         let unsubscribeAllOrders = null;
         if (userRole === 'admin') {
@@ -91,8 +107,6 @@ export const AuthProvider = ({ children }) => {
                 // Sort by date descending
                 ordersArray.sort((a, b) => new Date(b.date) - new Date(a.date)); 
                 // Store in a dedicated state if needed globally, or pass via context/props.
-                // For now, we'll rely on the dedicated fetch in OrderManagement.jsx if we needed real-time, 
-                // but a simple fetch is more idiomatic for admin data management. Let's keep it simple and rely on user data for now.
              });
         }
         
@@ -166,6 +180,8 @@ export const AuthProvider = ({ children }) => {
             unsubscribeLiveClasses();
             unsubscribeBlogPosts();
             unsubscribeApplications();
+            unsubscribeStories(); // NEW: Unsubscribe for stories
+            unsubscribeCommunityEvents(); // NEW: Unsubscribe for community events
             if(unsubscribeAllOrders) unsubscribeAllOrders();
         };
     }, [userRole]); // Re-run when userRole changes to potentially fetch admin data
@@ -192,10 +208,12 @@ export const AuthProvider = ({ children }) => {
         wishlist,
         enrolledCourses,
         registeredLiveClasses,
-        orderHistory, // NEW: Export order history
+        orderHistory, 
         liveClassesData,
         blogPostsData,
         instructorApplications,
+        successStoriesData, // NEW: Export success stories
+        communityEventsData, // NEW: Export community events data
 
         // ALL THREE COURSE DATA STRUCTURES
         coursesData,            // Grouped (for Category & Header)
