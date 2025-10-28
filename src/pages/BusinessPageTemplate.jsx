@@ -31,10 +31,44 @@ const BusinessPageTemplate = ({
   formTitle,
   formDescription,
   formFields,
-  coursesData // Accept prop
-
+  coursesData,
+  whatsappNumber // NEW: Accept whatsappNumber prop
 }) => {
   const filteredBreadcrumbs = breadcrumbs.filter(crumb => crumb.name !== "For Business");
+
+  // --- WHATSAPP SUBMISSION HANDLER ---
+  const handleWhatsAppSubmit = (event) => {
+    event.preventDefault(); // Stop the default form submission
+
+    if (!whatsappNumber) {
+      alert("WhatsApp number is not configured.");
+      return;
+    }
+
+    const formData = new FormData(event.target);
+    let message = `*${formTitle}*\n\n`; // Start with the form title as a heading
+
+    // Iterate over form fields to build the message with headings
+    formFields.forEach(field => {
+      const value = formData.get(field.name) || 'N/A';
+      // Format each field as a heading and its value
+      message += `*${field.label}:*\n${value}\n\n`;
+    });
+
+    // Remove the country code '+' for the wa.me URL, as it expects digits only.
+    const cleanNumber = whatsappNumber.replace(/\+/g, '').replace(/\s/g, '');
+    
+    // URL-encode the message
+    const encodedMessage = encodeURIComponent(message);
+    
+    // Construct the WhatsApp URL
+    const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedMessage}`;
+    
+    // Open the WhatsApp chat in a new tab
+    window.open(whatsappUrl, '_blank');
+  };
+  // -----------------------------------
+
 
   return (
     // CHANGED: Background to white, text to dark gray
@@ -164,7 +198,8 @@ const BusinessPageTemplate = ({
             </h3>
             <p className="text-lg text-gray-600 mb-12">{formDescription}</p>
 
-            <form className="space-y-8">
+            {/* UPDATED: Added onSubmit handler */}
+            <form onSubmit={handleWhatsAppSubmit} className="space-y-8">
               <div className="grid md:grid-cols-2 gap-8">
                 {formFields.map((field, i) => (
                   <div key={i} className="flex flex-col text-left">
@@ -173,12 +208,15 @@ const BusinessPageTemplate = ({
                       className="block text-sm font-semibold text-gray-700 mb-2"
                     >
                       {field.label}
+                      {/* ADDED: Required indicator */}
+                      {field.required && <span className="text-red-500 ml-1">*</span>}
                     </label>
                     {field.type === "textarea" ? (
                       <textarea
                         id={field.name}
                         name={field.name}
                         rows="4"
+                        required={field.required} // Added required attribute
                         // CHANGED: Focus ring color to blue-400
                         className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-400 focus:ring-blue-400"
                       />
@@ -186,11 +224,14 @@ const BusinessPageTemplate = ({
                       <select
                         id={field.name}
                         name={field.name}
+                        required={field.required} // Added required attribute
                         // CHANGED: Focus ring color to blue-400
                         className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-400 focus:ring-blue-400"
                       >
+                        {/* ADDED: Default empty/placeholder option */}
+                        <option value="" disabled selected>Select an option</option>
                         {field.options.map((option, j) => (
-                          <option key={j}>{option}</option>
+                          <option key={j} value={option}>{option}</option>
                         ))}
                       </select>
                     ) : (
@@ -198,6 +239,7 @@ const BusinessPageTemplate = ({
                         type={field.type}
                         id={field.name}
                         name={field.name}
+                        required={field.required} // Added required attribute
                         // CHANGED: Focus ring color to blue-400
                         className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-400 focus:ring-blue-400"
                       />
@@ -211,9 +253,11 @@ const BusinessPageTemplate = ({
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   // CHANGED: Submit button gradient to blue/cyan
-                  className="bg-gradient-to-r from-blue-400 to-cyan-400 text-white text-lg font-semibold py-3 px-12 rounded-full shadow-lg hover:opacity-90 transition"
+                  className="bg-gradient-to-r from-blue-400 to-cyan-400 text-white text-lg font-semibold py-3 px-12 rounded-full shadow-lg hover:opacity-90 transition flex items-center"
                 >
-                  Submit Request
+                   {/* UPDATED: Button text to be more explicit */}
+                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.16 2.76a1.18 1.18 0 00-.77-.77A9.85 9.85 0 0010 0C4.48 0 0 4.48 0 10s4.48 10 10 10c1.78 0 3.47-.48 4.93-1.3l.35.1.75.22.46.12.33.09c.14.04.29.06.43.06.3 0 .58-.09.83-.23l.1-.06.07-.04.06-.04.05-.04.04-.03.04-.03.03-.02c.07-.05.13-.11.19-.17.13-.13.23-.28.32-.45.09-.17.15-.35.18-.54.03-.19.04-.38.04-.58V10A9.85 9.85 0 0017.16 2.76zM10 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 2.21-1.2 4.15-3.03 5.37l-.05.04-1.32.74-2.27.76-.09.03-.2.07c-.12.04-.25.06-.38.06h-.1c-.13 0-.25-.03-.37-.06l-.2-.07-.09-.03-2.27-.76L5 15.65l-.05-.04C3.82 14.15 3 12.19 3 10c0-3.86 3.14-7 7-7s7 3.14 7 7-3.14 7-7 7zM14.65 11.23c-.15-.15-.35-.22-.56-.22-.2 0-.4.07-.55.22l-1.36 1.36-1.07-1.07c-.3-.3-.7-.47-1.13-.47s-.83.17-1.13.47l-1.07 1.07-1.36-1.36c-.3-.3-.7-.47-1.13-.47s-.83.17-1.13.47c-.62.62-.62 1.63 0 2.25l1.36 1.36 1.07 1.07c.3.3.7.47 1.13.47s.83-.17 1.13-.47l1.07-1.07 1.36-1.36c.62-.62.62-1.63 0-2.25z"/></svg>
+                  Send WhatsApp Message
                 </motion.button>
               </div>
             </form>

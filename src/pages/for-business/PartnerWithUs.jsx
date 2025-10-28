@@ -6,6 +6,10 @@ import bns6 from '../../assets/bns-6.jpg';
 import bns7 from '../../assets/bns-7.jpg';
 // --------------------------------------------------
 
+// --- WHATSAPP CONFIGURATION ---
+const WHATSAPP_NUMBER = '+919618108329'; // The target number
+// ------------------------------
+
 const pageData = {
   title: "Partner With Us",
   tagline: "Empowering The Future, Building The Future",
@@ -40,14 +44,19 @@ const pageData = {
       image: bns7, // UPDATED: Replaced random URL with imported asset bns7
     },
   ],
-  formTitle: "DigitallyBrave Partnership Interest Form",
+  formTitle: "Partnership Inquiry - WhatsApp Chat", // UPDATED title
   formDescription:
-    "Tell us about your organization and how you envision a partnership with us.",
+    "Fill out a few quick details, and upon clicking 'Send WhatsApp Message', a chat will open with your inquiry pre-filled.", // UPDATED description
+  
+  // --- WHATSAPP CONFIGURATION ---
+  whatsappNumber: WHATSAPP_NUMBER, // Pass the WhatsApp number to the template
+
+  // Simplified fields for a better WhatsApp initial message
   formFields: [
-    { label: "Company Information", type: "text", name: "companyInfo" },
-    { label: "Contact Person", type: "text", name: "contactPerson" },
-    { label: "Partnership Type", type: "textarea", name: "partnershipType" },
-    { label: "Tell Us More", type: "textarea", name: "tellUsMore" },
+    { label: "Contact Person", type: "text", name: "contactPerson", required: true },
+    { label: "Company Name", type: "text", name: "companyName", required: true },
+    { label: "Partnership Type (e.g., Sponsorship)", type: "text", name: "partnershipType", required: true },
+    { label: "Contact Email", type: "email", name: "contactEmail", required: true },
   ],
 };
 

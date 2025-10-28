@@ -7,6 +7,10 @@ import bns9 from '../../assets/bns-9.jpg';
 import bns10 from '../../assets/bns-10.jpg';
 // --------------------------------------------------
 
+// --- WHATSAPP CONFIGURATION ---
+const WHATSAPP_NUMBER = '+919618108329'; // The target number
+// ------------------------------
+
 const pageData = {
   title: "Hire From Us",
   tagline: "Build Your Dream Team With Proven, Job-Ready Talent",
@@ -50,20 +54,24 @@ const pageData = {
         "UX/UI Designer",
         "Software Developer",
         "Data Scientist",
-        // ADDED: The requested field
         "On-Demand Roles",
       ],
       image: bns10, // UPDATED: Replaced random URL with imported asset bns10
     },
   ],
-  formTitle: "Talent Request Form",
+  formTitle: "Talent Request - WhatsApp Chat", // UPDATED title
   formDescription:
-    "Tell us about the roles you need to fill and we will match you with the best candidates.",
+    "Fill out a few quick details, and upon clicking 'Send WhatsApp Message', a chat will open with your inquiry pre-filled.", // UPDATED description
+
+  // --- WHATSAPP CONFIGURATION ---
+  whatsappNumber: WHATSAPP_NUMBER, // Pass the WhatsApp number to the template
+
+  // Simplified fields for a better WhatsApp initial message
   formFields: [
-    { label: "Company Information", type: "text", name: "companyInfo" },
-    { label: "Role Requirements", type: "textarea", name: "roleRequirements" },
-    { label: "Budget & Hiring Process", type: "text", name: "budgetHiring" },
-    { label: "Final Details", type: "textarea", name: "finalDetails" },
+    { label: "Contact Person", type: "text", name: "contactPerson", required: true },
+    { label: "Company Name", type: "text", name: "companyName", required: true },
+    { label: "Role(s) Needed", type: "text", name: "rolesNeeded", required: true },
+    { label: "Hiring Timeline (e.g., 3 months)", type: "text", name: "hiringTimeline", required: true },
   ],
 };
 

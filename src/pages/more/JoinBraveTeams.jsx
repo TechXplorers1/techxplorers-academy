@@ -3,11 +3,45 @@ import React from 'react';
 import MorePageTemplate from '../MorePageTemplate';
 import useInView from '../../hooks/useInView';
 
+// --- WHATSAPP CONFIGURATION ---
+const WHATSAPP_NUMBER = '+919618108329';
+const FORM_TITLE = 'BraveTeams Application (Learner)';
+// ------------------------------
+
 const JoinBraveTeams = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const [introRef, introInView] = useInView({ threshold: 0.2 });
     const [sectionsRef, sectionsInView] = useInView({ threshold: 0.2 });
     const [howItWorksRef, howItWorksInView] = useInView({ threshold: 0.2 });
     const [formRef, formInView] = useInView({ threshold: 0.2 });
+
+    // --- WHATSAPP SUBMISSION HANDLER ---
+    const handleWhatsAppSubmit = (event) => {
+        event.preventDefault(); // Stop the default form submission
+
+        const formData = new FormData(event.target);
+        let message = `*${FORM_TITLE}*\n\n`; // Include form title as the main heading
+
+        // Collect and format data with headings
+        const fields = [
+            { label: 'Full Name', name: 'fullName' },
+            { label: 'Email Address', name: 'emailAddress' },
+            { label: 'Experience Details', name: 'experience' }
+        ];
+
+        fields.forEach(field => {
+            const value = formData.get(field.name) || 'N/A';
+            message += `*${field.label}:*\n${value}\n\n`;
+        });
+
+        // Clean number and construct URL
+        const cleanNumber = WHATSAPP_NUMBER.replace(/\+/g, '').replace(/\s/g, '');
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedMessage}`;
+        
+        // Open the WhatsApp chat
+        window.open(whatsappUrl, '_blank');
+    };
+    // -----------------------------------
 
     return (
         <MorePageTemplate title="Join BraveTeams" breadcrumb="Join BraveTeams" isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount}>
@@ -46,15 +80,20 @@ const JoinBraveTeams = ({ isLoggedIn, onLogout, cartItemsCount }) => {
             </div>
 
             <div ref={formRef} className={`bg-gray-100 p-12 rounded-2xl shadow-inner transition-all duration-700 delay-400 ${formInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                <h3 className="text-4xl font-extrabold text-center mb-10">Apply to Join a BraveTeam</h3>
-                <form className="space-y-8 max-w-2xl mx-auto">
+                <h3 className="text-4xl font-extrabold text-center mb-10">Apply to Join a BraveTeam - Submit via WhatsApp</h3>
+                {/* UPDATED: Added onSubmit handler */}
+                <form onSubmit={handleWhatsAppSubmit} className="space-y-8 max-w-2xl mx-auto">
                     <div className="grid md:grid-cols-2 gap-6">
-                        <input type="text" placeholder="Full Name" className="p-4 border rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500"/>
-                        <input type="email" placeholder="Email Address" className="p-4 border rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500"/>
+                        {/* UPDATED: Added name and required attributes */}
+                        <input type="text" name="fullName" placeholder="Full Name (Required)" required className="p-4 border rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500"/>
+                        {/* UPDATED: Added name and required attributes */}
+                        <input type="email" name="emailAddress" placeholder="Email Address (Required)" required className="p-4 border rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500"/>
                     </div>
-                    <textarea placeholder="Tell us about your experience" rows="4" className="w-full p-4 border rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500"></textarea>
+                    {/* UPDATED: Added name attribute */}
+                    <textarea name="experience" placeholder="Tell us about your experience" rows="4" className="w-full p-4 border rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500"></textarea>
+                    {/* UPDATED: Button text */}
                     <button type="submit" className="w-full py-4 bg-purple-600 text-white font-bold rounded-lg shadow-lg hover:bg-purple-700 transition-colors">
-                        Submit Application
+                        Send Application via WhatsApp
                     </button>
                 </form>
             </div>
