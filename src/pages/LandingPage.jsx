@@ -16,6 +16,12 @@ import ins4 from '../assets/ins-4.jpg';
 import ins5 from '../assets/ins-5.jpg';
 // -----------------------------------------------------------
 
+// --- REACT ICON IMPORTS (Added based on your request) ---
+import { AiOutlineBulb, AiOutlineBarChart, AiOutlineThunderbolt, AiOutlineAppstore } from 'react-icons/ai'; 
+import { FaLaptopCode, FaShieldHalved } from 'react-icons/fa6'; 
+// -----------------------------------------------------------------------
+
+
 // --- Inline SVG Icons (RE-ADDED to fix ReferenceError) ---
 const PlayIcon = ({ size = 24, className }) => (
   <svg
@@ -315,31 +321,31 @@ function LandingPage(props) {
     );
   };
 
+  // UPDATED: Replacing inline SVGs with imported React Icons
   const popularStacks = [
     {
       name: 'Product & Strategy',
-      // CHANGED: Icon color to blue-600
-      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0h2.204a2 2 0 01.838.188l4.095 2.048a1 1 0 001.122-.163l4.581-4.581c.31-.31.056-.879-.318-1.026l-4.095-1.638a2 2 0 01-1.47-.537L9 20z" /></svg>
+      icon: <AiOutlineBulb className="h-10 w-10 text-blue-600 group-hover:text-white" />
     },
     {
       name: 'UX & UI Design',
-      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8l-6 6 6 6M6 12h18" /></svg>
+      icon: <AiOutlineAppstore className="h-10 w-10 text-blue-600 group-hover:text-white" />
     },
     {
       name: 'Engineering & Development',
-      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4m-4 4l-4-4m-4-4l-4 4m-4-4l-4 4" /></svg>
+      icon: <FaLaptopCode className="h-10 w-10 text-blue-600 group-hover:text-white" />
     },
     {
       name: 'Data & Analytics',
-      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18.5a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18.5a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" strokeDasharray="3 3" /></svg>
+      icon: <AiOutlineBarChart className="h-10 w-10 text-blue-600 group-hover:text-white" />
     },
     {
       name: 'Cybersecurity & Compliance',
-      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5-6a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V6z" /></svg>
+      icon: <FaShieldHalved className="h-10 w-10 text-blue-600 group-hover:text-white" />
     },
     {
       name: 'AI & Automation',
-      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+      icon: <AiOutlineThunderbolt className="h-10 w-10 text-blue-600 group-hover:text-white" />
     }
   ].map(stack => ({
     ...stack,
