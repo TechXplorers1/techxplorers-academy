@@ -11,7 +11,7 @@ const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
         return null;
     }
 
-    // Dropdown remains white background, dark text
+    // Dropdown remains z-50 so it appears over the z-40 header on desktop
     return (
         <div
             ref={menuRef}
@@ -34,6 +34,22 @@ const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
     );
 };
 
+// Helper component for rendering the content of a mobile dropdown
+const MobileDropdownContent = ({ items, onLinkClick }) => (
+    <div className="pl-4 mt-1 space-y-1 border-l-2 border-gray-200 ml-3">
+        {items.map((item, index) => (
+            <Link
+                key={index}
+                to={item.path}
+                onClick={onLinkClick}
+                className="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-blue-600"
+            >
+                {item.name}
+            </Link>
+        ))}
+    </div>
+);
+
 const Header = () => {
     const { 
         isLoggedIn, 
@@ -47,9 +63,14 @@ const Header = () => {
     const [isForBusinessOpen, setIsForBusinessOpen] = React.useState(false);
     const [isResourcesOpen, setIsResourcesOpen] = React.useState(false);
     const [isMoreOpen, setIsMoreOpen] = React.useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    
+    const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
+    
     const navigate = useNavigate();
 
     const handleHover = (dropdownName, isOpen) => {
+        // ... (Desktop hover logic unchanged)
         setTimeout(() => {
             switch (dropdownName) {
                 case 'allStacks':
@@ -74,6 +95,25 @@ const Header = () => {
         navigate('/search');
     };
 
+    const toggleMobileMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen);
+        if (isMobileMenuOpen) {
+            setOpenMobileDropdown(null);
+        }
+    };
+    
+    const handleMobileLinkClick = (path) => {
+        if (path) {
+            navigate(path);
+        }
+        toggleMobileMenu();
+    };
+
+    const handleMobileDropdownToggle = (menuName) => {
+        setOpenMobileDropdown(prev => (prev === menuName ? null : menuName));
+    };
+
+    // ... (Item definitions are unchanged)
     const allStacksItems = coursesData ? Object.keys(coursesData).map(key => ({
         name: categoryMap[key] || key,
         path: `/all-stacks/${toKebabCase(key)}`
@@ -101,17 +141,21 @@ const Header = () => {
         { name: 'Plans', path: '/more/plans' },
     ];
 
-    // CHANGED: Header class to light theme (white background, dark text, subtle shadow/border)
-    const headerClass = "w-full z-50 bg-white shadow-md text-gray-800 border-b border-gray-200";
+
+    // --- MODIFIED ---
+    // Changed z-index to 40, so the mobile menu (z-50) can go over it
+    const headerClass = "w-full z-40 bg-white shadow-md text-gray-800 border-b border-gray-200";
 
     return (
         <header className={headerClass}>
-            <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-                {/* CHANGED: Logo accent color to blue-600 */}
+            <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center relative">
+                
                 <Link to="/" className="text-xl font-bold text-blue-600">Digitally Brave</Link>
+                
+                {/* ... (Desktop nav and auth links are unchanged) ... */}
                 <div className="hidden lg:flex items-center space-x-8">
+                    {/* All Stacks */}
                     <div className="relative" onMouseEnter={() => handleHover('allStacks', true)} onMouseLeave={() => handleHover('allStacks', false)}>
-                        {/* CHANGED: Navigation link hover color to blue-600 */}
                         <button className="flex items-center hover:text-blue-600 transition-colors">
                             All Stacks
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -120,8 +164,8 @@ const Header = () => {
                         </button>
                         <DropdownMenu isOpen={isAllStacksOpen} items={allStacksItems} onMouseEnter={() => handleHover('allStacks', true)} onMouseLeave={() => handleHover('allStacks', false)} />
                     </div>
+                    {/* For Business */}
                     <div className="relative" onMouseEnter={() => handleHover('forBusiness', true)} onMouseLeave={() => handleHover('forBusiness', false)}>
-                        {/* CHANGED: Navigation link hover color to blue-600 */}
                         <button className="flex items-center hover:text-blue-600 transition-colors">
                             For Business
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -130,8 +174,8 @@ const Header = () => {
                         </button>
                         <DropdownMenu isOpen={isForBusinessOpen} items={forBusinessItems} onMouseEnter={() => handleHover('forBusiness', true)} onMouseLeave={() => handleHover('forBusiness', false)} />
                     </div>
+                    {/* Resources */}
                     <div className="relative" onMouseEnter={() => handleHover('resources', true)} onMouseLeave={() => handleHover('resources', false)}>
-                        {/* CHANGED: Navigation link hover color to blue-600 */}
                         <button className="flex items-center hover:text-blue-600 transition-colors">
                             Resources
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -140,8 +184,8 @@ const Header = () => {
                         </button>
                         <DropdownMenu isOpen={isResourcesOpen} items={resourcesItems} onMouseEnter={() => handleHover('resources', true)} onMouseLeave={() => handleHover('resources', false)} />
                     </div>
+                    {/* More */}
                     <div className="relative" onMouseEnter={() => handleHover('more', true)} onMouseLeave={() => handleHover('more', false)}>
-                        {/* CHANGED: Navigation link hover color to blue-600 */}
                         <button className="flex items-center hover:text-blue-600 transition-colors">
                             More
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -150,20 +194,18 @@ const Header = () => {
                         </button>
                         <DropdownMenu isOpen={isMoreOpen} items={moreItems} onMouseEnter={() => handleHover('more', true)} onMouseLeave={() => handleHover('more', false)} />
                     </div>
-                    {/* CHANGED: Live Classes CTA color to blue-600 */}
+                    {/* Live Classes */}
                     <Link to="/more/live-classes" className="text-white font-bold py-2 px-4 rounded-full bg-blue-600 hover:bg-blue-700 transition-colors">
                         Live Classes
                     </Link>
                 </div>
                 <div className="hidden lg:flex items-center space-x-4">
-                    {/* CHANGED: Icon hover color to blue-600 */}
                     <button onClick={handleSearchClick} className="hover:text-blue-600 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </button>
                     {isLoggedIn && (
-                        // CHANGED: Icon hover color to blue-600
                         <Link to="/cart" className="relative hover:text-blue-600 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63-.63-.185 1.705.707 1.705H17m0 0a2 2 0 100 4 2 2 0 010-4zm-8 2a2 2 0 110 4 2 2 0 010-4z" />
@@ -177,7 +219,6 @@ const Header = () => {
                     )}
                     {isLoggedIn ? (
                         <>
-                            {/* Dashboard links hover color changed to blue-600 */}
                             {userRole === 'admin' && (
                                 <Link to="/admin/dashboard" className="hover:text-blue-600 transition-colors">
                                     Admin Dashboard
@@ -193,22 +234,153 @@ const Header = () => {
                                     Dashboard
                                 </Link>
                             )}
-                            {/* CHANGED: Logout button color scheme (Blue border/text, White hover bg/text) */}
                             <button onClick={onLogout} className="px-4 py-2 border border-blue-600 rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition-colors">
                                 Logout
                             </button>
                         </>
                     ) : (
-                        // CHANGED: Login link hover color to blue-600
                         <Link to="/login" className="hover:text-blue-600 transition-colors">Login</Link>
                     )}
                 </div>
-                {/* CHANGED: Mobile menu button color to gray-800 */}
-                <button className="lg:hidden text-2xl text-gray-800">
-                    ☰
+
+                {/* Mobile menu button (remains in nav) */}
+                <button 
+                    className="lg:hidden text-2xl text-gray-800"
+                    onClick={toggleMobileMenu}
+                >
+                    {/* This logic is still here, but the button will be hidden by the menu */}
+                    {isMobileMenuOpen ? '✕' : '☰'}
                 </button>
             </nav>
-            {/* CHANGED: Policy update bar color to secondary accent (cyan-500) */}
+
+            {/* --- MODIFIED: Mobile Menu --- */}
+            {isMobileMenuOpen && (
+                // Covers the full screen (inset-0) and is on top (z-50)
+                <div className="lg:hidden bg-white text-gray-800 fixed inset-0 overflow-y-auto z-50">
+                    <div className="px-4 pt-4 pb-4 space-y-1 sm:px-6">
+                        
+                        {/* --- ADDED: Row for Search and new Close Button --- */}
+                        <div className="flex items-center justify-between h-12">
+                            <button 
+                                onClick={() => { handleSearchClick(); toggleMobileMenu(); }} 
+                                className="flex-grow flex items-center w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                                Search
+                            </button>
+                            {/* --- ADDED: The new "cancel" button --- */}
+                            <button 
+                                className="ml-4 text-2xl text-gray-600 hover:text-gray-900"
+                                onClick={toggleMobileMenu}
+                                aria-label="Close menu"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        
+                        <hr className="my-2" />
+
+                        {/* Stacks Dropdown */}
+                        <div>
+                            <button 
+                                onClick={() => handleMobileDropdownToggle('stacks')}
+                                className="w-full flex justify-between items-center px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600"
+                            >
+                                All Stacks
+                                <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ml-1 transition-transform ${openMobileDropdown === 'stacks' ? 'transform rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            {openMobileDropdown === 'stacks' && (
+                                <MobileDropdownContent items={allStacksItems} onLinkClick={toggleMobileMenu} />
+                            )}
+                        </div>
+
+                        {/* Business Dropdown */}
+                        <div>
+                            <button 
+                                onClick={() => handleMobileDropdownToggle('business')}
+                                className="w-full flex justify-between items-center px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600"
+                            >
+                                For Business
+                                <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ml-1 transition-transform ${openMobileDropdown === 'business' ? 'transform rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            {openMobileDropdown === 'business' && (
+                                <MobileDropdownContent items={forBusinessItems} onLinkClick={toggleMobileMenu} />
+                            )}
+                        </div>
+
+                        {/* Resources Dropdown */}
+                        <div>
+                            <button 
+                                onClick={() => handleMobileDropdownToggle('resources')}
+                                className="w-full flex justify-between items-center px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600"
+                            >
+                                Resources
+                                <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ml-1 transition-transform ${openMobileDropdown === 'resources' ? 'transform rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            {openMobileDropdown === 'resources' && (
+                                <MobileDropdownContent items={resourcesItems} onLinkClick={toggleMobileMenu} />
+                            )}
+                        </div>
+
+                        {/* More Dropdown */}
+                        <div>
+                            <button 
+                                onClick={() => handleMobileDropdownToggle('more')}
+                                className="w-full flex justify-between items-center px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600"
+                            >
+                                More
+                                <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ml-1 transition-transform ${openMobileDropdown === 'more' ? 'transform rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            {openMobileDropdown === 'more' && (
+                                <MobileDropdownContent items={moreItems} onLinkClick={toggleMobileMenu} />
+                            )}
+                        </div>
+    
+                        {/* Live Classes Link */}
+                        <Link to="/more/live-classes" onClick={toggleMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium text-blue-600 font-bold hover:bg-gray-100">Live Classes</Link>
+                        
+                        <hr className="my-2" />
+
+                        {/* Auth Links for mobile */}
+                        {isLoggedIn ? (
+                            <>
+                                {userRole === 'admin' && <Link to="/admin/dashboard" onClick={toggleMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600">Admin Dashboard</Link>}
+                                {userRole === 'instructor' && <Link to="/instructor/dashboard" onClick={toggleMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600">Instructor Dashboard</Link>}
+                                {userRole === 'user' && <Link to="/dashboard" onClick={toggleMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600">Dashboard</Link>}
+                                
+                                <Link to="/cart" onClick={toggleMobileMenu} className="relative flex items-center px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600">
+                                    Cart
+                                    {cartItemsCount > 0 && (
+                                        <span className="ml-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                            {cartItemsCount}
+                                        </span>
+                                    )}
+                                </Link>
+                                <button 
+                                    onClick={() => { onLogout(); toggleMobileMenu(); }} 
+                                    className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-gray-100"
+                                >
+                                    Logout
+                                </button>
+                            </>
+                        ) : (
+                            <Link to="/login" onClick={toggleMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600">Login</Link>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* Policy update bar (this will be covered by the mobile menu when open) */}
             <div className="bg-cyan-500 text-sm py-2 text-center font-semibold text-white">
                 <span className="animate-pulse mr-2">📢</span>
                 POLICY UPDATE: Senior leaders from the world's leading research..

@@ -116,9 +116,9 @@ const NumberCounter = ({ targetNumber, duration = 2000 }) => {
     };
     window.requestAnimationFrame(step);
   };
-  
+ 
   // ... (rest of NumberCounter)
-  
+ 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -294,7 +294,7 @@ function LandingPage(props) {
     const newAngle = rotationAngle + (direction === 'left' ? angleIncrement : -angleIncrement);
 
     setRotationAngle(newAngle);
-    
+   
     // Manually ensure the CSS animation is paused/overridden during manual movement
     if (carouselRef.current) {
         carouselRef.current.style.animationPlayState = 'paused';
@@ -532,9 +532,11 @@ function LandingPage(props) {
                 </div>
               </div>
 
-              <div className="relative flex flex-col md:flex-row justify-center items-center gap-12">
+              {/* MODIFIED: This parent container now uses flex-col on mobile and md:flex-row on desktop */}
+              <div className="relative flex flex-col md:flex-row justify-center items-center gap-12 mt-12 md:mt-0">
                 {/* Social Media Card */}
-                <div className="group relative z-10 w-[260px] h-[380px] rounded-2xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 transform hero-v-card hero-v-card-left">
+                {/* NOTE: The 'hero-v-card' class CSS is now responsive */}
+                <div className="group relative z-10 w-[260px] h-[380px] rounded-2xl overflow-hidden shadow-2xl transition-all duration-700 hero-v-card hero-v-card-left">
                   {/* CHANGED: Social Card gradient to blue-focused blend */}
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_107%,_#3b82f6_0%,_#06b6d4_30%,_#1e3a8a_60%,_#2563eb_100%)] opacity-100 group-hover:opacity-0 transition-opacity duration-500"></div>
                   <div className="absolute inset-0 flex justify-center items-center text-white text-2xl font-bold transition-all duration-500 group-hover:transform group-hover:scale-0 group-hover:opacity-0">
@@ -554,7 +556,8 @@ function LandingPage(props) {
                   </div>
                 </div>
                 {/* Offers Card Carousel */}
-                <div className="group relative z-10 w-[260px] h-[380px] rounded-2xl overflow-hidden shadow-2xl p-8 flex flex-col items-center justify-center space-y-4 transition-all duration-700 transform hero-v-card hero-v-card-right">
+                {/* NOTE: The 'hero-v-card' class CSS is now responsive */}
+                <div className="group relative z-10 w-[260px] h-[380px] rounded-2xl overflow-hidden shadow-2xl p-8 flex flex-col items-center justify-center space-y-4 transition-all duration-700 hero-v-card hero-v-card-right">
                   <div className={`absolute inset-0 ${offers[currentOfferIndex].bgColor} ${offers[currentOfferIndex].textColor}`}></div>
                   <p className="relative z-10 text-sm font-semibold">Limited Offer</p>
                   <h3 className="relative z-10 text-4xl font-extrabold">{offers[currentOfferIndex].title}</h3>
@@ -1176,24 +1179,51 @@ function LandingPage(props) {
               0% { transform: translateY(-20px); opacity: 0; }
               100% { transform: translateY(0); opacity: 1; }
           }
-          
-          /* Hero V-shape animations */
+         
+          /* --- MODIFIED: Hero V-shape animations --- */
           .hero-v-card {
-              opacity: 0;
-              transform: translate(-50%, -50%) scale(0.8);
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transition: none;
+            position: relative; /* Default for mobile */
+            opacity: 1;
+            transform: scale(1);
+            top: auto;
+            left: auto;
+            transition: transform 0.3s ease-out; /* Add a simple mobile transition */
+          }
+          .hero-v-card:hover {
+            transform: scale(1.03); /* Simple mobile hover */
           }
 
-          .hero-section-visible .hero-v-card-left {
-              animation: spread-out-left 0.8s ease-out forwards;
-              animation-delay: 1200ms;
-          }
-          .hero-section-visible .hero-v-card-right {
-              animation: spread-out-right 0.8s ease-out forwards;
-              animation-delay: 1400ms;
+          /* Desktop (md) styles */
+          @media (min-width: 768px) {
+            .hero-v-card {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+                position: absolute; /* Only absolute on desktop */
+                top: 50%;
+                left: 50%;
+                transition: none; /* Animation will handle it */
+            }
+            .hero-v-card:hover {
+                 /* Disable mobile hover effect on desktop */
+                 transform: translate(-50%, -50%) scale(0.8);
+            }
+            .hero-section-visible .hero-v-card:hover {
+                 /* Re-apply animation end-state transform on hover */
+                 transform: translate(-100%, -50%) rotate(-6deg) scale(1);
+            }
+            .hero-section-visible .hero-v-card-right:hover {
+                 transform: translate(0%, -50%) rotate(6deg) scale(1);
+            }
+
+
+            .hero-section-visible .hero-v-card-left {
+                animation: spread-out-left 0.8s ease-out forwards;
+                animation-delay: 1200ms;
+            }
+            .hero-section-visible .hero-v-card-right {
+                animation: spread-out-right 0.8s ease-out forwards;
+                animation-delay: 1400ms;
+            }
           }
 
           @keyframes spread-out-left {
@@ -1204,7 +1234,8 @@ function LandingPage(props) {
               from { opacity: 0; transform: translate(-50%, -50%) rotate(0deg) scale(0.8); }
               to { opacity: 1; transform: translate(0%, -50%) rotate(6deg) scale(1); }
           }
-          
+          /* --- END OF MODIFICATION --- */
+         
           /* Ribbon Animation for Stats */
           @keyframes ribbon-wave {
               0%, 100% { transform: scaleX(0); }
@@ -1230,7 +1261,7 @@ function LandingPage(props) {
           .is-visible .text-glow {
               animation: text-glow 2s infinite ease-in-out;
           }
-          
+         
           /* Glowing Border for Testimonials */
           .glowing-border {
               position: relative;
@@ -1270,7 +1301,7 @@ function LandingPage(props) {
               transform: translateY(20px);
               transition: all 0.6s ease-out;
           }
-          
+         
           .hero-section-visible .animate-fade-in-down { animation: fade-in-down 0.6s ease-out forwards; animation-delay: 500ms; }
           .hero-section-visible .animate-slide-up-200 { animation: slide-up 0.6s ease-out forwards; animation-delay: 200ms; }
           .hero-section-visible .animate-slide-up-500 { animation: slide-up 0.6s ease-out forwards; animation-delay: 500ms; }
@@ -1279,13 +1310,13 @@ function LandingPage(props) {
           .hero-section-visible .animate-slide-up-1100 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1100ms; }
           .hero-section-visible .animate-slide-up-1300 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1300ms; }
           .hero-section-visible .animate-slide-up-1500 { animation: slide-up 0.6s ease-out forwards; animation-delay: 1500ms; }
-          
+         
 
           .animate-float { animation: float 3s ease-in-out infinite; }
           .animate-pulse-slow { animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
           .animate-bounce-slow { animation: bounce-slow 2s infinite; }
           .animation-delay-2000 { animation-delay: 2s; }
-          
+         
           .card-3d {
               position: relative;
               width: 500px;
@@ -1339,7 +1370,7 @@ function LandingPage(props) {
           .course-card.is-visible {
               opacity: 1;
               transform: translateY(0);
-        }
+          }
       `}</style>
     </div>
   );
