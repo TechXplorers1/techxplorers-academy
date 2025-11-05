@@ -1,52 +1,108 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+// NEW: Import PayPal components
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js"; 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 
-// NEW COMPONENT: Payment Modal
-const PaymentModal = ({ total, onClose, onPayNow }) => {
+// --- IMPORTANT ---
+// Get your Sandbox Client ID from the PayPal Developer Dashboard:
+// https://developer.paypal.com/developer/applications/
+//
+// 1. Go to "My Apps & Credentials".
+// 2. Create a new "App" (or use the default one).
+// 3. Copy the "Client ID" and paste it below.
+const PAYPAL_CLIENT_ID = "AcvkSghUkSJW8efQGCNQXTrU5JrcKvFbAniQWrwZ5O-rr3VFjoumhOMK0DmlvlXHguP-u7x-1d0gcgsw"; 
+// -----------------
+
+
+// MODIFIED: Payment Modal now handles the real PayPal flow
+const PaymentModal = ({ total, onClose, onApprovePayment, onError }) => {
+
+    // This function is called when the user clicks the PayPal button.
+    const createOrder = (data, actions) => {
+        return actions.order.create({
+            // We only need the purchase amount, not a full breakdown
+            purchase_units: [
+                {
+                    description: "BraveStack Course Purchase",
+                    amount: {
+                        currency_code: "USD", // Change this if your currency is different
+                        value: total.toFixed(2),
+                    },
+                },
+            ],
+            // Tell PayPal we are selling digital goods, so no shipping address is needed
+            application_context: {
+                shipping_preference: 'NO_SHIPPING',
+            }
+        });
+    };
+
+    // This function is called after the user approves the payment in the PayPal popup.
+    const onApprove = (data, actions) => {
+        // This captures the funds from the transaction.
+        return actions.order.capture().then((details) => {
+            // 'details' contains info about the successful transaction (e.g., payer name)
+            // We now call the function passed from CartPage to finalize the purchase in our database
+            onApprovePayment(details);
+        });
+    };
+
+    // This function is called if an error occurs during the payment process.
+    const onErrorHandler = (err) => {
+        console.error("PayPal Checkout Error:", err);
+        alert("An error occurred with your payment. Please try again.");
+        if (onError) onError(err); // Optional: pass error up
+    };
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-70 z-[100] flex justify-center items-center p-4">
             <div className="w-full max-w-lg bg-white text-gray-900 rounded-lg shadow-2xl p-8 transform transition-all duration-300 scale-100">
                 <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-2xl font-bold">Simulated Checkout</h3>
+                    <h3 className="text-2xl font-bold">Complete Your Purchase</h3>
                     <button onClick={onClose} className="text-gray-500 hover:text-gray-900 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
                 
-                {/* Changed text to reference a dummy PayPal/Gateway */}
-                <p className="text-gray-700 mb-4">This simulates a third-party payment gateway experience (e.g., PayPal, Stripe, etc.).</p>
-                
                 <div className="bg-gray-50 p-4 rounded-lg mb-6">
-                    <h4 className="text-lg font-semibold mb-2">Payment Details</h4>
                     <div className="flex justify-between font-bold text-3xl text-blue-600">
                         <span>Total Due:</span>
                         <span>${total.toFixed(2)}</span>
                     </div>
                 </div>
 
-                <div className="space-y-4">
-                    {/* Dummy fields to simulate card entry */}
-                    <input type="text" placeholder="Card Number (4444 xxxx xxxx 1111)" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" disabled/>
-                    <div className="flex space-x-4">
-                        <input type="text" placeholder="MM/YY" className="w-1/3 p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" disabled/>
-                        <input type="text" placeholder="CVC" className="w-2/3 p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" disabled/>
+                {/* --- REAL PAYPAL BUTTONS --- */}
+                {/* We check if the Client ID has been set. */}
+                {PAYPAL_CLIENT_ID === "YOUR_SANDBOX_CLIENT_ID" ? (
+                    // Show a message if the Client ID is still the placeholder
+                    <div className="text-center text-red-600 font-semibold p-4 bg-red-50 rounded-lg">
+                        <strong>Payment Gateway is not configured.</strong>
+                        <p className="text-sm font-normal">Please add your PayPal Client ID to `CartPage.jsx` to enable checkout.</p>
                     </div>
-                </div>
-
-                <button
-                    onClick={onPayNow}
-                    className="w-full mt-6 py-3 bg-blue-600 text-white font-bold text-lg rounded-lg shadow-lg hover:bg-blue-700 transition-colors transform hover:scale-[1.01]"
-                >
-                    Pay Now (${total.toFixed(2)})
-                </button>
-                <p className="text-sm text-center text-gray-500 mt-3">By clicking 'Pay Now', you confirm your purchase.</p>
+                ) : (
+                    // If Client ID is set, show the PayPal provider and buttons
+                    <PayPalScriptProvider options={{ "client-id": PAYPAL_CLIENT_ID, currency: "USD" }}>
+                        <PayPalButtons
+                            style={{ layout: "vertical" }} // Renders PayPal, Debit/Credit Card buttons
+                            createOrder={createOrder}
+                            onApprove={onApprove}
+                            onError={onErrorHandler}
+                        />
+                    </PayPalScriptProvider>
+                )}
+                {/* --- END PAYPAL INTEGRATION --- */}
+                
+                <p className="text-sm text-center text-gray-500 mt-4">
+                    You will be redirected to PayPal to complete your payment securely.
+                </p>
             </div>
         </div>
     );
 }
+
 
 const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount, isLoggedIn, onLogout, onCheckout, coursesData }) => {
     // MODIFIED: Total is now just the subtotal (no tax)
@@ -71,20 +127,24 @@ const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount, isLoggedIn, onL
         }
     };
     
-    // NEW: Function executed when "Pay Now" is clicked in the modal
-    const handlePayNow = async () => {
+    // MODIFIED: This function is now called AFTER PayPal payment is successful
+    const handlePaymentSuccess = async (details) => {
+        // 'details' object contains payer info and transaction status
+        console.log("Payment Successful! Payer details:", details);
+        
         // Close the modal immediately for better UX
         setShowPaymentModal(false);
         
-        // Call the onCheckout function, which returns a boolean for success
+        // Call the onCheckout function (from App.jsx) which saves the order
+        // and clears the cart in Firebase.
         const success = await onCheckout();
         
         if (success) {
             // Navigate to the enrolled courses dashboard upon successful checkout
             navigate('/dashboard/enrolled-courses');
         } else {
-            // In a real app, you would show an error message.
-            alert("Payment simulation failed. Please try again.");
+            // This is a critical error: payment was taken but order failed to save.
+            alert("Your payment was successful, but we encountered an error enrolling you in the courses. Please contact support immediately.");
         }
     };
 
@@ -96,11 +156,12 @@ const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount, isLoggedIn, onL
                 <PaymentModal 
                     total={total}
                     onClose={() => setShowPaymentModal(false)}
-                    onPayNow={handlePayNow}
+                    // MODIFIED: Pass the new success handler to the modal
+                    onApprovePayment={handlePaymentSuccess}
                 />
             )}
 
-            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} coursesData={coursesData}  />
+            <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} coursesData={coursesData}  />
             <Hero
                 title="Your Cart"
                 breadcrumbs={breadcrumbs}
@@ -108,6 +169,7 @@ const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount, isLoggedIn, onL
 
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 {cartItems.length === 0 ? (
+                    // ... (no changes to the "empty cart" view)
                     <div className="text-center py-20 bg-white rounded-3xl shadow-xl">
                         <h2 className="text-3xl font-bold mb-4 text-gray-800">Your cart is empty</h2>
                         <p className="text-gray-600 mb-6">Explore our courses and find the perfect stack for your career.</p>
@@ -119,6 +181,7 @@ const CartPage = ({ cartItems, onRemoveFromCart, cartItemsCount, isLoggedIn, onL
                         </Link>
                     </div>
                 ) : (
+                    // ... (no changes to the cart items list)
                     <div className="grid lg:grid-cols-3 gap-12">
                         <div className="lg:col-span-2 space-y-8">
                             {cartItems.map(item => (

@@ -2,23 +2,67 @@ import React, { useState, useRef, useEffect } from 'react';
 import MorePageTemplate from '../MorePageTemplate';
 import useInView from '../../hooks/useInView';
 import { Link, useNavigate } from 'react-router-dom';
+// NEW: Import PayPal components
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
-// NEW COMPONENT: Payment Modal (Adapted from CartPage)
-const PaymentModal = ({ event, onClose, onPayNow }) => {
+// --- IMPORTANT ---
+// Get your Sandbox Client ID from the PayPal Developer Dashboard:
+// https://developer.paypal.com/developer/applications/
+//
+// 1. Go to "My Apps & Credentials".
+// 2. Create a new "App" (or use the default one).
+// 3. Copy the "Client ID" and paste it below.
+const PAYPAL_CLIENT_ID = "AcvkSghUkSJW8efQGCNQXTrU5JrcKvFbAniQWrwZ5O-rr3VFjoumhOMK0DmlvlXHguP-u7x-1d0gcgsw"; 
+// -----------------
+
+// MODIFIED: Payment Modal now handles the real PayPal flow
+const PaymentModal = ({ event, onClose, onApprovePayment }) => {
     // FIX APPLIED HERE: Use parseFloat() to ensure it's a number before calculating total.
     const numericPrice = parseFloat(event.price) || 0; 
     const total = numericPrice; 
+
+    // This function is called when the user clicks the PayPal button.
+    const createOrder = (data, actions) => {
+        return actions.order.create({
+            purchase_units: [
+                {
+                    // MODIFIED: Add a clear description for the live class
+                    description: `BraveStack Live Class: ${event.title}`, 
+                    amount: {
+                        currency_code: "USD", // Change this if your currency is different
+                        value: total.toFixed(2),
+                    },
+                },
+            ],
+            application_context: {
+                shipping_preference: 'NO_SHIPPING', // It's a digital good
+            }
+        });
+    };
+
+    // This function is called after the user approves the payment in the PayPal popup.
+    const onApprove = (data, actions) => {
+        return actions.order.capture().then((details) => {
+            // Call the function passed from LiveClasses to finalize registration
+            onApprovePayment(details);
+        });
+    };
+
+    // This function is called if an error occurs.
+    const onErrorHandler = (err) => {
+        console.error("PayPal Checkout Error:", err);
+        alert("An error occurred with your payment. Please try again.");
+    };
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-70 z-[100] flex justify-center items-center p-4">
             <div className="w-full max-w-lg bg-white text-gray-900 rounded-lg shadow-2xl p-8 transform transition-all duration-300 scale-100">
                 <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-2xl font-bold">Simulated Checkout for {event.title}</h3>
+                    <h3 className="text-2xl font-bold">Register for {event.title}</h3>
                     <button onClick={onClose} className="text-gray-500 hover:text-gray-900 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
-                
-                <p className="text-gray-700 mb-4">This simulates a third-party payment gateway for your class registration.</p>
                 
                 <div className="bg-gray-50 p-4 rounded-lg mb-6">
                     <h4 className="text-lg font-semibold mb-2">Class Price</h4>
@@ -28,22 +72,27 @@ const PaymentModal = ({ event, onClose, onPayNow }) => {
                     </div>
                 </div>
 
-                <div className="space-y-4">
-                    {/* Dummy fields to simulate card entry */}
-                    <input type="text" placeholder="Card Number (4444 xxxx xxxx 1111)" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" disabled/>
-                    <div className="flex space-x-4">
-                        <input type="text" placeholder="MM/YY" className="w-1/3 p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" disabled/>
-                        <input type="text" placeholder="CVC" className="w-2/3 p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" disabled/>
+                {/* --- REAL PAYPAL BUTTONS --- */}
+                {PAYPAL_CLIENT_ID === "YOUR_SANDBOX_CLIENT_ID" ? (
+                    <div className="text-center text-red-600 font-semibold p-4 bg-red-50 rounded-lg">
+                        <strong>Payment Gateway is not configured.</strong>
+                        <p className="text-sm font-normal">Please add your PayPal Client ID to `LiveClasses.jsx` to enable checkout.</p>
                     </div>
-                </div>
-
-                <button
-                    onClick={onPayNow}
-                    className="w-full mt-6 py-3 bg-purple-600 text-white font-bold text-lg rounded-lg shadow-lg hover:bg-purple-700 transition-colors transform hover:scale-[1.01]"
-                >
-                    Pay & Register (${total.toFixed(2)})
-                </button>
-                <p className="text-sm text-center text-gray-500 mt-3">By clicking 'Pay & Register', you confirm your enrollment.</p>
+                ) : (
+                    <PayPalScriptProvider options={{ "client-id": PAYPAL_CLIENT_ID, currency: "USD" }}>
+                        <PayPalButtons
+                            style={{ layout: "vertical" }}
+                            createOrder={createOrder}
+                            onApprove={onApprove}
+                            onError={onErrorHandler}
+                        />
+                    </PayPalScriptProvider>
+                )}
+                {/* --- END PAYPAL INTEGRATION --- */}
+                
+                <p className="text-sm text-center text-gray-500 mt-4">
+                    You will be redirected to PayPal to complete your registration securely.
+                </p>
             </div>
         </div>
     );
@@ -223,16 +272,19 @@ const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , onReg
         navigate('/login');
     };
 
+    // This handler is used for BOTH free and paid registration success
     const handleRegisterSuccess = (event) => {
         onRegisterLiveClass(event);
         setShowRegistrationFormModal(false);
-        setShowPaymentModal(false); // Close payment modal too if successful
+        setShowPaymentModal(false); // Close payment modal too
     };
 
-    // NEW: Function executed when "Pay & Register" is clicked in the modal
-    const handlePayNow = () => {
-        // Simulate payment success immediately
+    // MODIFIED: Renamed from handlePayNow() to handlePaymentSuccess()
+    // This is now called by PayPal's onApprove
+    const handlePaymentSuccess = (details) => {
+        console.log("Payment Successful! Payer details:", details);
         alert(`Payment successful! You are now registered for: ${selectedEvent.title}.`);
+        // Now run the original registration success logic
         handleRegisterSuccess(selectedEvent);
     };
 
@@ -259,12 +311,12 @@ const LiveClasses = ({ isLoggedIn, onLogout, cartItemsCount, coursesData , onReg
                     onRegisterSuccess={handleRegisterSuccess} 
                 />
             )}
-            {/* NEW: Payment Modal for paid classes */}
+            {/* MODIFIED: Payment Modal for paid classes, passing new handler */}
             {showPaymentModal && selectedEvent && (
                 <PaymentModal
                     event={selectedEvent}
                     onClose={() => setShowPaymentModal(false)}
-                    onPayNow={handlePayNow}
+                    onApprovePayment={handlePaymentSuccess}
                 />
             )}
 
