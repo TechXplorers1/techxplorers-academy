@@ -215,7 +215,7 @@ function LandingPage(props) {
 
   const instructors = [
     // UPDATED: Using imported image variables
-    { name: "Prakashii", title: "Senior Developer", image: ins1 },
+    { name: "Prakash", title: "Senior Developer", image: ins1 },
     { name: "Krishna", title: "UI/UX Expert", image: ins2 },
     { name: "Chaveen", title: "Data Scientist", image: ins3 },
     { name: "Humer Resham", title: "Cloud Architect", image: ins4 },
