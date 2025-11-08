@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+// MODIFIED: Import useLocation
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { ref, set } from "firebase/database";
 import { auth, db } from '../../firebase';
 
-// Eye Icon SVG component (reused and corrected)
+// ... (EyeIcon component is unchanged) ...
 const EyeIcon = ({ onClick, isVisible }) => (
     <button type="button" onClick={onClick} className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-gray-500 hover:text-purple-600 transition-colors">
         {isVisible ? (
-            // Icon when password IS visible (should be the 'slashed out' eye or hide icon)
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
                 <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c4.77 0 8.35 3.33 10 7-1.42 2.65-4.22 4.67-7.44 5.34" />
@@ -18,7 +18,6 @@ const EyeIcon = ({ onClick, isVisible }) => (
                 <line x1="2" y1="2" x2="22" y2="22" />
             </svg>
         ) : (
-            // Icon when password IS NOT visible (should be the 'open' eye or show icon)
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
                 <circle cx="12" cy="12" r="3" />
@@ -41,6 +40,10 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const navigate = useNavigate();
+  
+  // ADDED: Get location and check for 'from' state
+  const location = useLocation();
+  const fromPage = location.state?.from || '/';
 
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
@@ -55,13 +58,12 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
       const userCredential = await createUserWithEmailAndPassword(auth, signupForm.email, signupForm.password);
       const user = userCredential.user;
 
-      // Create a user entry in Realtime Database with first name, last name, and role
       const userRef = ref(db, 'users/' + user.uid);
       await set(userRef, {
         firstName: signupForm.firstName,
         lastName: signupForm.lastName,
         email: signupForm.email,
-        role: 'user', // Assign role as user
+        role: 'user',
         cart: {},
         wishlist: {},
         enrolledCourses: {},
@@ -69,8 +71,8 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
       });
 
       setIsLoggedIn(true);
-      // Redirect to the root path
-      navigate('/');
+      // MODIFIED: Navigate to 'fromPage' instead of just '/'
+      navigate(fromPage, { replace: true });
     } catch (error) {
       alert(error.message);
       setIsLoading(false);
@@ -89,6 +91,7 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center font-inter text-gray-900 relative">
       <Header cartItemsCount={cartItemsCount} />
       
+      {/* ... (Animated blobs are unchanged) ... */}
       <div className="absolute top-0 left-0 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-2xl opacity-40 animate-blob"></div>
       <div className="absolute top-0 right-0 w-80 h-80 bg-orange-200 rounded-full mix-blend-multiply filter blur-2xl opacity-40 animate-blob animation-delay-2000"></div>
       <div className="absolute bottom-0 left-1/2 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-2xl opacity-40 animate-blob animation-delay-4000"></div>
@@ -104,8 +107,10 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
               <p className="text-lg text-purple-100 text-center mb-8 max-w-xs">
                 Create an account to start your journey in tech and access all our resources.
               </p>
+              {/* MODIFIED: Pass the 'from' state back to the login link */}
               <Link
                 to="/login"
+                state={{ from: fromPage }}
                 className="relative z-20 px-8 py-3 bg-white text-purple-600 font-bold rounded-full shadow-lg hover:bg-gray-100 transition-colors"
               >
                 Log In
@@ -121,6 +126,7 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
             </h2>
             
             <form className="space-y-6" onSubmit={handleSignupSubmit}>
+                {/* ... (All form fields are unchanged) ... */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label htmlFor="firstName" className="sr-only">First Name</label>
@@ -173,7 +179,6 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
               <input
                 id="signup-password"
                 name="password"
-                // Toggle type between password and text
                 type={showPassword ? "text" : "password"} 
                 autoComplete="new-password"
                 required
@@ -183,7 +188,6 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
                 onChange={handleSignupChange}
                 disabled={isLoading}
               />
-              {/* Password toggle button */}
               <EyeIcon 
                   onClick={() => setShowPassword(!showPassword)} 
                   isVisible={showPassword} 
@@ -194,7 +198,6 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
               <input
                 id="confirmPassword"
                 name="confirmPassword"
-                // Toggle type between password and text
                 type={showConfirmPassword ? "text" : "password"} 
                 autoComplete="new-password"
                 required
@@ -204,7 +207,6 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
                 onChange={handleSignupChange}
                 disabled={isLoading}
               />
-              {/* Confirm Password toggle button */}
               <EyeIcon 
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)} 
                   isVisible={showConfirmPassword} 
@@ -226,6 +228,7 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
             </div>
             </form>
 
+            {/* ... (OR divider and Social buttons are unchanged) ... */}
             <div className="mt-6 flex items-center justify-center">
               <span className="w-full border-t border-gray-300"></span>
               <span className="mx-4 text-sm text-gray-500">OR</span>
@@ -255,7 +258,8 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
             <div className="mt-8 md:hidden text-center text-sm">
                 <p className="text-gray-600">
                     Already have an account?{' '}
-                    <Link to="/login" className="font-medium text-purple-600 hover:text-purple-500">
+                    {/* MODIFIED: Pass the 'from' state back to the mobile login link */}
+                    <Link to="/login" state={{ from: fromPage }} className="font-medium text-purple-600 hover:text-purple-500">
                       Log In
                     </Link>
                 </p>
@@ -266,6 +270,7 @@ const SignupPage = ({ setIsLoggedIn, cartItemsCount }) => {
       
       <Footer />
 
+      {/* ... (Style tag is unchanged) ... */}
       <style>{`
         .animate-blob {
             animation: blob 7s infinite;

@@ -3,15 +3,17 @@ import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { categoryMap, toKebabCase } from '../utils/categoryHelper';
 import { useAuth } from '../AuthContext'; 
+// ADDED: Import the new modal component
+import ConfirmationModal from './ConfirmationModal'; 
 
 const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
+    // ... (DropdownMenu component code is unchanged) ...
     const menuRef = React.useRef(null);
 
     if (!isOpen) {
         return null;
     }
 
-    // Dropdown remains z-50 so it appears over the z-40 header on desktop
     return (
         <div
             ref={menuRef}
@@ -34,8 +36,8 @@ const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
     );
 };
 
-// Helper component for rendering the content of a mobile dropdown
 const MobileDropdownContent = ({ items, onLinkClick }) => (
+    // ... (MobileDropdownContent component code is unchanged) ...
     <div className="pl-4 mt-1 space-y-1 border-l-2 border-gray-200 ml-3">
         {items.map((item, index) => (
             <Link
@@ -51,13 +53,13 @@ const MobileDropdownContent = ({ items, onLinkClick }) => (
 );
 
 const Header = () => {
-    const { 
-        isLoggedIn, 
-        onLogout, 
-        cartItemsCount, 
-        coursesData, 
-        userRole 
-    } = useAuth(); 
+    const {
+        isLoggedIn,
+        onLogout,
+        cartItemsCount,
+        coursesData,
+        userRole
+    } = useAuth();
 
     const [isAllStacksOpen, setIsAllStacksOpen] = React.useState(false);
     const [isForBusinessOpen, setIsForBusinessOpen] = React.useState(false);
@@ -65,12 +67,34 @@ const Header = () => {
     const [isMoreOpen, setIsMoreOpen] = React.useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     
+    // ADDED: State to control the logout modal
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
     const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
-    
+
     const navigate = useNavigate();
+    
+    // --- MODIFIED: Logout handlers now open the modal ---
+    const handleLogout = () => {
+        setIsLogoutModalOpen(true); // Just open the modal
+    };
+    
+    const handleMobileLogout = () => {
+        setIsLogoutModalOpen(true); // Just open the modal
+    };
+
+    // --- ADDED: This function is called by the modal's "Logout" button ---
+    const handleConfirmLogout = () => {
+        onLogout();
+        setIsLogoutModalOpen(false); // Close the modal
+        if (isMobileMenuOpen) {
+            toggleMobileMenu(); // Also close the mobile menu if it was open
+        }
+    };
+
 
     const handleHover = (dropdownName, isOpen) => {
-        // ... (Desktop hover logic unchanged)
+        // ... (handleHover logic is unchanged) ...
         setTimeout(() => {
             switch (dropdownName) {
                 case 'allStacks':
@@ -101,7 +125,7 @@ const Header = () => {
             setOpenMobileDropdown(null);
         }
     };
-    
+
     const handleMobileLinkClick = (path) => {
         if (path) {
             navigate(path);
@@ -113,18 +137,16 @@ const Header = () => {
         setOpenMobileDropdown(prev => (prev === menuName ? null : menuName));
     };
 
-    // ... (Item definitions are unchanged)
+    // ... (Item definitions are unchanged) ...
     const allStacksItems = coursesData ? Object.keys(coursesData).map(key => ({
         name: categoryMap[key] || key,
         path: `/all-stacks/${toKebabCase(key)}`
     })) : [];
-
     const forBusinessItems = [
         { name: 'BraveBusiness', path: '/for-business/Brave-business' },
         { name: 'Partner With Us', path: '/for-business/partner-with-us' },
         { name: 'Hire From Us', path: '/for-business/hire-from-us' },
     ];
-
     const resourcesItems = [
         { name: 'Free Resources', path: '/resources/free-resources' },
         { name: 'Success Stories', path: '/resources/success-stories' },
@@ -132,7 +154,6 @@ const Header = () => {
         { name: 'BraveStatistics', path: '/resources/Brave-statistics' },
         { name: 'Community Events', path: '/resources/community-events' },
     ];
-
     const moreItems = [
         { name: 'About Us', path: '/more/about-us' },
         { name: 'Become A Mentor or Instructor', path: '/more/become-a-mentor' },
@@ -141,20 +162,17 @@ const Header = () => {
         { name: 'Plans', path: '/more/plans' },
     ];
 
-
-    // --- MODIFIED ---
-    // Changed z-index to 40, so the mobile menu (z-50) can go over it
     const headerClass = "w-full z-40 bg-white shadow-md text-gray-800 border-b border-gray-200";
 
     return (
         <header className={headerClass}>
             <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center relative">
-                
+
                 <Link to="/" className="text-xl font-bold text-blue-600">Digitally Brave</Link>
-                
-                {/* ... (Desktop nav and auth links are unchanged) ... */}
+
+                {/* --- Desktop Nav --- */}
                 <div className="hidden lg:flex items-center space-x-8">
-                    {/* All Stacks */}
+                    {/* ... (All desktop nav links are unchanged) ... */}
                     <div className="relative" onMouseEnter={() => handleHover('allStacks', true)} onMouseLeave={() => handleHover('allStacks', false)}>
                         <button className="flex items-center hover:text-blue-600 transition-colors">
                             All Stacks
@@ -164,7 +182,6 @@ const Header = () => {
                         </button>
                         <DropdownMenu isOpen={isAllStacksOpen} items={allStacksItems} onMouseEnter={() => handleHover('allStacks', true)} onMouseLeave={() => handleHover('allStacks', false)} />
                     </div>
-                    {/* For Business */}
                     <div className="relative" onMouseEnter={() => handleHover('forBusiness', true)} onMouseLeave={() => handleHover('forBusiness', false)}>
                         <button className="flex items-center hover:text-blue-600 transition-colors">
                             For Business
@@ -174,7 +191,6 @@ const Header = () => {
                         </button>
                         <DropdownMenu isOpen={isForBusinessOpen} items={forBusinessItems} onMouseEnter={() => handleHover('forBusiness', true)} onMouseLeave={() => handleHover('forBusiness', false)} />
                     </div>
-                    {/* Resources */}
                     <div className="relative" onMouseEnter={() => handleHover('resources', true)} onMouseLeave={() => handleHover('resources', false)}>
                         <button className="flex items-center hover:text-blue-600 transition-colors">
                             Resources
@@ -184,7 +200,6 @@ const Header = () => {
                         </button>
                         <DropdownMenu isOpen={isResourcesOpen} items={resourcesItems} onMouseEnter={() => handleHover('resources', true)} onMouseLeave={() => handleHover('resources', false)} />
                     </div>
-                    {/* More */}
                     <div className="relative" onMouseEnter={() => handleHover('more', true)} onMouseLeave={() => handleHover('more', false)}>
                         <button className="flex items-center hover:text-blue-600 transition-colors">
                             More
@@ -194,11 +209,12 @@ const Header = () => {
                         </button>
                         <DropdownMenu isOpen={isMoreOpen} items={moreItems} onMouseEnter={() => handleHover('more', true)} onMouseLeave={() => handleHover('more', false)} />
                     </div>
-                    {/* Live Classes */}
                     <Link to="/more/live-classes" className="text-white font-bold py-2 px-4 rounded-full bg-blue-600 hover:bg-blue-700 transition-colors">
                         Live Classes
                     </Link>
                 </div>
+
+                {/* --- Desktop Auth Links --- */}
                 <div className="hidden lg:flex items-center space-x-4">
                     <button onClick={handleSearchClick} className="hover:text-blue-600 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -234,7 +250,8 @@ const Header = () => {
                                     Dashboard
                                 </Link>
                             )}
-                            <button onClick={onLogout} className="px-4 py-2 border border-blue-600 rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition-colors">
+                            {/* MODIFIED: Now calls handleLogout to open the modal */}
+                            <button onClick={handleLogout} className="px-4 py-2 border border-blue-600 rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition-colors">
                                 Logout
                             </button>
                         </>
@@ -243,26 +260,23 @@ const Header = () => {
                     )}
                 </div>
 
-                {/* Mobile menu button (remains in nav) */}
-                <button 
+                {/* Mobile menu button */}
+                <button
                     className="lg:hidden text-2xl text-gray-800"
                     onClick={toggleMobileMenu}
                 >
-                    {/* This logic is still here, but the button will be hidden by the menu */}
                     {isMobileMenuOpen ? '✕' : '☰'}
                 </button>
             </nav>
 
-            {/* --- MODIFIED: Mobile Menu --- */}
+            {/* --- Mobile Menu --- */}
             {isMobileMenuOpen && (
-                // Covers the full screen (inset-0) and is on top (z-50)
                 <div className="lg:hidden bg-white text-gray-800 fixed inset-0 overflow-y-auto z-50">
                     <div className="px-4 pt-4 pb-4 space-y-1 sm:px-6">
-                        
-                        {/* --- ADDED: Row for Search and new Close Button --- */}
+                        {/* ... (Mobile header, search, and nav dropdowns are unchanged) ... */}
                         <div className="flex items-center justify-between h-12">
-                            <button 
-                                onClick={() => { handleSearchClick(); toggleMobileMenu(); }} 
+                            <button
+                                onClick={() => { handleSearchClick(); toggleMobileMenu(); }}
                                 className="flex-grow flex items-center w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -270,8 +284,7 @@ const Header = () => {
                                 </svg>
                                 Search
                             </button>
-                            {/* --- ADDED: The new "cancel" button --- */}
-                            <button 
+                            <button
                                 className="ml-4 text-2xl text-gray-600 hover:text-gray-900"
                                 onClick={toggleMobileMenu}
                                 aria-label="Close menu"
@@ -279,12 +292,9 @@ const Header = () => {
                                 ✕
                             </button>
                         </div>
-                        
                         <hr className="my-2" />
-
-                        {/* Stacks Dropdown */}
                         <div>
-                            <button 
+                            <button
                                 onClick={() => handleMobileDropdownToggle('stacks')}
                                 className="w-full flex justify-between items-center px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600"
                             >
@@ -297,10 +307,8 @@ const Header = () => {
                                 <MobileDropdownContent items={allStacksItems} onLinkClick={toggleMobileMenu} />
                             )}
                         </div>
-
-                        {/* Business Dropdown */}
                         <div>
-                            <button 
+                            <button
                                 onClick={() => handleMobileDropdownToggle('business')}
                                 className="w-full flex justify-between items-center px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600"
                             >
@@ -313,10 +321,8 @@ const Header = () => {
                                 <MobileDropdownContent items={forBusinessItems} onLinkClick={toggleMobileMenu} />
                             )}
                         </div>
-
-                        {/* Resources Dropdown */}
                         <div>
-                            <button 
+                            <button
                                 onClick={() => handleMobileDropdownToggle('resources')}
                                 className="w-full flex justify-between items-center px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600"
                             >
@@ -329,10 +335,8 @@ const Header = () => {
                                 <MobileDropdownContent items={resourcesItems} onLinkClick={toggleMobileMenu} />
                             )}
                         </div>
-
-                        {/* More Dropdown */}
                         <div>
-                            <button 
+                            <button
                                 onClick={() => handleMobileDropdownToggle('more')}
                                 className="w-full flex justify-between items-center px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600"
                             >
@@ -345,19 +349,17 @@ const Header = () => {
                                 <MobileDropdownContent items={moreItems} onLinkClick={toggleMobileMenu} />
                             )}
                         </div>
-    
-                        {/* Live Classes Link */}
                         <Link to="/more/live-classes" onClick={toggleMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium text-blue-600 font-bold hover:bg-gray-100">Live Classes</Link>
                         
                         <hr className="my-2" />
 
-                        {/* Auth Links for mobile */}
+                        {/* --- Mobile Auth Links --- */}
                         {isLoggedIn ? (
                             <>
                                 {userRole === 'admin' && <Link to="/admin/dashboard" onClick={toggleMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600">Admin Dashboard</Link>}
                                 {userRole === 'instructor' && <Link to="/instructor/dashboard" onClick={toggleMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600">Instructor Dashboard</Link>}
                                 {userRole === 'user' && <Link to="/dashboard" onClick={toggleMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600">Dashboard</Link>}
-                                
+
                                 <Link to="/cart" onClick={toggleMobileMenu} className="relative flex items-center px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 hover:text-blue-600">
                                     Cart
                                     {cartItemsCount > 0 && (
@@ -366,8 +368,10 @@ const Header = () => {
                                         </span>
                                     )}
                                 </Link>
-                                <button 
-                                    onClick={() => { onLogout(); toggleMobileMenu(); }} 
+
+                                {/* MODIFIED: Now calls handleMobileLogout to open the modal */}
+                                <button
+                                    onClick={handleMobileLogout}
                                     className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-gray-100"
                                 >
                                     Logout
@@ -380,11 +384,22 @@ const Header = () => {
                 </div>
             )}
 
-            {/* Policy update bar (this will be covered by the mobile menu when open) */}
+            {/* Policy update bar */}
             <div className="bg-cyan-500 text-sm py-2 text-center font-semibold text-white">
                 <span className="animate-pulse mr-2">📢</span>
                 POLICY UPDATE: Senior leaders from the world's leading research..
             </div>
+            
+            {/* ADDED: Render the modal here. 
+              It's "Portal-ed" to the root of the body, so it doesn't matter where it sits in the JSX.
+            */}
+            <ConfirmationModal 
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                onConfirm={handleConfirmLogout}
+                title="Confirm Logout"
+                message="Are you sure you want to logout?"
+            />
         </header>
     );
 };

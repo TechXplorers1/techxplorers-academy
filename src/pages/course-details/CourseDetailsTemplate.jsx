@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Hero from '../../components/Hero';
 
-// Login Required Modal Component
+// ... (LoginRequiredModal component is unchanged) ...
 const LoginRequiredModal = ({ onClose, onLoginRedirect }) => {
     const modalRef = useRef(null);
 
@@ -36,7 +36,6 @@ const LoginRequiredModal = ({ onClose, onLoginRedirect }) => {
             >
                 <h3 className="text-xl font-bold mb-4">Login Required</h3>
                 <p className="text-gray-700 mb-6">You need to be logged in to access this feature.</p>
-                {/* CHANGED: Modal CTA color to blue-600 */}
                 <button
                     onClick={onLoginRedirect}
                     className="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors"
@@ -48,12 +47,12 @@ const LoginRequiredModal = ({ onClose, onLoginRedirect }) => {
     );
 };
 
+// ... (StarRating component is unchanged) ...
 const StarRating = ({ rating }) => {
     const fullStars = Math.floor(rating);
     const halfStar = rating % 1 !== 0;
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
-    // CHANGED: Star color to orange-500
     return (
         <div className="flex text-orange-500">
             {'★'.repeat(fullStars)}
@@ -63,6 +62,7 @@ const StarRating = ({ rating }) => {
     );
 };
 
+// ... (useInView hook is unchanged) ...
 const useInView = (options) => {
     const [inView, setInView] = useState(false);
     const ref = useRef(null);
@@ -90,6 +90,7 @@ const useInView = (options) => {
     return [ref, inView];
 };
 
+
 const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishlist, onRemoveFromCart, cart, wishlist, isLoggedIn, onLogout, cartItemsCount, enrolledCourses, coursesData }) => {
     const { courseId } = useParams();
     const [course, setCourse] = useState(null);
@@ -100,6 +101,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
     const [popupMessage, setPopupMessage] = useState('');
     const [showLoginModal, setShowLoginModal] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const allCourses = Object.values(coursesData).flat();
     const relatedCourses = allCourses.filter(c => c.id !== courseId).slice(0, 3);
@@ -109,6 +111,8 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
         setCourse(foundCourse);
     }, [courseId, coursesData, allCourses]);
 
+    // --- THIS IS THE MISSING FUNCTION ---
+    // It makes the page scroll to the top when a related course is clicked
     const handleCourseClick = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -161,13 +165,14 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
 
     const handleLoginRedirect = () => {
         setShowLoginModal(false);
-        navigate('/login');
+        navigate('/login', { state: { from: location.pathname } });
     };
 
     if (!course) {
         return <div className="text-center py-20">Course not found.</div>;
     }
     
+    // ... (getCategoryLink, isEnrolled, etc. are unchanged) ...
     const getCategoryLink = (category) => {
         const categoryMap = {
             'Product & Strategy': '/all-stacks/product-strategy',
@@ -192,8 +197,8 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
         { name: course.title, path: "" }
     ];
 
+    // ... (The rest of the JSX return is unchanged, but now handleCourseClick is defined) ...
     return (
-        // CHANGED: Background to light gray, text to dark gray
         <div className="bg-gray-50 text-gray-900 min-h-screen font-inter">
             {showLoginModal && <LoginRequiredModal onClose={() => setShowLoginModal(false)} onLoginRedirect={handleLoginRedirect} />}
             <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} coursesData={coursesData} />
@@ -204,7 +209,6 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
 
             <main ref={pageRef} className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 {showPopup && (
-                    // Pop-up message color remains green for success
                     <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-green-500 text-white py-3 px-6 rounded-full shadow-lg z-50 animate-fade-in-down">
                         {popupMessage}
                     </div>
@@ -229,7 +233,6 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                                 <ul className="grid md:grid-cols-2 gap-x-8 gap-y-4 text-lg">
                                     {(course.learningOutcomes || []).map((item, index) => (
                                         <li key={index} className="flex items-start text-gray-700 animate-slide-in-right" style={{animationDelay: `${index * 100}ms`}}>
-                                            {/* CHANGED: Checkmark icon color to blue-600 */}
                                             <svg className="w-6 h-6 text-blue-600 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                             </svg>
@@ -258,7 +261,6 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                                                 <ul className="text-gray-600 ml-4 space-y-1">
                                                     {(module.lessons || []).map((lesson, lessonIndex) => (
                                                         <li key={lessonIndex} className="flex items-center text-lg">
-                                                            {/* CHANGED: Lesson icon color to blue-600 */}
                                                             <svg className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                                 <path d="M2.5 5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0V5zM2.5 12.5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0v-.5zM12.5 5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0V5zM12.5 12.5a2.5 2.5 0 015 0v.5a2.5 2.5 0 01-5 0v-.5z" />
                                                             </svg>
@@ -278,7 +280,6 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                                 <div className="grid sm:grid-cols-2 gap-8">
                                     {(course.mentors || []).map((mentor, index) => (
                                         <div key={index} className="flex items-center space-x-4">
-                                            {/* CHANGED: Mentor border color to blue-600 */}
                                             <img src={mentor.image} alt={mentor.name} className="w-20 h-20 rounded-full object-cover border-4 border-blue-600"/>
                                             <div>
                                                 <h4 className="text-xl font-semibold">{mentor.name}</h4>
@@ -294,7 +295,6 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                         <div className="lg:col-span-1">
                             <div className={`bg-white rounded-3xl shadow-2xl p-6 sticky top-28 transition-all duration-700 delay-500 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
                                 <div className="flex items-center justify-between mb-4">
-                                    {/* CHANGED: Price text color to blue-600 */}
                                     <h3 className="text-3xl font-bold text-blue-600">${course.price}</h3>
                                     <div className="flex items-center">
                                         <StarRating rating={course.rating} />
@@ -308,7 +308,6 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                                 ) : (
                                     <button
                                         onClick={handleAddToCartClick}
-                                        // CHANGED: CTA button color to blue-600
                                         className={`w-full py-4 font-semibold rounded-full text-lg shadow-lg transition-colors ${isInCart ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
                                     >
                                         {isInCart ? 'Remove from Cart' : 'Add to Cart'}
@@ -316,7 +315,6 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                                 )}
                                 <div className="flex justify-between items-center mt-4 space-x-2">
                                     <button
-                                        // CHANGED: Wishlist button colors to blue-600
                                         className={`flex-1 py-3 px-4 rounded-full font-semibold border transition-colors ${isInWishlist ? 'bg-blue-600 text-white border-blue-600' : 'bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200'}`}
                                         onClick={handleWishlistClick}
                                         disabled={isEnrolled}
@@ -344,7 +342,6 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                                     </div>
                                 </div>
                                 <ul className="mt-6 space-y-3 text-gray-700">
-                                    {/* CHANGED: Checklist icon colors to blue-600 */}
                                     <li className="flex items-center"><svg className="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>Fully On-Demand</li>
                                     <li className="flex items-center"><svg className="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>Includes Mentorship</li>
                                     <li className="flex items-center"><svg className="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>Certificate of Completion</li>

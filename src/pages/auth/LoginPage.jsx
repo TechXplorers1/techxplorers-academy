@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+// MODIFIED: Import useLocation
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../../firebase'; // Import auth only
+import { auth } from '../../firebase';
 
-// Eye Icon SVG component with CORRECT logic
+// ... (EyeIcon component is unchanged) ...
 const EyeIcon = ({ onClick, isVisible }) => (
     <button type="button" onClick={onClick} className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-gray-500 hover:text-purple-600 transition-colors">
         {isVisible ? (
-            // Slashed Eye: Password IS VISIBLE, clicking will hide it
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
                 <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c4.77 0 8.35 3.33 10 7-1.42 2.65-4.22 4.67-7.44 5.34" />
@@ -17,7 +17,6 @@ const EyeIcon = ({ onClick, isVisible }) => (
                 <line x1="2" y1="22" x2="22" y2="2" strokeWidth="2"/>
             </svg>
         ) : (
-            // Open Eye: Password IS HIDDEN, clicking will show it
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
                 <circle cx="12" cy="12" r="3" />
@@ -26,12 +25,17 @@ const EyeIcon = ({ onClick, isVisible }) => (
     </button>
 );
 
+
 const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  
+  // ADDED: Get location and check for 'from' state
+  const location = useLocation();
+  const fromPage = location.state?.from || '/';
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -39,8 +43,10 @@ const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setIsLoggedIn(true);
-      // Redirect to the root path
-      navigate('/'); 
+      // MODIFIED: Navigate to 'fromPage' instead of just '/'
+      // We use 'replace: true' to replace the /login page in the history,
+      // so the user doesn't click "back" and end up on the login page again.
+      navigate(fromPage, { replace: true });
     } catch (error) {
       alert(error.message);
       setIsLoading(false);
@@ -51,6 +57,7 @@ const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center font-inter text-gray-900 relative">
       <Header cartItemsCount={cartItemsCount} /> 
       
+      {/* ... (Animated blobs are unchanged) ... */}
       <div className="absolute top-0 left-0 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-2xl opacity-40 animate-blob"></div>
       <div className="absolute top-0 right-0 w-80 h-80 bg-orange-200 rounded-full mix-blend-multiply filter blur-2xl opacity-40 animate-blob animation-delay-2000"></div>
       <div className="absolute bottom-0 left-1/2 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-2xl opacity-40 animate-blob animation-delay-4000"></div>
@@ -66,8 +73,10 @@ const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
               <p className="text-lg text-purple-100 text-center mb-8">
                 Log in to access your dashboard, courses, and community.
               </p>
+              {/* MODIFIED: Pass the 'from' state to the signup link */}
               <Link
                 to="/signup"
+                state={{ from: fromPage }} 
                 className="relative z-20 px-8 py-3 bg-white text-purple-600 font-bold rounded-full shadow-lg hover:bg-gray-100 transition-colors"
               >
                 Sign Up
@@ -83,6 +92,7 @@ const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
             </h2>
             
             <form className="space-y-6" onSubmit={handleLoginSubmit}>
+              {/* ... (Email, Password, Remember Me fields are unchanged) ... */}
               <div>
                 <label htmlFor="login-email" className="sr-only">Email address</label>
                 <input
@@ -103,7 +113,6 @@ const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
                 <input
                   id="login-password"
                   name="password"
-                  // Toggle type between password and text
                   type={showPassword ? "text" : "password"} 
                   autoComplete="current-password"
                   required
@@ -113,7 +122,6 @@ const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={isLoading}
                 />
-                {/* Password toggle button */}
                 <EyeIcon 
                     onClick={() => setShowPassword(!showPassword)} 
                     isVisible={showPassword} 
@@ -133,7 +141,6 @@ const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
                   </label>
                 </div>
                 <div className="text-sm">
-                  {/* Link to the new ForgotPasswordPage */}
                   <Link to="/forgot-password" className="font-medium text-purple-600 hover:text-purple-500">
                     Forgot your password?
                   </Link>
@@ -150,6 +157,7 @@ const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
               </div>
             </form>
 
+            {/* ... (OR divider and Social buttons are unchanged) ... */}
             <div className="mt-6 flex items-center justify-center">
               <span className="w-full border-t border-gray-300"></span>
               <span className="mx-4 text-sm text-gray-500">OR</span>
@@ -179,7 +187,8 @@ const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
             <div className="mt-8 md:hidden text-center text-sm">
                 <p className="text-gray-600">
                     Don't have an account?{' '}
-                    <Link to="/signup" className="font-medium text-purple-600 hover:text-purple-500">
+                    {/* MODIFIED: Pass the 'from' state to the mobile signup link */}
+                    <Link to="/signup" state={{ from: fromPage }} className="font-medium text-purple-600 hover:text-purple-500">
                       Sign up
                     </Link>
                 </p>
@@ -190,6 +199,7 @@ const LoginPage = ({ setIsLoggedIn, cartItemsCount }) => {
       
       <Footer />
 
+      {/* ... (Style tag is unchanged) ... */}
       <style>{`
         .animate-blob {
             animation: blob 7s infinite;

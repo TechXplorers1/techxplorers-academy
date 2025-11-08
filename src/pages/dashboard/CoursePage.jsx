@@ -12,24 +12,57 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, user, e
     const [completedLessons, setCompletedLessons] = useState({});
 
     useEffect(() => {
-        const allCourses = coursesData ? Object.values(coursesData).flat() : [];
-        const foundCourseData = allCourses.find(c => c.id === courseId);
-
+        // 'coursesData' is the allCoursesFullObject from context
+        const foundCourseData = coursesData ? coursesData[courseId] : null;
         const enrolledCourse = enrolledCourses.find(c => c.id === courseId);
 
         if (foundCourseData && enrolledCourse) {
+            
+            // --- START: FIX FOR INCONSISTENT LESSON IDs ---
+            // This processes the course data to ensure every lesson has a unique ID,
+            // even if the database stores them as an array without 'id' fields.
+            const processedModules = (foundCourseData.modules || []).map((module, moduleIndex) => {
+                // Get lessons as an array, regardless of original DB structure (array or object)
+                const lessonsArray = Object.values(module.lessons || {});
+
+                const lessonsWithIds = lessonsArray.map((lesson, lessonIndex) => {
+                    // If lesson has an ID, use it. Otherwise, create a stable, unique ID.
+                    const uniqueId = lesson.id || `mod-${moduleIndex}-les-${lessonIndex}`;
+                    return {
+                        ...lesson,
+                        id: uniqueId // Ensure 'id' field exists
+                    };
+                });
+                
+                // Return module with lessons now structured as an object map, keyed by their unique ID
+                return {
+                    ...module,
+                    lessons: lessonsWithIds.reduce((acc, lesson) => {
+                        acc[lesson.id] = lesson;
+                        return acc;
+                    }, {})
+                };
+            });
+            // --- END: FIX ---
+
             const courseWithProgress = {
                 ...foundCourseData,
+                modules: processedModules, // Use the processed, normalized modules
                 progress: enrolledCourse.progress || 0,
                 completedLessons: enrolledCourse.completedLessons || {}
             };
+            
             setCourse(courseWithProgress);
             setCompletedLessons(courseWithProgress.completedLessons);
 
             if (courseWithProgress.modules && courseWithProgress.modules.length > 0) {
+                // This flatMap logic is now robust because 'lessons' is a guaranteed object
                 let allLessons = courseWithProgress.modules.flatMap(module => Object.values(module.lessons || {}));
+                
                 if (allLessons.length > 0) {
+                    // Find the first lesson that is NOT marked as complete
                     let firstIncompleteLesson = allLessons.find(lesson => !courseWithProgress.completedLessons[lesson.id]);
+                    // Set the current lesson to the first incomplete one, or the very first lesson if all are complete
                     setCurrentLesson(firstIncompleteLesson || allLessons[0]);
                 }
             }
@@ -41,7 +74,10 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, user, e
     };
 
     const handleMarkAsComplete = async (lessonId) => {
-        if (!auth.currentUser || !course) return;
+        if (!auth.currentUser || !course || lessonId === undefined) return; // Prevent 'undefined' key
+
+        // Only update if it's not already completed
+        if (completedLessons[lessonId]) return;
 
         const newCompletedLessons = { ...completedLessons, [lessonId]: true };
         const allLessonsCount = course.modules.flatMap(module => Object.values(module.lessons || {})).length;
@@ -54,22 +90,36 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, user, e
             completedLessons: newCompletedLessons
         });
 
+        // Update local state to reflect change immediately
         setCompletedLessons(newCompletedLessons);
 
+        // Update the global context state
         setEnrolledCourses(prevEnrolled => {
-            return prevEnrolled.map(c => c.id === courseId ? { ...c, progress: newProgress, completedLessons: newCompletedLessons } : c);
+            return prevEnrolled.map(c => 
+                c.id === courseId ? { ...c, progress: newProgress, completedLessons: newCompletedLessons } : c
+            );
         });
+
+        // Also update the course state itself to show progress
+        setCourse(prevCourse => ({
+            ...prevCourse,
+            progress: newProgress,
+            completedLessons: newCompletedLessons
+        }));
     };
 
     const handleNextLesson = () => {
         if (!currentLesson || !course || !course.modules) return;
 
+        // This logic is now safe because all lessons have a unique ID
         let allLessons = course.modules.flatMap(module => Object.values(module.lessons || {}));
         const currentIndex = allLessons.findIndex(l => l.id === currentLesson.id);
 
         if (currentIndex !== -1 && currentIndex < allLessons.length - 1) {
+            // Move to the next lesson
             setCurrentLesson(allLessons[currentIndex + 1]);
         } else {
+            // Last lesson
             alert("You have completed all lessons in this course!");
         }
     };
@@ -87,6 +137,7 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, user, e
             </div>
         );
     }
+    
     const convertYouTubeUrl = (url) => {
         if (!url) return '';
         const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/);
@@ -99,6 +150,7 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, user, e
             <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} user={user} />
 
             <main className="flex flex-col lg:flex-row h-full" style={{ height: 'calc(100vh - 80px)' }}>
+                {/* Video Player Section */}
                 <div className="lg:flex-grow p-4 md:p-8 bg-gray-900 flex flex-col justify-between">
                     <div className="w-full flex-grow flex items-center justify-center">
                         {currentLesson && currentLesson.videoUrl ? (
@@ -120,6 +172,7 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, user, e
                             </div>
                         )}
                     </div>
+                    {/* Lesson Controls */}
                     {currentLesson && (
                         <div className="mt-4 text-center pb-4">
                             <h2 className="text-2xl font-bold text-white mb-4">{currentLesson.title}</h2>
@@ -140,12 +193,14 @@ const CoursePage = ({ isLoggedIn, onLogout, cartItemsCount, coursesData, user, e
                     )}
                 </div>
 
+                {/* Sidebar */}
                 <aside className="lg:w-96 bg-white shadow-md p-6 overflow-y-auto">
                     <h2 className="text-2xl font-bold text-gray-900 mb-4">Course Content</h2>
                     {(course.modules || []).map((module, index) => (
                         <div key={module.id || index} className="mb-6">
                             <h3 className="text-lg font-semibold text-gray-800 mb-2">{module.title}</h3>
                             <ul className="space-y-2">
+                                {/* This map logic is now safe */}
                                 {Object.values(module.lessons || {}).map(lesson => (
                                     <li
                                         key={lesson.id}
