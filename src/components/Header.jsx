@@ -168,7 +168,7 @@ const Header = () => {
         <header className={headerClass}>
             <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center relative">
 
-                <Link to="/" className="text-xl font-bold text-blue-600">Digitally Brave</Link>
+                <Link to="/" className="text-xl font-bold text-blue-600">TX Academy</Link>
 
                 {/* --- Desktop Nav --- */}
                 <div className="hidden lg:flex items-center space-x-8">
