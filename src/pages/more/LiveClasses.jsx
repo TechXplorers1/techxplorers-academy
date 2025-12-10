@@ -27,7 +27,7 @@ const PaymentModal = ({ event, onClose, onApprovePayment }) => {
             purchase_units: [
                 {
                     // MODIFIED: Add a clear description for the live class
-                    description: `BraveStack Live Class: ${event.title}`, 
+                    description: `TX Stack Live Class: ${event.title}`, 
                     amount: {
                         currency_code: "USD", // Change this if your currency is different
                         value: total.toFixed(2),

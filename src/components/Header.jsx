@@ -143,7 +143,7 @@ const Header = () => {
         path: `/all-stacks/${toKebabCase(key)}`
     })) : [];
     const forBusinessItems = [
-        { name: 'BraveBusiness', path: '/for-business/Brave-business' },
+        { name: 'TX Business', path: '/for-business/TX-business' },
         { name: 'Partner With Us', path: '/for-business/partner-with-us' },
         { name: 'Hire From Us', path: '/for-business/hire-from-us' },
     ];
@@ -151,14 +151,14 @@ const Header = () => {
         { name: 'Free Resources', path: '/resources/free-resources' },
         { name: 'Success Stories', path: '/resources/success-stories' },
         { name: 'Masterclass Replays', path: '/resources/masterclass-replays' },
-        { name: 'BraveStatistics', path: '/resources/Brave-statistics' },
+        { name: 'TX Statistics', path: '/resources/TX-statistics' },
         { name: 'Community Events', path: '/resources/community-events' },
     ];
     const moreItems = [
         { name: 'About Us', path: '/more/about-us' },
         { name: 'Become A Mentor or Instructor', path: '/more/become-a-mentor' },
-        { name: 'Join BraveTeams', path: '/more/join-Brave-teams' },
-        { name: 'Join BraveProjects', path: '/more/join-Brave-projects' },
+        { name: 'Join TX Teams', path: '/more/join-TX-teams' },
+        { name: 'Join TX Projects', path: '/more/join-TX-projects' },
         { name: 'Plans', path: '/more/plans' },
     ];
 

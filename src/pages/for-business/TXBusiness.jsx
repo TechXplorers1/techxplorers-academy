@@ -13,17 +13,17 @@ const WHATSAPP_NUMBER = '+919618108329'; // The target number
 // ------------------------------
 
 const pageData = {
-  title: "BraveBusiness",
-  tagline: "DigitallyBrave For Corporations, Co-Ops & Solopreneurs",
+  title: "TX Business",
+  tagline: "TX Academy For Corporations, Co-Ops & Solopreneurs",
   breadcrumbs: [
     { name: "For Business", path: "/for-business" },
-    { name: "BraveBusiness" },
+    { name: "TX Business" },
   ],
   sections: [
     {
       title: "Project Fulfillment",
       description:
-        "Bring us your backlog, and we’ll build you a Brave team to execute. From UX design to product development, data dashboards to full-stack builds—BraveBusiness assembles vetted talent to deliver quality results.",
+        "Bring us your backlog, and we’ll build you a TX team to execute. From UX design to product development, data dashboards to full-stack builds—TXBusiness assembles vetted talent to deliver quality results.",
       list: [
         "Custom team simulations based on your tools & workflows",
         "Project-based learning for faster retention",
@@ -65,7 +65,7 @@ const pageData = {
       image: bns4, // UPDATED: Changed from random URL to imported asset bns4
     },
   ],
-  formTitle: "BraveBusiness Inquiry - WhatsApp Chat", // UPDATED title
+  formTitle: "TX Business Inquiry - WhatsApp Chat", // UPDATED title
   formDescription:
     "Fill out a few quick details, and upon clicking 'Send WhatsApp Message', a chat will open with your inquiry pre-filled.", // UPDATED description
   
@@ -88,8 +88,8 @@ const pageData = {
   // --------------------------------
 };
 
-const BraveBusiness = ({ isLoggedIn, onLogout, cartItemsCount }) => (
+const TXBusiness = ({ isLoggedIn, onLogout, cartItemsCount }) => (
   <BusinessPageTemplate {...pageData} isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} />
 );
 
-export default BraveBusiness;
+export default TXBusiness;

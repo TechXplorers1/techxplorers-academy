@@ -22,11 +22,11 @@ const Plans = ({ isLoggedIn, onLogout, cartItemsCount }) => {
 
                 <div className="grid md:grid-cols-3 gap-8 w-full mt-12">
                     <div ref={card1Ref} className={`bg-gray-100 p-10 rounded-2xl shadow-lg space-y-6 transition-all duration-500 ${card1InView ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
-                        <h3 className="text-3xl font-extrabold text-gray-900">BraveAccess+</h3>
+                        <h3 className="text-3xl font-extrabold text-gray-900">TX Access+</h3>
                         <p className="text-gray-500 text-sm">Perfect for beginners and those exploring new skills.</p>
                         <p className="text-5xl font-extrabold text-orange-500">$99<span className="text-sm font-normal text-gray-500">/mo</span></p>
                         <ul className="text-left space-y-3 text-gray-700">
-                            <li className="flex items-center"><span className="mr-2">{checkIcon}</span> Access to 1 BraveStack/month</li>
+                            <li className="flex items-center"><span className="mr-2">{checkIcon}</span> Access to 1 TXStack/month</li>
                             <li className="flex items-center"><span className="mr-2">{checkIcon}</span> Project templates & tools</li>
                             <li className="flex items-center"><span className="mr-2">{checkIcon}</span> Up to $49/mo stack tool access</li>
                             <li className="flex items-center"><span className="mr-2">{checkIcon}</span> Stack replays</li>
@@ -39,11 +39,11 @@ const Plans = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                     </div>
 
                     <div ref={card2Ref} className={`bg-purple-600 text-white p-10 rounded-2xl shadow-2xl space-y-6 transition-all duration-500 delay-200 ${card2InView ? 'opacity-100 scale-105' : 'opacity-0 scale-90'}`}>
-                        <h3 className="text-3xl font-extrabold">BraveMentor</h3>
+                        <h3 className="text-3xl font-extrabold">TX Mentor</h3>
                         <p className="text-purple-200 text-sm">Unlock all courses, mentorship, and real-world projects.</p>
                         <p className="text-5xl font-extrabold">$199<span className="text-sm font-normal">/mo</span></p>
                         <ul className="text-left space-y-3">
-                            <li className="flex items-center"><span className="mr-2">{checkIcon}</span> Access to 1 BraveStack/month</li>
+                            <li className="flex items-center"><span className="mr-2">{checkIcon}</span> Access to 1 TX Stack/month</li>
                             <li className="flex items-center"><span className="mr-2">{checkIcon}</span> Project templates & tools</li>
                             <li className="flex items-center"><span className="mr-2">{checkIcon}</span> Up to $49/mo stack tool access</li>
                             <li className="flex items-center"><span className="mr-2">{checkIcon}</span> Stack replays</li>
@@ -56,11 +56,11 @@ const Plans = ({ isLoggedIn, onLogout, cartItemsCount }) => {
                     </div>
 
                     <div ref={card3Ref} className={`bg-gray-100 p-10 rounded-2xl shadow-lg space-y-6 transition-all duration-500 delay-400 ${card3InView ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
-                        <h3 className="text-3xl font-extrabold text-gray-900">BraveMentor</h3>
+                        <h3 className="text-3xl font-extrabold text-gray-900">TX Mentor</h3>
                         <p className="text-gray-500 text-sm">Custom solutions for companies of all sizes.</p>
                         <p className="text-5xl font-extrabold text-orange-500">$299<span className="text-sm font-normal text-gray-500">/mo</span></p>
                         <ul className="text-left space-y-3 text-gray-700">
-                            <li className="flex items-center"><span className="mr-2">{checkIcon}</span> Access to 1 BraveStack/month</li>
+                            <li className="flex items-center"><span className="mr-2">{checkIcon}</span> Access to 1 TX Stack/month</li>
                             <li className="flex items-center"><span className="mr-2">{checkIcon}</span> Project templates & tools</li>
                             <li className="flex items-center"><span className="mr-2">{checkIcon}</span> Tech tools included (+ upgrades)</li>
                             <li className="flex items-center"><span className="mr-2">{checkIcon}</span> Stack replays</li>

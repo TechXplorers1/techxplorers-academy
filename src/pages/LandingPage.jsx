@@ -16,82 +16,34 @@ import ins4 from '../assets/ins-4.jpg';
 import ins5 from '../assets/ins-5.jpg';
 // -----------------------------------------------------------
 
-// --- REACT ICON IMPORTS (Added based on your request) ---
-import { AiOutlineBulb, AiOutlineBarChart, AiOutlineThunderbolt, AiOutlineAppstore } from 'react-icons/ai'; 
-import { FaLaptopCode, FaShieldHalved } from 'react-icons/fa6'; 
+// --- REACT ICON IMPORTS ---
+import {
+  Play,
+  User,
+  BookOpen,
+  Trophy,
+  ArrowUp,
+  ChevronLeft,
+  ChevronRight,
+  Lightbulb,
+  LayoutGrid,
+  Laptop,
+  BarChart3,
+  ShieldCheck,
+  Zap,
+  CheckCircle,
+  PlayCircle,
+  Users,
+  Award,
+  Clock,
+  Briefcase,
+  Map
+} from 'lucide-react';
+import { FaInstagram, FaXTwitter, FaDiscord } from 'react-icons/fa6';
 // -----------------------------------------------------------------------
 
 
-// --- Inline SVG Icons (RE-ADDED to fix ReferenceError) ---
-const PlayIcon = ({ size = 24, className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 512 512"
-    width={size}
-    height={size}
-    fill="currentColor"
-    className={className}
-  >
-    <path d="M501.9 224.2L56.7 5.1C47.2-1.3 35.7-.7 27 5.7S9.6 20.9 9.6 32v448c0 11.1 4.5 21.6 12.7 28s19.8 8.1 28.5 1.7L501.9 287.8c8.9-6.4 14.1-16.7 14.1-27.8s-5.2-21.4-14.1-27.8z" />
-  </svg>
-);
-
-const UserIcon = ({ size = 24, className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 448 512"
-    width={size}
-    height={size}
-    fill="currentColor"
-    className={className}
-  >
-    <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 67.8L5.7 400.9C1.1 405.7 0 411.3 0 417.1V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V417.1c0-5.8-1.1-11.4-5.7-16.2L269.7 323.8c-20.9 14.7-45.6 22.2-74.9 22.2s-54-7.5-74.9-22.2z" />
-  </svg>
-);
-
-const BookIcon = ({ size = 24, className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 448 512"
-    width={size}
-    height={size}
-    fill="currentColor"
-    className={className}
-  >
-    <path d="M448 40.5V471.5c0 18-17.7 33-39.7 33c-38.2 0-77.9-25.7-119.8-59.5C246.5 394.1 228.4 384 224 384c-4.4 0-22.5 10.1-64.5 41.2C85.6 479.8 45.9 505 7.7 505c-22 0-39.7-15-39.7-33V40.5C-1.8 15.3 22.3-.4 48.5 0h351C425.7-.4 448 15.3 448 40.5zM128 208c-17.7 0-32-14.3-32-32s14.3-32 32-32h192c17.7 0 32 14.3 32 32s-14.3 32-32 32H128zM96 288c0-17.7 14.3-32 32-32h192c17.7 0 32 14.3 32 32s-14.3 32-32 32H128c-17.7 0-32-14.3-32-32z" />
-  </svg>
-);
-
-const TrophyIcon = ({ size = 24, className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 576 512"
-    width={size}
-    height={size}
-    fill="currentColor"
-    className={className}
-  >
-    <path d="M552 64H176C78.8 64 0 142.8 0 240c0 49.6 21.4 96.1 59.8 134.4C44.3 410.1 32 458.4 32 480c0 17.7 14.3 32 32 32h16c17.7 0 32-14.3 32-32c0-30.8 18.2-58.4 46.1-70.2c2.4-1.2 4.9-2.3 7.4-3.4c29.1-12.7 58.7-27.1 86.8-43.1c11.8-6.8 24.3-12.9 36.6-18.7c-50.5-22.4-86.6-67.4-96.8-120.3c-2.4-12.7 6.4-25.2 19.1-27.6c12.7-2.4 25.2 6.4 27.6 19.1c9.3 49.3 41.3 89.3 84.4 110.1c4.5 2.2 9.2 3.8 14 5.3c-4.4 12.8-12 24.6-22.2 34.6c-48 48-113.1 76-184.2 76H96c-17.7 0-32 14.3-32 32s14.3 32 32 32h32c17.7 0 32-14.3 32-32c0-17.7-14.3-32-32-32s-32 14.3-32 32c0 20.3 12.9 38.3 31.6 46.2c16 6.9 33.3 10.8 51.4 11.8c-.8 6.9-1.2 13.9-1.2 21c0 2.2 .2 4.4 .5 6.6c-49.8-16.1-85.3-64.8-85.3-121.2C176 142.8 254.8 64 352 64h200c13.3 0 24 10.7 24 24v40c0 13.3-10.7 24-24 24zM352 96c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h80c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16h-80zM352 176c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h80c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16h-80zM352 256c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h80c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16h-80z" />
-  </svg>
-);
-
-const InstagramIcon = ({ size = 40, className }) => (
-  <svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg" className={className} width={size} height={size}>
-    <path d="M 9.9980469 3 C 6.1390469 3 3 6.1419531 3 10.001953 L 3 20.001953 C 3 23.860953 6.1419531 27 10.001953 27 L 20.001953 27 C 23.860953 27 27 23.858047 27 19.998047 L 27 9.9980469 C 27 6.1390469 23.858047 3 19.998047 3 L 9.9980469 3 z M 22 7 C 22.552 7 23 7.448 23 8 C 23 8.552 22.552 9 22 9 C 21.448 9 21 8.552 21 8 C 21 7.448 21.448 7 22 7 z M 15 9 C 18.309 9 21 11.691 21 15 C 21 18.309 18.309 21 15 21 C 11.691 21 9 18.309 9 15 C 9 11.691 11.691 9 15 9 z M 15 11 A 4 4 0 0 0 11 15 A 4 4 0 0 0 15 19 A 4 4 0 0 0 19 15 A 4 4 0 0 0 15 11 z" />
-  </svg>
-);
-
-const TwitterIcon = ({ size = 40, className }) => (
-  <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className={className} width={size} height={size}>
-    <path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z" />
-  </svg>
-);
-
-const DiscordIcon = ({ size = 40, className }) => (
-  <svg viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg" className={className} width={size} height={size}>
-    <path d="M524.531,69.836a1.5,1.5,0,0,0-.764-.7A485.065,485.065,0,0,0,404.081,32.03a1.816,1.816,0,0,0-1.923.91,337.461,337.461,0,0,0-14.9,30.6,447.848,447.848,0,0,0-134.426,0,309.541,309.541,0,0,0-15.135-30.6,1.89,1.89,0,0,0-1.924-.91A483.689,483.689,0,0,0,116.085,69.137a1.712,1.712,0,0,0-.788.676C39.068,183.651,18.186,294.69,28.43,404.354a2.016,2.016,0,0,0,.765,1.375A487.666,487.666,0,0,0,176.02,479.918a1.9,1.9,0,0,0,2.063-.676A348.2,348.2,0,0,0,208.12,430.4a1.86,1.86,0,0,0-1.019-2.588,321.173,321.173,0,0,1-45.868-21.853,1.885,1.885,0,0,1-.185-3.126c3.082-2.309,6.166-4.711,9.109-7.137a1.819,1.819,0,0,1,1.9-.256c96.229,43.917,200.41,43.917,295.5,0a1.812,1.812,0,0,1,1.924.233c2.944,2.426,6.027,4.851,9.132,7.16a1.884,1.884,0,0,1-.162,3.126,301.407,301.407,0,0,1-45.89,21.83,1.875,1.875,0,0,0-1,2.611,391.055,391.055,0,0,0,30.014,48.815,1.864,1.864,0,0,0,2.063.7A486.048,486.048,0,0,0,610.7,405.729a1.882,1.882,0,0,0,.765-1.352C623.729,277.594,590.933,167.465,524.531,69.836ZM222.491,337.58c-28.972,0-52.844-26.587-52.844-59.239S193.056,219.1,222.491,219.1c29.665,0,53.306,26.82,52.843,59.239C275.334,310.993,251.924,337.58,222.491,337.58Zm195.38,0c-28.971,0-52.843-26.587-52.843-59.239S388.437,219.1,417.871,219.1c29.667,0,53.307,26.82,52.844,59.239C470.715,310.993,447.538,337.58,417.871,337.58Z" />
-  </svg>
-);
+// Inline SVGs removed in favor of library icons
 
 // NumberCounter, useInView, and Arrow components remain the same for functionality
 const NumberCounter = ({ targetNumber, duration = 2000 }) => {
@@ -116,9 +68,9 @@ const NumberCounter = ({ targetNumber, duration = 2000 }) => {
     };
     window.requestAnimationFrame(step);
   };
- 
+
   // ... (rest of NumberCounter)
- 
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -153,24 +105,7 @@ const NumberCounter = ({ targetNumber, duration = 2000 }) => {
 };
 
 
-const ArrowUpIcon = ({ size = 24, className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="m5 12 7-7 7 7" />
-    <path d="M12 19V5" />
-  </svg>
-);
-
-const LeftArrow = ({ size = 24, className, onClick }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} onClick={onClick}>
-    <path d="m15 19l-7-7 7-7" />
-  </svg>
-);
-
-const RightArrow = ({ size = 24, className, onClick }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} onClick={onClick}>
-    <path d="m9 19l7-7-7-7" />
-  </svg>
-);
+// Arrow components removed in favor of lucide-react
 
 const useInView = (options) => {
   const [inView, setInView] = useState(false);
@@ -231,7 +166,7 @@ function LandingPage(props) {
 
   const [activeCategory, setActiveCategory] = useState("All");
   // FIX: Ensure showGoTop state is declared here before its JSX usage (line 412 in your error report)
-  const [showGoTop, setShowGoTop] = useState(false); 
+  const [showGoTop, setShowGoTop] = useState(false);
   const carouselRef = useRef(null);
 
   // Animation state hooks
@@ -294,11 +229,11 @@ function LandingPage(props) {
     const newAngle = rotationAngle + (direction === 'left' ? angleIncrement : -angleIncrement);
 
     setRotationAngle(newAngle);
-   
+
     // Manually ensure the CSS animation is paused/overridden during manual movement
     if (carouselRef.current) {
-        carouselRef.current.style.animationPlayState = 'paused';
-        carouselRef.current.style.transform = `perspective(1000px) rotateY(${newAngle}deg)`;
+      carouselRef.current.style.animationPlayState = 'paused';
+      carouselRef.current.style.transform = `perspective(1000px) rotateY(${newAngle}deg)`;
     }
   };
 
@@ -325,27 +260,27 @@ function LandingPage(props) {
   const popularStacks = [
     {
       name: 'Product & Strategy',
-      icon: <AiOutlineBulb className="h-10 w-10 text-blue-600 group-hover:text-white" />
+      icon: <Lightbulb className="h-10 w-10 text-blue-600 group-hover:text-white" />
     },
     {
       name: 'UX & UI Design',
-      icon: <AiOutlineAppstore className="h-10 w-10 text-blue-600 group-hover:text-white" />
+      icon: <LayoutGrid className="h-10 w-10 text-blue-600 group-hover:text-white" />
     },
     {
       name: 'Engineering & Development',
-      icon: <FaLaptopCode className="h-10 w-10 text-blue-600 group-hover:text-white" />
+      icon: <Laptop className="h-10 w-10 text-blue-600 group-hover:text-white" />
     },
     {
       name: 'Data & Analytics',
-      icon: <AiOutlineBarChart className="h-10 w-10 text-blue-600 group-hover:text-white" />
+      icon: <BarChart3 className="h-10 w-10 text-blue-600 group-hover:text-white" />
     },
     {
       name: 'Cybersecurity & Compliance',
-      icon: <FaShieldHalved className="h-10 w-10 text-blue-600 group-hover:text-white" />
+      icon: <ShieldCheck className="h-10 w-10 text-blue-600 group-hover:text-white" />
     },
     {
       name: 'AI & Automation',
-      icon: <AiOutlineThunderbolt className="h-10 w-10 text-blue-600 group-hover:text-white" />
+      icon: <Zap className="h-10 w-10 text-blue-600 group-hover:text-white" />
     }
   ].map(stack => ({
     ...stack,
@@ -355,7 +290,7 @@ function LandingPage(props) {
   const offers = [
     {
       title: "Get 50% Off",
-      subtitle: "On your first BraveStack purchase.",
+      subtitle: "On your first TX Stack purchase.",
       // CHANGED: Colors
       bgColor: "bg-blue-600",
       textColor: "text-white",
@@ -373,7 +308,7 @@ function LandingPage(props) {
     },
     {
       title: "Free First Month",
-      subtitle: "On our BraveMentor subscription.",
+      subtitle: "On our TX Mentor subscription.",
       // CHANGED: Colors
       bgColor: "bg-orange-500",
       textColor: "text-white",
@@ -429,7 +364,7 @@ function LandingPage(props) {
           className="fixed bottom-4 right-4 bg-blue-600 text-white p-3 rounded-full shadow-lg transition-transform duration-300 hover:scale-110 z-50"
           aria-label="Go to top"
         >
-          <ArrowUpIcon size={24} />
+          <ArrowUp size={24} />
         </button>
       )}
 
@@ -460,7 +395,7 @@ function LandingPage(props) {
       )}
 
       <main>
-      <Header {...props} isLandingPage={true} />
+        <Header {...props} isLandingPage={true} />
         {/* Enhanced Hero Section with Offers */}
         <section ref={heroRef} className={`relative overflow-hidden min-h-screen flex flex-col items-center justify-center pb-32 hero-section-container ${heroInView ? 'hero-section-visible' : ''}`}>
           {/* Background Image Container */}
@@ -477,9 +412,7 @@ function LandingPage(props) {
               <div className="text-center md:text-left text-white">
                 {/* CHANGED: Badge gradient to Blue/Cyan */}
                 <div className="inline-flex items-center bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-4 py-2 rounded-full mb-8 animate-slide-up-200">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
+                  <CheckCircle className="h-5 w-5 mr-2" />
                   <span className="text-sm font-semibold">100% Satisfaction Guarantee</span>
                 </div>
 
@@ -505,9 +438,7 @@ function LandingPage(props) {
                   {/* CHANGED: Secondary CTA hover color to blue-600 */}
                   <button onClick={handleWatchDemoClick} className="relative group bg-transparent border-2 border-white text-white font-semibold py-4 px-8 rounded-full overflow-hidden transition-all duration-300 hover:bg-white hover:text-blue-600 hover:shadow-xl">
                     <span className="relative z-10 flex items-center justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                      </svg>
+                      <PlayCircle className="h-5 w-5 mr-2" />
                       Watch Demo
                     </span>
                   </button>
@@ -545,13 +476,13 @@ function LandingPage(props) {
                   <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-300">
                     {/* CHANGED: Icon colors to blue/cyan shades */}
                     <a href="#" className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white transition-transform duration-300 hover:scale-110">
-                      <InstagramIcon size={32} />
+                      <FaInstagram size={32} />
                     </a>
                     <a href="#" className="w-16 h-16 bg-cyan-500 rounded-full flex items-center justify-center text-white transition-transform duration-300 hover:scale-110">
-                      <TwitterIcon size={32} />
+                      <FaXTwitter size={32} />
                     </a>
                     <a href="#" className="w-16 h-16 bg-blue-800 rounded-full flex items-center justify-center text-white transition-transform duration-300 hover:scale-110">
-                      <DiscordIcon size={32} />
+                      <FaDiscord size={32} />
                     </a>
                   </div>
                 </div>
@@ -728,9 +659,7 @@ function LandingPage(props) {
               <div className="flex flex-col items-center text-center animate-on-scroll animation-delay-400">
                 {/* CHANGED: Icon background color to blue-600 */}
                 <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white mb-6 transform transition-transform duration-300 hover:scale-110 shadow-lg">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2m-9 4h10m-2 4h4m-4 4h4" />
-                  </svg>
+                  <Laptop className="h-8 w-8" />
                 </div>
                 <h3 className="text-2xl font-semibold mb-2 text-gray-900">Hands-On Projects</h3>
                 <p className="text-gray-700">
@@ -741,9 +670,7 @@ function LandingPage(props) {
               <div className="flex flex-col items-center text-center animate-on-scroll animation-delay-600">
                 {/* CHANGED: Icon background color to cyan-500 */}
                 <div className="w-16 h-16 rounded-full bg-cyan-500 flex items-center justify-center text-white mb-6 transform transition-transform duration-300 hover:scale-110 shadow-lg">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h-1a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4zm-1-12a2 2 0 100-4 2 2 0 000 4z" />
-                  </svg>
+                  <Users className="h-8 w-8" />
                 </div>
                 <h3 className="text-2xl font-semibold mb-2 text-gray-900">Expert-Led Support</h3>
                 <p className="text-gray-700">
@@ -754,9 +681,7 @@ function LandingPage(props) {
               <div className="flex flex-col items-center text-center animate-on-scroll animation-delay-800">
                 {/* CHANGED: Icon background color to orange-500 */}
                 <div className="w-16 h-16 rounded-full bg-orange-500 flex items-center justify-center text-white mb-6 transform transition-transform duration-300 hover:scale-110 shadow-lg">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h-1a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2zM9 11h6" />
-                  </svg>
+                  <Map className="h-8 w-8" />
                 </div>
                 <h3 className="text-2xl font-semibold mb-2 text-gray-900">Flexible Learning Paths</h3>
                 <p className="text-gray-700">
@@ -820,7 +745,7 @@ function LandingPage(props) {
                   Not Sure Where To Start? We've Got You.
                 </h2>
                 <p className="text-gray-700 mb-8">
-                  At **DigitallyBrave**, we don't just offer courses—we build **real-world learning experiences** with expert support and flexible stacks. We work with people, not just platforms. Whether you're starting fresh or switching careers, we're here to guide you—step by step.
+                  At **TX Academy**, we don't just offer courses—we build **real-world learning experiences** with expert support and flexible stacks. We work with people, not just platforms. Whether you're starting fresh or switching careers, we're here to guide you—step by step.
                 </p>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4 animate-on-scroll animation-delay-1000">
@@ -847,7 +772,7 @@ function LandingPage(props) {
                     <div>
                       <h3 className="text-xl font-semibold mb-1 text-gray-900">Practical, Project-Based Stacks</h3>
                       <p className="text-gray-700">
-                        Learn by doing. Every DigitallyBrave stack builds real experience with smart systems and tools.
+                        Learn by doing. Every TX Academy stack builds real experience with smart systems and tools.
                       </p>
                     </div>
                   </div>
@@ -883,7 +808,7 @@ function LandingPage(props) {
                 onClick={() => handleManualScroll('left')}
                 className="bg-gray-800 text-white p-3 rounded-full shadow-lg transition-transform duration-300 hover:scale-110"
               >
-                <LeftArrow size={24} />
+                <ChevronLeft size={24} />
               </button>
               <button
                 aria-label="Next slide"
@@ -891,7 +816,7 @@ function LandingPage(props) {
                 onClick={() => handleManualScroll('right')}
                 className="bg-gray-800 text-white p-3 rounded-full shadow-lg transition-transform duration-300 hover:scale-110"
               >
-                <RightArrow size={24} />
+                <ChevronRight size={24} />
               </button>
             </div>
 
@@ -910,7 +835,7 @@ function LandingPage(props) {
                   }
                 }}
                 // Bind rotation angle state for manual control
-                style={{ transform: `perspective(1000px) rotateY(${rotationAngle}deg)` }} 
+                style={{ transform: `perspective(1000px) rotateY(${rotationAngle}deg)` }}
               >
                 {filteredBlogPosts.map((post, index) => (
                   <div
@@ -965,7 +890,7 @@ function LandingPage(props) {
                     <div className="flex items-start gap-4 animate-on-scroll animation-delay-200">
                       {/* CHANGED: Icon background color to blue-600 */}
                       <div className="flex-shrink-0 bg-blue-600 text-white p-3 rounded-full">
-                        <UserIcon size={24} />
+                        <User size={24} />
                       </div>
                       <div>
                         <h4 className="font-semibold text-lg text-gray-900">1. Create an Account</h4>
@@ -975,7 +900,7 @@ function LandingPage(props) {
                     <div className="flex items-start gap-4 animate-on-scroll animation-delay-400">
                       {/* CHANGED: Icon background color to blue-600 */}
                       <div className="flex-shrink-0 bg-blue-600 text-white p-3 rounded-full">
-                        <BookIcon size={24} />
+                        <BookOpen size={24} />
                       </div>
                       <div>
                         <h4 className="font-semibold text-lg text-gray-900">2. Find Your Course</h4>
@@ -985,7 +910,7 @@ function LandingPage(props) {
                     <div className="flex items-start gap-4 animate-on-scroll animation-delay-600">
                       {/* CHANGED: Icon background color to blue-600 */}
                       <div className="flex-shrink-0 bg-blue-600 text-white p-3 rounded-full">
-                        <TrophyIcon size={24} />
+                        <Trophy size={24} />
                       </div>
                       <div>
                         <h4 className="font-semibold text-lg text-gray-900">3. Earn Your Certification</h4>
@@ -1007,15 +932,13 @@ function LandingPage(props) {
                   Focus on Practical Skills and Career Growth.
                 </h2>
                 <p className="text-gray-700 mb-8">
-                  At **DigitallyBrave**, we don't just offer courses—we build **real-world learning experiences** with expert support and flexible stacks. We work with people, not just platforms. Whether you're starting fresh or switching careers, we're here to guide you—step by step.
+                  At **TX Academy**, we don't just offer courses—we build **real-world learning experiences** with expert support and flexible stacks. We work with people, not just platforms. Whether you're starting fresh or switching careers, we're here to guide you—step by step.
                 </p>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4 animate-on-scroll animation-delay-1000">
                     {/* CHANGED: Icon background color to blue-600 */}
                     <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h-1a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4zm-1-12a2 2 0 100-4 2 2 0 000 4z" />
-                      </svg>
+                      <Users className="w-6 h-6 text-white" />
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold mb-1 text-gray-900">Skilled, Supportive Mentors</h3>
@@ -1027,14 +950,12 @@ function LandingPage(props) {
                   <div className="flex items-start gap-4 animate-on-scroll animation-delay-1200">
                     {/* CHANGED: Icon background color to blue-600 */}
                     <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13.5m0-13.5c-4.82 0-8.75 3.197-8.75 7.124 0 1.547.469 3.018 1.34 4.31a.879.879 0 001.458.077c.433-.655 1.353-.984 2.222-.894 1.13.116 2.062.632 2.73 1.488.802 1.042 1.144 2.146 1.056 3.084m-1.056-3.084c.888-1.04 1.947-1.465 3.024-1.285 1.41.229 2.508 1.258 3.18 2.536 1.232 2.378 1.446 5.166.417 7.027" />
-                      </svg>
+                      <Briefcase className="w-6 h-6 text-white" />
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold mb-1 text-gray-900">Practical, Project-Based Stacks</h3>
                       <p className="text-gray-700">
-                        Learn by doing. Every DigitallyBrave stack builds real experience with smart systems and tools.
+                        Learn by doing. Every TX Academy stack builds real experience with smart systems and tools.
                       </p>
                     </div>
                   </div>
@@ -1067,7 +988,7 @@ function LandingPage(props) {
                         className="w-12 h-12 rounded-full"
                       />
                       <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <PlayIcon size={20} className="text-white" />
+                        <Play size={20} className="text-white" />
                       </div>
                     </div>
                     <div className="ml-4">

@@ -19,7 +19,7 @@ const pageData = {
   ],
   sections: [
     {
-      title: "Why Partner With DigitallyBrave?",
+      title: "Why Partner With TX Academy?",
       description:
         "We partner with leading organizations to create innovative learning solutions. Let’s build the future together by leveraging our expertise and community.",
       list: [

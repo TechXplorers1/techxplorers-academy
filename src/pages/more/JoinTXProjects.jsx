@@ -1,4 +1,4 @@
-// src/pages/more/JoinBraveProjects.jsx
+// src/pages/more/JoinTXProjects.jsx
 import React from 'react';
 import MorePageTemplate from '../MorePageTemplate';
 // Assuming this is a custom hook or alias for the one from framer-motion
@@ -9,7 +9,7 @@ const WHATSAPP_NUMBER = '+919618108329';
 const FORM_TITLE = 'Project Join Inquiry (Learner)';
 // ------------------------------
 
-const JoinBraveProjects = ({ isLoggedIn, onLogout, cartItemsCount }) => {
+const JoinTXProjects = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     // FIX: Removed the 'new' keyword from the hook calls
     const [introRef, introInView] = useInView({ threshold: 0.2 });
     const [whatYoullGetRef, whatYoullGetInView] = useInView({ threshold: 0.1 });
@@ -127,4 +127,4 @@ const JoinBraveProjects = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     );
 };
 
-export default JoinBraveProjects;``
+export default JoinTXProjects;``

@@ -26,7 +26,7 @@ const PaymentModal = ({ total, onClose, onApprovePayment, onError }) => {
             // We only need the purchase amount, not a full breakdown
             purchase_units: [
                 {
-                    description: "BraveStack Course Purchase",
+                    description: "TX Stack Course Purchase",
                     amount: {
                         currency_code: "USD", // Change this if your currency is different
                         value: total.toFixed(2),

@@ -3,7 +3,7 @@ import ResourcesPageTemplate from '../ResourcesPageTemplate';
 import useInView from '../../hooks/useInView';
 import NumberCounter from '../../components/NumberCounter'; // Changed to a default import
 
-const BraveStatistics = ({ isLoggedIn, onLogout, cartItemsCount }) => {
+const TXStatistics = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     const [contentRef, contentInView] = useInView({ threshold: 0.2 });
 
     const stats = [
@@ -15,8 +15,8 @@ const BraveStatistics = ({ isLoggedIn, onLogout, cartItemsCount }) => {
 
     return (
         <ResourcesPageTemplate 
-            title="Brave Statistics" 
-            breadcrumb="Brave Statistics"
+            title="TX Statistics" 
+            breadcrumb="TX Statistics"
             isLoggedIn={isLoggedIn}
             onLogout={onLogout}
             cartItemsCount={cartItemsCount}
@@ -41,4 +41,4 @@ const BraveStatistics = ({ isLoggedIn, onLogout, cartItemsCount }) => {
     );
 };
 
-export default BraveStatistics;
+export default TXStatistics;

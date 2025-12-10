@@ -22,18 +22,18 @@ import CartPage from './pages/CartPage';
 import SearchPage from './pages/SearchPage';
 import BlogPage from './pages/BlogPage';
 import CategoryPage from './pages/all-stacks/CategoryPage';
-import BraveBusiness from './pages/for-business/BraveBusiness';
+import TXBusiness from './pages/for-business/TXBusiness';
 import HireFromUs from './pages/for-business/HireFromUs';
 import PartnerWithUs from './pages/for-business/PartnerWithUs';
-import BraveStatistics from './pages/resources/BraveStatistics';
+import TXStatistics from './pages/resources/TXStatistics';
 import CommunityEvents from './pages/resources/CommunityEvents';
 import FreeResources from './pages/resources/FreeResources';
 import MasterclassReplays from './pages/resources/MasterclassReplays';
 import SuccessStories from './pages/resources/SuccessStories';
 import AboutUs from './pages/more/AboutUs';
 import BecomeAMentor from './pages/more/BecomeAMentor';
-import JoinBraveProjects from './pages/more/JoinBraveProjects';
-import JoinBraveTeams from './pages/more/JoinBraveTeams';
+import JoinTXProjects from './pages/more/JoinTXProjects';
+import JoinTXTeams from './pages/more/JoinTXTeams';
 import Plans from './pages/more/Plans';
 import LiveClasses from './pages/more/LiveClasses';
 import CourseDetailsTemplate from './pages/course-details/CourseDetailsTemplate';
@@ -197,19 +197,19 @@ const AppRoutes = () => {
                 <Route path="/course-details/:courseId" element={<CourseDetailsTemplate {...commonProps} onAddToCart={handleAddToCart} onAddToWishlist={handleAddToWishlist} onRemoveFromWishlist={handleRemoveFromWishlist} onRemoveFromCart={handleRemoveFromCart} cart={cart} wishlist={wishlist} enrolledCourses={enrolledCourses} coursesData={allCoursesFullObject} />} />
                 <Route path="/cart" element={<CartPage {...commonProps} cartItems={cart} onRemoveFromCart={handleRemoveFromCart} onCheckout={handleCheckout} />} />
         
-                <Route path="/for-business/Brave-business" element={<BraveBusiness {...commonProps} />} />
+                <Route path="/for-business/TX-business" element={<TXBusiness {...commonProps} />} />
                 <Route path="/for-business/partner-with-us" element={<PartnerWithUs {...commonProps} />} />
                 <Route path="/for-business/hire-from-us" element={<HireFromUs {...commonProps} />} />
                 <Route path="/resources/free-resources" element={<FreeResources {...commonProps} />} />
                 {/* MODIFIED: Pass successStoriesData as 'stories' prop */}
                 <Route path="/resources/success-stories" element={<SuccessStories {...commonProps} stories={successStoriesData} />} /> 
                 <Route path="/resources/masterclass-replays" element={<MasterclassReplays {...commonProps} />} />
-                <Route path="/resources/Brave-statistics" element={<BraveStatistics {...commonProps} />} />
+                <Route path="/resources/TX-statistics" element={<TXStatistics {...commonProps} />} />
                 {/* MODIFIED: Pass communityEventsData as 'events' prop */}
                 <Route path="/resources/community-events" element={<CommunityEvents {...commonProps} events={communityEventsData} />} />
                 <Route path="/more/about-us" element={<AboutUs {...commonProps} />} />
-                <Route path="/more/join-Brave-teams" element={<JoinBraveTeams {...commonProps} />} />
-                <Route path="/more/join-Brave-projects" element={<JoinBraveProjects {...commonProps} />} />
+                <Route path="/more/join-TX-teams" element={<JoinTXTeams {...commonProps} />} />
+                <Route path="/more/join-TX-projects" element={<JoinTXProjects {...commonProps} />} />
                 <Route path="/more/plans" element={<Plans {...commonProps} />} />
                 <Route path="/more/live-classes" element={<LiveClasses {...commonProps} onRegisterLiveClass={handleRegisterLiveClass} registeredLiveClasses={registeredLiveClasses} liveClassesData={liveClassesData} />} />
 

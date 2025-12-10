@@ -20,7 +20,7 @@ const pageData = {
   ],
   sections: [
     {
-      title: "Why Hire From DigitallyBrave?",
+      title: "Why Hire From TX Academy?",
       description:
         "Our graduates are equipped with real-world skills and are ready to contribute from day one. They are trained in our project-based ecosystem, ensuring they have practical experience.",
       list: [
