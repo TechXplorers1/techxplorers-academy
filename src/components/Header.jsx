@@ -2,12 +2,12 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { categoryMap, toKebabCase } from '../utils/categoryHelper';
-import { useAuth } from '../AuthContext'; 
-// ADDED: Import the new modal component
-import ConfirmationModal from './ConfirmationModal'; 
+import { useAuth } from '../AuthContext';
+import { useStore } from '../contexts/StoreContext';
+import { useCourse } from '../contexts/CourseContext';
+import ConfirmationModal from './ConfirmationModal';
 
 const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
-    // ... (DropdownMenu component code is unchanged) ...
     const menuRef = React.useRef(null);
 
     if (!isOpen) {
@@ -37,7 +37,6 @@ const DropdownMenu = ({ items, isOpen, onMouseEnter, onMouseLeave }) => {
 };
 
 const MobileDropdownContent = ({ items, onLinkClick }) => (
-    // ... (MobileDropdownContent component code is unchanged) ...
     <div className="pl-4 mt-1 space-y-1 border-l-2 border-gray-200 ml-3">
         {items.map((item, index) => (
             <Link
@@ -56,45 +55,43 @@ const Header = () => {
     const {
         isLoggedIn,
         onLogout,
-        cartItemsCount,
-        coursesData,
         userRole
     } = useAuth();
+
+    // Use the correct contexts for data
+    const { cartItemsCount } = useStore();
+    const { coursesData } = useCourse();
 
     const [isAllStacksOpen, setIsAllStacksOpen] = React.useState(false);
     const [isForBusinessOpen, setIsForBusinessOpen] = React.useState(false);
     const [isResourcesOpen, setIsResourcesOpen] = React.useState(false);
     const [isMoreOpen, setIsMoreOpen] = React.useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    
-    // ADDED: State to control the logout modal
+
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
     const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
 
     const navigate = useNavigate();
-    
-    // --- MODIFIED: Logout handlers now open the modal ---
+
     const handleLogout = () => {
-        setIsLogoutModalOpen(true); // Just open the modal
-    };
-    
-    const handleMobileLogout = () => {
-        setIsLogoutModalOpen(true); // Just open the modal
+        setIsLogoutModalOpen(true);
     };
 
-    // --- ADDED: This function is called by the modal's "Logout" button ---
+    const handleMobileLogout = () => {
+        setIsLogoutModalOpen(true);
+    };
+
     const handleConfirmLogout = () => {
         onLogout();
-        setIsLogoutModalOpen(false); // Close the modal
+        setIsLogoutModalOpen(false);
         if (isMobileMenuOpen) {
-            toggleMobileMenu(); // Also close the mobile menu if it was open
+            toggleMobileMenu();
         }
     };
 
 
     const handleHover = (dropdownName, isOpen) => {
-        // ... (handleHover logic is unchanged) ...
         setTimeout(() => {
             switch (dropdownName) {
                 case 'allStacks':
@@ -137,11 +134,12 @@ const Header = () => {
         setOpenMobileDropdown(prev => (prev === menuName ? null : menuName));
     };
 
-    // ... (Item definitions are unchanged) ...
+    // Safely map coursesData because it might be empty initially
     const allStacksItems = coursesData ? Object.keys(coursesData).map(key => ({
         name: categoryMap[key] || key,
         path: `/all-stacks/${toKebabCase(key)}`
     })) : [];
+
     const forBusinessItems = [
         { name: 'TX Business', path: '/for-business/TX-business' },
         { name: 'Partner With Us', path: '/for-business/partner-with-us' },
@@ -172,7 +170,6 @@ const Header = () => {
 
                 {/* --- Desktop Nav --- */}
                 <div className="hidden lg:flex items-center space-x-8">
-                    {/* ... (All desktop nav links are unchanged) ... */}
                     <div className="relative" onMouseEnter={() => handleHover('allStacks', true)} onMouseLeave={() => handleHover('allStacks', false)}>
                         <button className="flex items-center hover:text-blue-600 transition-colors">
                             All Stacks
@@ -250,7 +247,6 @@ const Header = () => {
                                     Dashboard
                                 </Link>
                             )}
-                            {/* MODIFIED: Now calls handleLogout to open the modal */}
                             <button onClick={handleLogout} className="px-4 py-2 border border-blue-600 rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition-colors">
                                 Logout
                             </button>
@@ -273,7 +269,6 @@ const Header = () => {
             {isMobileMenuOpen && (
                 <div className="lg:hidden bg-white text-gray-800 fixed inset-0 overflow-y-auto z-50">
                     <div className="px-4 pt-4 pb-4 space-y-1 sm:px-6">
-                        {/* ... (Mobile header, search, and nav dropdowns are unchanged) ... */}
                         <div className="flex items-center justify-between h-12">
                             <button
                                 onClick={() => { handleSearchClick(); toggleMobileMenu(); }}
@@ -350,7 +345,7 @@ const Header = () => {
                             )}
                         </div>
                         <Link to="/more/live-classes" onClick={toggleMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium text-blue-600 font-bold hover:bg-gray-100">Live Classes</Link>
-                        
+
                         <hr className="my-2" />
 
                         {/* --- Mobile Auth Links --- */}
@@ -369,7 +364,6 @@ const Header = () => {
                                     )}
                                 </Link>
 
-                                {/* MODIFIED: Now calls handleMobileLogout to open the modal */}
                                 <button
                                     onClick={handleMobileLogout}
                                     className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-gray-100"
@@ -389,11 +383,8 @@ const Header = () => {
                 <span className="animate-pulse mr-2">📢</span>
                 POLICY UPDATE: Senior leaders from the world's leading research..
             </div>
-            
-            {/* ADDED: Render the modal here. 
-              It's "Portal-ed" to the root of the body, so it doesn't matter where it sits in the JSX.
-            */}
-            <ConfirmationModal 
+
+            <ConfirmationModal
                 isOpen={isLogoutModalOpen}
                 onClose={() => setIsLogoutModalOpen(false)}
                 onConfirm={handleConfirmLogout}

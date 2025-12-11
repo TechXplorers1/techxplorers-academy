@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AdminDashboardTemplate from './AdminDashboardTemplate';
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, query, limitToLast } from "firebase/database";
 import { db } from '../../firebase';
 
 // NEW COMPONENT: Order Details Modal
@@ -44,12 +44,13 @@ const OrderManagement = (props) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     // NEW STATE: To store the currently selected order for the modal
-    const [selectedOrder, setSelectedOrder] = useState(null); 
+    const [selectedOrder, setSelectedOrder] = useState(null);
 
     useEffect(() => {
         // Fetch all orders from the global 'orders' collection
-        const ordersRef = ref(db, 'orders');
-        
+        // Fetch recent orders to reduce bandwidth
+        const ordersRef = query(ref(db, 'orders'), limitToLast(50));
+
         const unsubscribe = onValue(ordersRef, (snapshot) => {
             setLoading(true);
             const data = snapshot.val();
@@ -72,7 +73,7 @@ const OrderManagement = (props) => {
 
         return () => unsubscribe();
     }, []);
-    
+
     // Handler to show the modal with order details
     const handleViewDetails = (order) => {
         setSelectedOrder(order);
@@ -97,9 +98,9 @@ const OrderManagement = (props) => {
     return (
         <AdminDashboardTemplate {...props} title="Order Management">
             {/* Render the modal if an order is selected */}
-            <OrderDetailsModal 
-                order={selectedOrder} 
-                onClose={() => setSelectedOrder(null)} 
+            <OrderDetailsModal
+                order={selectedOrder}
+                onClose={() => setSelectedOrder(null)}
             />
 
             <div className="bg-white p-8 rounded-2xl shadow-lg">
@@ -125,7 +126,7 @@ const OrderManagement = (props) => {
                                     <td className="py-3 px-4 border-b text-sm">${order.total}</td>
                                     <td className="py-3 px-4 border-b text-sm">{order.courses.length}</td>
                                     <td className="py-3 px-4 border-b">
-                                        <button 
+                                        <button
                                             onClick={() => handleViewDetails(order)} // Call handler on click
                                             className="text-purple-600 hover:underline font-semibold"
                                         >

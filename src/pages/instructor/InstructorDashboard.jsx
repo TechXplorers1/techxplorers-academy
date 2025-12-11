@@ -4,12 +4,12 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { db, storage } from '../../firebase';
-import { ref, onValue, push, set, update, remove } from 'firebase/database';
+import { ref, onValue, push, set, update, remove, query, orderByChild, equalTo } from 'firebase/database';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 // A Self-Contained, Full-Featured Editor Component for a Single Course
 const CourseEditor = ({ course, onSave, onCancel, user }) => {
-    const [courseData, setCourseData] = useState(JSON.parse(JSON.stringify(course))); 
+    const [courseData, setCourseData] = useState(JSON.parse(JSON.stringify(course)));
     const [isUploading, setIsUploading] = useState(false);
     const [imageInputMethod, setImageInputMethod] = useState('upload');
     const [modalContent, setModalContent] = useState({ type: null, mode: 'add', data: {}, indices: {} });
@@ -17,7 +17,7 @@ const CourseEditor = ({ course, onSave, onCancel, user }) => {
 
     useEffect(() => {
         if (!courseData.id && user?.name) {
-            setCourseData(prev => ({...prev, instructor: user.name}));
+            setCourseData(prev => ({ ...prev, instructor: user.name }));
         }
     }, [user, courseData.id]);
 
@@ -25,7 +25,7 @@ const CourseEditor = ({ course, onSave, onCancel, user }) => {
         const { name, value } = e.target;
         setCourseData(prev => ({ ...prev, [name]: value }));
     };
-    
+
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -49,12 +49,12 @@ const CourseEditor = ({ course, onSave, onCancel, user }) => {
         setModalContent({ type, mode, data: JSON.parse(JSON.stringify(data)), indices });
         setIsModalOpen(true);
     };
-    
+
     const handleModalInputChange = (e) => {
         const { name, value } = e.target;
-        setModalContent(prev => ({...prev, data: {...prev.data, [name]: value}}));
+        setModalContent(prev => ({ ...prev, data: { ...prev.data, [name]: value } }));
     };
-    
+
     const handleModalFormSubmit = (e) => {
         e.preventDefault();
         const { type, mode, data, indices } = modalContent;
@@ -87,7 +87,7 @@ const CourseEditor = ({ course, onSave, onCancel, user }) => {
         setCourseData(updatedCourse);
         setIsModalOpen(false);
     };
-    
+
     const handleDeleteItem = (type, indices) => {
         if (!window.confirm(`Are you sure you want to delete this ${type}?`)) return;
         const updatedCourse = { ...courseData };
@@ -105,7 +105,7 @@ const CourseEditor = ({ course, onSave, onCancel, user }) => {
             <div className="bg-white p-6 rounded-lg shadow-sm">
                 <h3 className="text-xl font-bold text-gray-800 mb-4">Basic Details</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                     <div className="md:col-span-1">
+                    <div className="md:col-span-1">
                         <label className="block text-sm font-medium text-gray-700 mb-1">Course Image</label>
                         <div className="flex items-center space-x-2 mb-2">
                             <button type="button" onClick={() => setImageInputMethod('upload')} className={`text-xs px-3 py-1 rounded-full ${imageInputMethod === 'upload' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'}`}>Upload</button>
@@ -113,16 +113,16 @@ const CourseEditor = ({ course, onSave, onCancel, user }) => {
                         </div>
                         {imageInputMethod === 'upload' ? (
                             <div>
-                                <input type="file" accept="image/*" onChange={handleImageUpload} className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"/>
+                                <input type="file" accept="image/*" onChange={handleImageUpload} className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100" />
                                 {isUploading && <p className="text-sm text-purple-600 mt-1">Uploading...</p>}
                             </div>
                         ) : (
                             <input type="text" name="image" value={courseData.image || ''} onChange={handleInputChange} placeholder="https://example.com/image.png" className="w-full p-2 border rounded-md" />
                         )}
-                        {courseData.image && <img src={courseData.image} alt="Course preview" className="w-full h-auto object-cover rounded-lg mt-2 border"/>}
+                        {courseData.image && <img src={courseData.image} alt="Course preview" className="w-full h-auto object-cover rounded-lg mt-2 border" />}
                     </div>
                     <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-                         <div>
+                        <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Course Title</label>
                             <input type="text" name="title" value={courseData.title} onChange={handleInputChange} className="w-full p-2 border rounded-md" />
                         </div>
@@ -145,7 +145,7 @@ const CourseEditor = ({ course, onSave, onCancel, user }) => {
                     </div>
                 </div>
             </div>
-            
+
             <div className="bg-white p-6 rounded-lg shadow-sm">
                 <div className="flex justify-between items-center mb-4">
                     <h3 className="text-xl font-bold text-gray-800">Learning Outcomes</h3>
@@ -171,7 +171,7 @@ const CourseEditor = ({ course, onSave, onCancel, user }) => {
                 </div>
                 <div className="space-y-3">
                     {(courseData.mentors || []).map((mentor, index) => (
-                         <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                             <div className="flex items-center">
                                 <img src={mentor.image || 'https://placehold.co/100x100'} alt={mentor.name} className="w-10 h-10 rounded-full mr-4" />
                                 <div>
@@ -189,7 +189,7 @@ const CourseEditor = ({ course, onSave, onCancel, user }) => {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
-                 <div className="flex justify-between items-center mb-4">
+                <div className="flex justify-between items-center mb-4">
                     <h3 className="text-xl font-bold text-gray-800">Modules & Lessons</h3>
                     <button onClick={() => openModal('module', 'add', { title: '' })} className="px-4 py-2 bg-blue-500 text-white text-sm font-semibold rounded-full hover:bg-blue-600">Add Module</button>
                 </div>
@@ -219,7 +219,7 @@ const CourseEditor = ({ course, onSave, onCancel, user }) => {
                     ))}
                 </div>
             </div>
-            
+
             <div className="flex justify-end gap-4 pt-4 border-t">
                 <button onClick={onCancel} className="px-6 py-2 bg-gray-200 font-semibold rounded-full hover:bg-gray-300">Cancel</button>
                 <button onClick={handleSaveChanges} className="px-6 py-2 bg-green-600 text-white font-semibold rounded-full hover:bg-green-700">Save All Changes</button>
@@ -230,15 +230,15 @@ const CourseEditor = ({ course, onSave, onCancel, user }) => {
                     <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-lg">
                         <h2 className="text-2xl font-bold mb-6">{`${modalContent.mode === 'add' ? 'Add' : 'Edit'} ${modalContent.type.charAt(0).toUpperCase() + modalContent.type.slice(1)}`}</h2>
                         <form onSubmit={handleModalFormSubmit} className="space-y-4">
-                            {modalContent.type === 'outcome' && <textarea name="text" value={modalContent.data.text || ''} onChange={handleModalInputChange} className="w-full p-2 border rounded-lg h-24" autoFocus/>}
+                            {modalContent.type === 'outcome' && <textarea name="text" value={modalContent.data.text || ''} onChange={handleModalInputChange} className="w-full p-2 border rounded-lg h-24" autoFocus />}
                             {modalContent.type === 'mentor' && <>
-                                <input type="text" name="name" placeholder="Mentor Name" value={modalContent.data.name || ''} onChange={handleModalInputChange} className="w-full p-2 border rounded-lg" required autoFocus/>
+                                <input type="text" name="name" placeholder="Mentor Name" value={modalContent.data.name || ''} onChange={handleModalInputChange} className="w-full p-2 border rounded-lg" required autoFocus />
                                 <input type="text" name="title" placeholder="Mentor Title" value={modalContent.data.title || ''} onChange={handleModalInputChange} className="w-full p-2 border rounded-lg" required />
                                 <input type="text" name="image" placeholder="Image URL" value={modalContent.data.image || ''} onChange={handleModalInputChange} className="w-full p-2 border rounded-lg" />
                             </>}
-                            {modalContent.type === 'module' && <input type="text" name="title" placeholder="Module Title" value={modalContent.data.title || ''} onChange={handleModalInputChange} className="w-full p-2 border rounded-lg" required autoFocus/>}
+                            {modalContent.type === 'module' && <input type="text" name="title" placeholder="Module Title" value={modalContent.data.title || ''} onChange={handleModalInputChange} className="w-full p-2 border rounded-lg" required autoFocus />}
                             {modalContent.type === 'lesson' && <>
-                                <input type="text" name="title" placeholder="Lesson Title" value={modalContent.data.title || ''} onChange={handleModalInputChange} className="w-full p-2 border rounded-lg" required autoFocus/>
+                                <input type="text" name="title" placeholder="Lesson Title" value={modalContent.data.title || ''} onChange={handleModalInputChange} className="w-full p-2 border rounded-lg" required autoFocus />
                                 <input type="text" name="videoUrl" placeholder="Video URL" value={modalContent.data.videoUrl || ''} onChange={handleModalInputChange} className="w-full p-2 border rounded-lg" required />
                             </>}
                             <div className="flex justify-end space-x-4 mt-6">
@@ -262,7 +262,7 @@ const LiveClassEditor = ({ liveClass, onSave, onCancel, user }) => {
 
     useEffect(() => {
         if (!classData.id && user?.name) {
-            setClassData(prev => ({...prev, instructor: user.name}));
+            setClassData(prev => ({ ...prev, instructor: user.name }));
         }
     }, [user, classData.id]);
 
@@ -324,20 +324,20 @@ const LiveClassEditor = ({ liveClass, onSave, onCancel, user }) => {
                         </div>
                         {imageInputMethod === 'upload' ? (
                             <div>
-                                <input type="file" accept="image/*" onChange={handleImageUpload} className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
+                                <input type="file" accept="image/*" onChange={handleImageUpload} className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                                 {isUploading && <p className="text-sm text-blue-600 mt-1">Uploading...</p>}
                             </div>
                         ) : (
                             <input type="text" name="image" value={classData.image || ''} onChange={handleInputChange} placeholder="https://example.com/image.png" className="w-full p-2 border rounded-md" />
                         )}
-                        {classData.image && <img src={classData.image} alt="Class preview" className="w-full h-auto object-cover rounded-lg mt-2 border"/>}
+                        {classData.image && <img src={classData.image} alt="Class preview" className="w-full h-auto object-cover rounded-lg mt-2 border" />}
                     </div>
                     <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
                             <input type="text" name="title" value={classData.title} onChange={handleInputChange} className="w-full p-2 border rounded-md" />
                         </div>
-                         <div>
+                        <div>
                             <label className="block text-sm font-medium text-gray-500 mb-1">Instructor</label>
                             <input type="text" name="instructor" value={classData.instructor} className="w-full p-2 border rounded-md bg-gray-100" readOnly />
                         </div>
@@ -349,7 +349,7 @@ const LiveClassEditor = ({ liveClass, onSave, onCancel, user }) => {
                             <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
                             <input type="text" name="time" value={classData.time} onChange={handleInputChange} className="w-full p-2 border rounded-md" placeholder="e.g., 10:00 AM EST" />
                         </div>
-                         <div>
+                        <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
                             <input type="number" name="price" value={classData.price} onChange={handleInputChange} className="w-full p-2 border rounded-md" step="0.01" />
                         </div>
@@ -391,7 +391,7 @@ const LiveClassEditor = ({ liveClass, onSave, onCancel, user }) => {
 
 const RecordingModal = ({ content, onSave, onClose }) => {
     const [data, setData] = useState(content.data);
-    const handleChange = (e) => setData(prev => ({...prev, [e.target.name]: e.target.value}));
+    const handleChange = (e) => setData(prev => ({ ...prev, [e.target.name]: e.target.value }));
     const handleSubmit = (e) => { e.preventDefault(); onSave(data); };
 
     return (
@@ -426,14 +426,14 @@ const InstructorDashboard = (props) => {
         if (!user?.name) { setIsLoading(false); return; }
         const coursesRef = ref(db, 'courses');
         const liveClassesRef = ref(db, 'liveClasses');
-        
-        const unsubCourses = onValue(coursesRef, snap => {
+
+        const unsubCourses = onValue(query(coursesRef, orderByChild('instructor'), equalTo(user.name)), snap => {
             const data = snap.val() || {};
-            setMyCourses(Object.values(data).filter(c => c.instructor === user.name));
+            setMyCourses(Object.values(data));
         });
-        const unsubLiveClasses = onValue(liveClassesRef, snap => {
+        const unsubLiveClasses = onValue(query(liveClassesRef, orderByChild('instructor'), equalTo(user.name)), snap => {
             const data = snap.val() || {};
-            setMyLiveClasses(Object.values(data).filter(c => c.instructor === user.name));
+            setMyLiveClasses(Object.values(data));
         });
 
         setIsLoading(false);
@@ -458,14 +458,14 @@ const InstructorDashboard = (props) => {
             alert(`Error saving course: ${error.message}`);
         }
     };
-    
+
     const handleDeleteCourse = async (courseId, courseTitle) => {
         if (window.confirm(`Are you sure you want to PERMANENTLY DELETE "${courseTitle}"?`)) {
             await remove(ref(db, 'courses/' + courseId));
             alert('Course deleted.');
         }
     };
-    
+
     const handleSaveLiveClass = async (classData) => {
         try {
             if (isAddingNewLiveClass) {
@@ -536,7 +536,7 @@ const InstructorDashboard = (props) => {
                         )}
 
                         {activeTab === 'liveClasses' && (
-                             <div className="bg-white p-8 rounded-2xl shadow-lg space-y-4">
+                            <div className="bg-white p-8 rounded-2xl shadow-lg space-y-4">
                                 <div className="flex justify-between items-center">
                                     <h2 className="text-2xl font-bold text-gray-800">Your Scheduled Live Classes</h2>
                                     <button onClick={() => setIsAddingNewLiveClass(true)} className="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-full hover:bg-blue-700">Schedule New Class</button>
@@ -556,7 +556,7 @@ const InstructorDashboard = (props) => {
                                         {editingLiveClassId === cls.id && <LiveClassEditor liveClass={cls} onSave={handleSaveLiveClass} onCancel={() => setEditingLiveClassId(null)} user={user} />}
                                     </div>
                                 ))}
-                             </div>
+                            </div>
                         )}
                     </>
                 )}

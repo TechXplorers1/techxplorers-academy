@@ -171,7 +171,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
     if (!course) {
         return <div className="text-center py-20">Course not found.</div>;
     }
-    
+
     // ... (getCategoryLink, isEnrolled, etc. are unchanged) ...
     const getCategoryLink = (category) => {
         const categoryMap = {
@@ -186,7 +186,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
         };
         return categoryMap[category] || '#';
     };
-    
+
     const isEnrolled = isLoggedIn && enrolledCourses.some(item => item.id === course?.id);
     const isInCart = isLoggedIn && cart.some(item => item.id === course?.id);
     const isInWishlist = isLoggedIn && wishlist.some(item => item.id === course?.id);
@@ -202,14 +202,14 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
         <div className="bg-gray-50 text-gray-900 min-h-screen font-inter">
             {showLoginModal && <LoginRequiredModal onClose={() => setShowLoginModal(false)} onLoginRedirect={handleLoginRedirect} />}
             <Header isLoggedIn={isLoggedIn} onLogout={onLogout} cartItemsCount={cartItemsCount} coursesData={coursesData} />
-            <Hero 
+            <Hero
                 title={course.title}
                 breadcrumbs={breadcrumbs}
             />
 
             <main ref={pageRef} className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 {showPopup && (
-                    <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-green-500 text-white py-3 px-6 rounded-full shadow-lg z-50 animate-fade-in-down">
+                    <div className="fixed top-32 left-1/2 -translate-x-1/2 bg-green-500 text-white py-3 px-6 rounded-full shadow-lg z-[100] animate-fade-in-down">
                         {popupMessage}
                     </div>
                 )}
@@ -219,7 +219,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                         <div className="lg:col-span-2 space-y-12">
                             <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-100 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
                                 <div className="w-full aspect-video rounded-2xl overflow-hidden mb-6">
-                                    <img src={course.image} alt={course.title} className="w-full h-full object-cover"/>
+                                    <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
                                 </div>
                                 <h2 className="text-3xl md:text-4xl font-bold mb-4">Course Overview</h2>
                                 <p className="text-gray-700 leading-relaxed text-lg">
@@ -232,7 +232,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                                 <h2 className="text-3xl md:text-4xl font-bold mb-6">What You'll Learn</h2>
                                 <ul className="grid md:grid-cols-2 gap-x-8 gap-y-4 text-lg">
                                     {(course.learningOutcomes || []).map((item, index) => (
-                                        <li key={index} className="flex items-start text-gray-700 animate-slide-in-right" style={{animationDelay: `${index * 100}ms`}}>
+                                        <li key={index} className="flex items-start text-gray-700 animate-slide-in-right" style={{ animationDelay: `${index * 100}ms` }}>
                                             <svg className="w-6 h-6 text-blue-600 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                             </svg>
@@ -241,7 +241,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                                     ))}
                                 </ul>
                             </div>
-                            
+
                             {/* Curriculum */}
                             <div className={`bg-white rounded-3xl shadow-2xl p-6 md:p-10 transition-all duration-700 delay-300 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
                                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Curriculum</h2>
@@ -280,7 +280,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                                 <div className="grid sm:grid-cols-2 gap-8">
                                     {(course.mentors || []).map((mentor, index) => (
                                         <div key={index} className="flex items-center space-x-4">
-                                            <img src={mentor.image} alt={mentor.name} className="w-20 h-20 rounded-full object-cover border-4 border-blue-600"/>
+                                            <img src={mentor.image} alt={mentor.name} className="w-20 h-20 rounded-full object-cover border-4 border-blue-600" />
                                             <div>
                                                 <h4 className="text-xl font-semibold">{mentor.name}</h4>
                                                 <p className="text-gray-600">{mentor.title}</p>
@@ -290,7 +290,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                                 </div>
                             </div>
                         </div>
-                        
+
                         {/* Right Column (Sticky Sidebar) */}
                         <div className="lg:col-span-1">
                             <div className={`bg-white rounded-3xl shadow-2xl p-6 sticky top-28 transition-all duration-700 delay-500 ${pageInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
@@ -358,7 +358,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
                         {relatedCourses.map((relatedCourse, index) => (
                             <Link key={index} to={`/course-details/${relatedCourse.id}`} onClick={handleCourseClick} className="flex-none w-80">
                                 <div className="bg-gray-100 rounded-lg p-4 transition-all duration-300 hover:shadow-lg hover:scale-105">
-                                    <img src={relatedCourse.image} alt={relatedCourse.title} className="w-full h-32 object-cover rounded-md mb-3"/>
+                                    <img src={relatedCourse.image} alt={relatedCourse.title} className="w-full h-32 object-cover rounded-md mb-3" />
                                     <h4 className="text-lg font-bold">{relatedCourse.title}</h4>
                                     <p className="text-sm text-gray-600">by {relatedCourse.instructor}</p>
                                     <div className="flex items-center mt-2">
@@ -373,7 +373,7 @@ const CourseDetailsTemplate = ({ onAddToCart, onAddToWishlist, onRemoveFromWishl
             </main>
 
             <Footer />
-            
+
             <style>{`
                 @keyframes fade-in-down {
                     from { opacity: 0; transform: translateY(-20px); }

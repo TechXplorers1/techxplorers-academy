@@ -1,0 +1,44 @@
+{
+    "rules": {
+        "users": {
+            "$uid": {
+                ".read": "$uid === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin'",
+                ".write": "$uid === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin'"
+            }
+        },
+        "courses": {
+            ".read": true,
+            ".write": "root.child('users').child(auth.uid).child('role').val() === 'admin' || (auth != null && root.child('users').child(auth.uid).child('role').val() === 'instructor')",
+            ".indexOn": [
+                "instructor"
+            ]
+        },
+        "liveClasses": {
+            ".read": true,
+            ".write": "root.child('users').child(auth.uid).child('role').val() === 'admin' || (auth != null && root.child('users').child(auth.uid).child('role').val() === 'instructor')",
+            ".indexOn": [
+                "instructor"
+            ]
+        },
+        "blogPosts": {
+            ".read": true,
+            ".write": "root.child('users').child(auth.uid).child('role').val() === 'admin'"
+        },
+        "successStories": {
+            ".read": true,
+            ".write": "root.child('users').child(auth.uid).child('role').val() === 'admin'"
+        },
+        "communityEvents": {
+            ".read": true,
+            ".write": "root.child('users').child(auth.uid).child('role').val() === 'admin'"
+        },
+        "instructorApplications": {
+            ".read": "root.child('users').child(auth.uid).child('role').val() === 'admin'",
+            ".write": "auth != null"
+        },
+        "orders": {
+            ".read": "root.child('users').child(auth.uid).child('role').val() === 'admin'",
+            ".write": "auth != null"
+        }
+    }
+}

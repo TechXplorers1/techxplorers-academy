@@ -2,114 +2,29 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { ref, onValue, set } from "firebase/database";
 import { auth, db } from './firebase';
-import { toCamelCase } from './utils/categoryHelper';
 
 // 1. Create the Context
 const AuthContext = createContext();
 
 // Custom hook to use the Auth context
 export const useAuth = () => {
-  return useContext(AuthContext);
+    return useContext(AuthContext);
 };
 
 // 2. Create the Provider Component
 export const AuthProvider = ({ children }) => {
-    // State migrated from App.jsx
+    // Auth State
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState(null);
     const [userRole, setUserRole] = useState(null);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [cart, setCart] = useState([]);
-    const [wishlist, setWishlist] = useState([]);
+
+    // User-specific Academy State (Profile/Progress)
     const [enrolledCourses, setEnrolledCourses] = useState([]);
     const [registeredLiveClasses, setRegisteredLiveClasses] = useState([]);
-    // NEW: State for Order History
-    const [orderHistory, setOrderHistory] = useState([]); 
-    
-    // Data states
-    const [coursesData, setCoursesData] = useState({});
-    const [liveClassesData, setLiveClassesData] = useState([]);
-    const [blogPostsData, setBlogPostsData] = useState([]);
-    const [instructorApplications, setInstructorApplications] = useState([]);
-    // NEW: Success Stories State
-    const [successStoriesData, setSuccessStoriesData] = useState([]); 
-    // NEW: Community Events State
-    const [communityEventsData, setCommunityEventsData] = useState([]); 
-    
-    // Calculated course structures
-    const [allCoursesFlatList, setAllCoursesFlatList] = useState([]);
-    const [allCoursesFullObject, setAllCoursesFullObject] = useState({});
 
     useEffect(() => {
-        // --- Data fetching for courses, classes, applications, and blogs ---
-        const coursesRef = ref(db, 'courses');
-        const unsubscribeCourses = onValue(coursesRef, (snapshot) => {
-            const data = snapshot.val() || {};
-            const allCourses = Object.values(data);
-
-            // 1. Grouped Courses Data (for Header, CategoryPage)
-            const grouped = allCourses.reduce((acc, course) => {
-                const key = toCamelCase(course.category);
-                if (!acc[key]) acc[key] = [];
-                acc[key].push(course);
-                return acc;
-            }, {});
-            setCoursesData(grouped);
-            
-            // 2. Flat List (for SearchPage)
-            setAllCoursesFlatList(allCourses);
-            
-            // 3. Flat Object Map (for CourseDetailsTemplate, EnrolledCourses, CoursePage)
-            const fullObject = allCourses.reduce((obj, course) => {
-                obj[course.id] = course;
-                return obj;
-            }, {});
-            setAllCoursesFullObject(fullObject);
-        });
-
-        const liveClassesRef = ref(db, 'liveClasses');
-        const unsubscribeLiveClasses = onValue(liveClassesRef, (snapshot) => {
-            setLiveClassesData(Object.values(snapshot.val() || {}));
-        });
-
-        const blogPostsRef = ref(db, 'blogPosts');
-        const unsubscribeBlogPosts = onValue(blogPostsRef, (snapshot) => {
-            const data = snapshot.val() || [];
-            setBlogPostsData(data.filter(post => post !== null));
-        });
-
-        const applicationsRef = ref(db, 'instructorApplications/');
-        const unsubscribeApplications = onValue(applicationsRef, (snapshot) => {
-            const data = snapshot.val();
-            setInstructorApplications(data ? Object.values(data) : []);
-        });
-
-        // NEW: Fetch Success Stories
-        const storiesRef = ref(db, 'successStories');
-        const unsubscribeStories = onValue(storiesRef, (snapshot) => {
-            setSuccessStoriesData(Object.values(snapshot.val() || {}));
-        });
-        
-        // NEW: Fetch Community Events
-        const communityEventsRef = ref(db, 'communityEvents');
-        const unsubscribeCommunityEvents = onValue(communityEventsRef, (snapshot) => {
-            setCommunityEventsData(Object.values(snapshot.val() || {}));
-        });
-
-        // NEW: Fetch ALL orders for Admin Order Management
-        let unsubscribeAllOrders = null;
-        if (userRole === 'admin') {
-             const allOrdersRef = ref(db, 'orders');
-             unsubscribeAllOrders = onValue(allOrdersRef, (snapshot) => {
-                const data = snapshot.val() || {};
-                const ordersArray = Object.values(data).flatMap(userOrders => Object.values(userOrders));
-                // Sort by date descending
-                ordersArray.sort((a, b) => new Date(b.date) - new Date(a.date)); 
-                // Store in a dedicated state if needed globally, or pass via context/props.
-             });
-        }
-        
         // --- AUTH STATE LISTENER ---
         const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
             let unsubscribeDb = null;
@@ -123,24 +38,21 @@ export const AuthProvider = ({ children }) => {
                         setFirstName(data.firstName || '');
                         setLastName(data.lastName || '');
                         setUserRole(data.role || 'user');
-                        setCart(Object.values(data.cart || {}));
-                        setWishlist(Object.values(data.wishlist || {}));
-                        
+
+                        // Parse Enrolled Courses
                         const enrolledCoursesObject = data.enrolledCourses || {};
                         setEnrolledCourses(Object.keys(enrolledCoursesObject).map(id => ({
                             id,
                             progress: enrolledCoursesObject[id].progress || 0,
                             completedLessons: enrolledCoursesObject[id].completedLessons || {}
                         })));
+
+                        // Parse Registered Live Classes
                         setRegisteredLiveClasses(Object.keys(data.registeredLiveClasses || {}));
-                        
-                        // NEW: Fetch User Order History
-                        const userOrders = data.orderHistory || {};
-                        const ordersArray = Object.values(userOrders).sort((a, b) => new Date(b.date) - new Date(a.date));
-                        setOrderHistory(ordersArray);
 
                     } else if (auth.currentUser) {
-                        // User creation logic for new Firebase users
+                        // User creation logic for new Firebase users should ideally handle this, 
+                        // but keeping fallback here as in original code
                         set(userRef, {
                             email: auth.currentUser.email,
                             firstName: '',
@@ -150,7 +62,7 @@ export const AuthProvider = ({ children }) => {
                             wishlist: {},
                             enrolledCourses: {},
                             registeredLiveClasses: {},
-                            orderHistory: {} // NEW: Initialize order history
+                            orderHistory: {}
                         });
                     }
                 });
@@ -161,11 +73,8 @@ export const AuthProvider = ({ children }) => {
                 setUserRole(null);
                 setFirstName('');
                 setLastName('');
-                setCart([]);
-                setWishlist([]);
                 setEnrolledCourses([]);
                 setRegisteredLiveClasses([]);
-                setOrderHistory([]); // NEW: Clear order history
             }
             return () => {
                 if (unsubscribeDb) {
@@ -176,15 +85,8 @@ export const AuthProvider = ({ children }) => {
 
         return () => {
             unsubscribeAuth();
-            unsubscribeCourses();
-            unsubscribeLiveClasses();
-            unsubscribeBlogPosts();
-            unsubscribeApplications();
-            unsubscribeStories(); // NEW: Unsubscribe for stories
-            unsubscribeCommunityEvents(); // NEW: Unsubscribe for community events
-            if(unsubscribeAllOrders) unsubscribeAllOrders();
         };
-    }, [userRole]); // Re-run when userRole changes to potentially fetch admin data
+    }, []);
 
     const handleLogout = async () => {
         try {
@@ -196,33 +98,16 @@ export const AuthProvider = ({ children }) => {
 
     // Combine all values for the context
     const contextValue = {
-        // Common App State and Handlers
         isLoggedIn,
+        setIsLoggedIn,
         onLogout: handleLogout,
-        cartItemsCount: cart.length,
-        userRole,
         user,
+        userRole,
         firstName,
         lastName,
-        cart,
-        wishlist,
         enrolledCourses,
-        registeredLiveClasses,
-        orderHistory, 
-        liveClassesData,
-        blogPostsData,
-        instructorApplications,
-        successStoriesData, // NEW: Export success stories
-        communityEventsData, // NEW: Export community events data
-
-        // ALL THREE COURSE DATA STRUCTURES
-        coursesData,            // Grouped (for Category & Header)
-        allCoursesFlatList,     // Flat Array (for SearchPage)
-        allCoursesFullObject,   // Flat Object Map (for details/enrolled pages)
-
-        // Setters
-        setIsLoggedIn, 
         setEnrolledCourses,
+        registeredLiveClasses,
     };
 
     return (
