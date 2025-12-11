@@ -62,11 +62,7 @@ export const CourseProvider = ({ children }) => {
                 const blogs = blogPostsSnapshot.val() || [];
                 setBlogPostsData(blogs.filter(post => post !== null));
 
-                // 4. Instructor Applications (Admin only mostly, but fetched here)
-                const applicationsRef = ref(db, 'instructorApplications/');
-                const applicationsSnapshot = await get(applicationsRef);
-                const apps = applicationsSnapshot.val();
-                setInstructorApplications(apps ? Object.values(apps) : []);
+
 
                 // 5. Success Stories
                 const storiesRef = ref(db, 'successStories');
